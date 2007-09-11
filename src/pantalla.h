@@ -7,7 +7,9 @@ using namespace std;
 class Pantalla
 {
 private:
-	SDL_Surface* Screen;
+	SDL_Surface* screen;
+	int h_screen;
+	int v_screen;
 public:
 	Pantalla();
 	~Pantalla();
