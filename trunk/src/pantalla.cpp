@@ -14,6 +14,10 @@ Pantalla::~Pantalla() {
 	SDL_Quit();
 }
 
+SDL_Surface* Pantalla::GetPantalla(){
+	return screen;
+}
+
 void Pantalla::Entrada() {
 	SDL_Event event;
 	SDL_WaitEvent(&event);
