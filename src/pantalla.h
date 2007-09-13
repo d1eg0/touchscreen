@@ -10,9 +10,13 @@ private:
 	SDL_Surface* screen;
 	int h_screen;
 	int v_screen;
+	bool sdl_quit;
 public:
 	Pantalla();
 	~Pantalla();
+
+	void Entrada();
+	bool Salir();
 
 };
 #endif
