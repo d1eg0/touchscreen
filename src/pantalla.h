@@ -14,7 +14,8 @@ private:
 public:
 	Pantalla();
 	~Pantalla();
-
+    
+	SDL_Surface* GetPantalla();
 	void Entrada();
 	bool Salir();
 
