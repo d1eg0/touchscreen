@@ -1,22 +1,23 @@
 ## Macros
 
 CC = g++
-RM = rm
+RM = rm -f
 CFLAGS = -g -Wall -O2
 SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs)
-OBJ = boton.o pantalla.o main.o
+EXTERN_LIBS = -L/usr/local/lib -ldxf -L/usr/X11R6/lib -lX11
+PROGRAMA = gui
+OBJ = dxfparser.o frame.o mouse.o boton.o pantalla.o $(PROGRAMA).o
 
-all: $(OBJ)
-	$(CC) -g $(CFLAGS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(OBJ) -o main 
+.SUFFIXES: .o .cpp
+
+.cpp.o:
+	$(CC) -c -o $@ $<
+
+all: 	$(PROGRAMA)
+
+$(PROGRAMA):	$(OBJ)
+	$(CC) $(CFLAGS) $(SDL_CFLAGS) $(SDL_LDFLAGS) $(OBJ) -o $(PROGRAMA) $(EXTERN_LIBS)
 
 clean:
-	$(RM) $(OBJ) main
-
-# Reglas implícitas
-main.o: 
-	$(CC) -c main.cpp -g
-pantalla.o: pantalla.cpp pantalla.h
-	$(CC) -c pantalla.cpp -g
-boton.o: boton.cpp boton.h
-	$(CC) -c boton.cpp -g
+	$(RM) $(OBJ) $(PROGRAMA)

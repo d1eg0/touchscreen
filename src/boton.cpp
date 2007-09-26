@@ -1,5 +1,5 @@
 #include "boton.h"
-
+#include "constantes.h"
 Boton::Boton(SDL_Surface *Ventana)
 {
 	area.h=20;
@@ -57,24 +57,22 @@ void Boto::LlevarSombra(bool Som)
 }
 
 */
-void Boton::CargarBoton(int x, int y, int w, int h, char *_texto, Uint32 _Colorfons, SDL_Color *_colortexto)
+void Boton::CargarBoton(int x, int y, int w, int h, Uint32 color)
 {
 	int wt, ht;
-	color=_Colorfons;
+	this->color=color;
 	area.h=h;
 	area.w=w;
 	area.x=x;
 	area.y=y;
-
 	//TTF_SizeText(Font,_texto,&wt,&ht);
-	
-	texto=_texto;	
 
 	contenedor.x=area.x + ((w - wt)/2);
 	contenedor.y=area.y + ((h - ht)/2);
 	contenedor.w=wt;
 	contenedor.h=ht;
-	colorFuente=*_colortexto;
+	SDL_FillRect(ventana, &area, color);
+	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 void Boton::DibujarBoton()
@@ -192,3 +190,10 @@ int Boto::GetW()
 	return Area.w;
 }
 */
+
+bool Boton::Presionado(int x,int y)
+{
+	return (x>area.x)&&(x<area.x+area.w)&&
+		(y>area.y)&&(y<area.y+area.h);
+}
+

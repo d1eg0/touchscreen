@@ -7,17 +7,18 @@ using namespace std;
 class Pantalla
 {
 private:
-	SDL_Surface* screen;
-	int h_screen;
-	int v_screen;
-	bool sdl_quit;
+    SDL_Surface* screen;
+    int h_screen;
+    int v_screen;
+    bool sdl_quit;
 public:
-	Pantalla();
-	~Pantalla();
-    
-	SDL_Surface* GetPantalla();
-	void Entrada();
-	bool Salir();
+    Pantalla();
+    ~Pantalla();
+
+    SDL_Surface* GetPantalla();
+    void Entrada();
+    bool Salir();
+
 
 };
 #endif
