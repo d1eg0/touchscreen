@@ -7,11 +7,13 @@
 #include "frame.h"
 #include "constantes.h"
 #include "dxfparser.h"
+#include "mapa.h"
 #include <dxflib/dl_dxf.h>
 using namespace std;
 
 Boton *boton1;
 Frame *mapa;
+Mapa  plano;
 int gestor (void *unusued){
     cout << "soy un hilo" << endl;
     Pantalla *pantalla=new Pantalla();
@@ -29,18 +31,21 @@ int gestor (void *unusued){
 
 int main(int argc, char *argv[])
 {
+
     SDL_Thread *hilo;
     cout <<"Inicializando SDL." << endl;
-    
+   
     //Lectura Fichero DXF
     DxfParser *parser_dxf=new DxfParser();
     DL_Dxf* dxf = new DL_Dxf();
-    if (!dxf->in("casa.dxf", parser_dxf)) {
+    if (!dxf->in("maps/casa.dxf", parser_dxf)) {
 	std::cerr << "No se ha podido abrir el DXF.\n";
     }
     delete dxf;
     delete parser_dxf;
     //Fin lectura Fichero DXF
+
+    plano.pintarMapa(mapa);
 
     //Inicio libreria para controlar video
     if(SDL_Init(SDL_INIT_VIDEO)< 0) {

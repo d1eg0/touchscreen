@@ -22,7 +22,6 @@ public:
 	//int GetY();
 	//int GetW();
 	//int GetH();
-	void LecturaMapa(); 
 
 private:
 	SDL_Rect area;
