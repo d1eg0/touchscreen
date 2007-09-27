@@ -39,8 +39,5 @@ bool Frame::Presionado(int x,int y)
 		(y>area.y)&&(y<area.y+area.h);
 }
 
-void Frame::LecturaMapa(){
-    
-}
 
 
