@@ -37,7 +37,9 @@ void Mapa::clearMapa(){
 }
 
 
-void Mapa::pintarMapa(Frame *frame){   
+void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame){   
+    pincel=new Dibujar(screen);
+
      vector<Capa>::iterator i_capa;
      vector<Linea>::iterator i_linea;
      for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
@@ -46,6 +48,7 @@ void Mapa::pintarMapa(Frame *frame){
 	 for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
 	     Linea linealeida=(*i_linea);
 	     printf("LINE     (%lf, %lf) (%lf, %lf)\n",linealeida.getX1(),linealeida.getY1(), linealeida.getX2(),linealeida.getY2());
+	     pincel->dibujarLinea(frame,&linealeida);
 	 }
      }
 }

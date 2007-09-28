@@ -11,13 +11,15 @@ private:
     int h_screen;
     int v_screen;
     bool sdl_quit;
+    const SDL_VideoInfo *info;
+
 public:
     Pantalla();
     ~Pantalla();
 
-    SDL_Surface* GetPantalla();
-    void Entrada();
-    bool Salir();
+    SDL_Surface* getPantalla();
+    void entrada();
+    bool salir();
 
 
 };

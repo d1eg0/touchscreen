@@ -2,7 +2,6 @@
 #define FRAME_H
 #include <SDL/SDL.h>
 
-
 //enum EstadoBoton {seleccionado=1, deseleccionado=0};
 
 class Frame  
@@ -16,19 +15,18 @@ public:
 	
 	//void InsertarTexto(char *_text);
 
-	bool Presionado(int xm, int ym);
+    bool Presionado(int xm, int ym);
 
-	//int GetX();
-	//int GetY();
-	//int GetW();
-	//int GetH();
-
+    int getX();
+    int getY();
+    int getW();
+    int getH();
+    SDL_Rect getArea();
 private:
 	SDL_Rect area;
 	SDL_Surface *ventana;
 	//char *texto;
 	Uint32 color;
-
 	//SDL_Surface *SurfaceF;
 	//TTF_Font *fuente;
 	//SDL_Color colorFuente;
