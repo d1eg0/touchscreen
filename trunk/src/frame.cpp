@@ -3,8 +3,8 @@
 
 Frame::Frame(SDL_Surface *Ventana)
 {
-	area.h=20;
-	area.w=40;
+	area.h=0;
+	area.w=0;
 	area.x=0;
 	area.y=0;
 	ventana=Ventana;
@@ -29,6 +29,7 @@ void Frame::CargarFrame(int x, int y, int w, int h, Uint32 color)
 	contenedor.y=area.y + ((h - ht)/2);
 	contenedor.w=wt;
 	contenedor.h=ht;
+	SDL_SetClipRect(ventana, &area);
 	SDL_FillRect(ventana, &area, color);
 	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
@@ -40,4 +41,23 @@ bool Frame::Presionado(int x,int y)
 }
 
 
+int Frame::getX(){
+    return area.x;
+}
+
+int Frame::getY(){
+    return area.y;
+}
+
+int Frame::getW(){
+    return area.w;
+}
+
+int Frame::getH(){
+    return area.h;
+}
+
+SDL_Rect Frame::getArea(){
+    return area;
+}
 

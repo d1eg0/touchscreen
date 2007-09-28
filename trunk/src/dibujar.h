@@ -1,5 +1,5 @@
 /**
- *    \file  mapa.h
+ *    \file  dibujar.h
  *   \brief  
  *
  *  Detailed description starts here.
@@ -7,7 +7,7 @@
  *  \author  Diego García Valverde , kobydiego@gmail.com
  *
  *  \internal
- *    Created:  26/09/07
+ *    Created:  28/09/07
  *   Compiler:  gcc/g++
  *    Company:  UIB
  *
@@ -15,33 +15,31 @@
  *  GNU General Public License as published by the Free Software Foundation.
  * =====================================================================================
  */
-#ifndef MAPA_H
-#define MAPA_H
+#ifndef DIBUJAR_H
+#define DIBUJAR_H
 
-#include <vector>
-#include "capa.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_gfxPrimitives.h>
+#include "linea.h"
 #include "frame.h"
-#include "dibujar.h"
-using namespace std;
+
 /**
- *  \class Mapa
- *  \brief Organiza las capas del fichero dxf
+ *  \class Dibujar
+ *  \brief Generar un plano
  *   
  *  \par 
  */
-class Mapa {
-public:
-    Mapa();
-    ~Mapa();
 
-    vector<Capa>* getMapa();   
-    void addCapa(Capa capa);
-    void clearMapa();
-    void pintarMapa(SDL_Surface *screen,Frame *frame);
+class Dibujar {
+
+public:
+    Dibujar(SDL_Surface *screen);
+    ~Dibujar();
+    
+    void dibujarLinea(Frame *frame, Linea *linea);
 private:
-    vector<Capa> listaCapas;
-    Dibujar *pincel;
-      
+    SDL_Surface *screen;
+
 };
 #endif
 

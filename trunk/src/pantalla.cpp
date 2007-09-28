@@ -4,27 +4,38 @@
 extern Boton *boton1;
 Pantalla::Pantalla() 
 {
-	h_screen=SCREEN_H;
-	v_screen=SCREEN_W;
-	sdl_quit=false;
-	screen=SDL_SetVideoMode(v_screen, h_screen, 16, SDL_DOUBLEBUF|SDL_SWSURFACE);	
-	SDL_FillRect( screen, 0, SDL_MapRGB( screen->format, 200, 200, 200 ) );
-	SDL_UpdateRect(screen,0,0,0,0);
+    Uint8 video_bpp;
+    Uint32 videoflags;
+    videoflags = SDL_SWSURFACE | SDL_SRCALPHA | SDL_RESIZABLE;
+    h_screen=SCREEN_H;
+    v_screen=SCREEN_W;
+    sdl_quit=false;
+    info = SDL_GetVideoInfo();
+    if ( info->vfmt->BitsPerPixel > 8 ) {
+	video_bpp = info->vfmt->BitsPerPixel;
+    } else {
+	video_bpp = 16;
+    }
+    screen=SDL_SetVideoMode(v_screen, h_screen, video_bpp, videoflags);
+//SDL_DOUBLEBUF|SDL_SWSURFACE);	
+    SDL_SetAlpha(screen, SDL_SRCALPHA, 0);
+    //SDL_FillRect( screen, 0, SDL_MapRGB( screen->format, 200, 200, 200 ) );
+    SDL_UpdateRect(screen,0,0,0,0);
 	//SDL_ShowCursor(0);	//ocultar cursor
 }
 
 Pantalla::~Pantalla() 
 {
-	SDL_Quit();
+    SDL_Quit();
 }
 
 
-SDL_Surface* Pantalla::GetPantalla()
+SDL_Surface* Pantalla::getPantalla()
 {
 	return screen;
 }
 
-void Pantalla::Entrada() 
+void Pantalla::entrada() 
 {
 	SDL_Event event;
 	SDL_WaitEvent(&event);
@@ -72,7 +83,7 @@ void Pantalla::Entrada()
 	} 
 }
 
-bool Pantalla::Salir()
+bool Pantalla::salir()
 {
 	return sdl_quit;
 }
