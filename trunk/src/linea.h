@@ -35,6 +35,7 @@ public:
     double getX2();
     double getY2();
     string getCapa();
+    void escalar(int escala);
 private:
     double x1,y1,x2,y2; 
     string capa;

@@ -1,5 +1,6 @@
 #include "frame.h"
 #include "constantes.h"
+#include <SDL/SDL_gfxPrimitives.h>
 
 Frame::Frame(SDL_Surface *Ventana)
 {
@@ -15,9 +16,8 @@ Frame::~Frame()
 
 }
 
-void Frame::CargarFrame(int x, int y, int w, int h, Uint32 color)
+void Frame::CargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 {
-	int wt, ht;
 	this->color=color;
 	area.h=h;
 	area.w=w;
@@ -25,12 +25,14 @@ void Frame::CargarFrame(int x, int y, int w, int h, Uint32 color)
 	area.y=y;
 	//TTF_SizeText(Font,_texto,&wt,&ht);
 
-	contenedor.x=area.x + ((w - wt)/2);
-	contenedor.y=area.y + ((h - ht)/2);
-	contenedor.w=wt;
-	contenedor.h=ht;
-	SDL_SetClipRect(ventana, &area);
+	contenedor.x=area.x;
+	contenedor.y=area.y-MARGEN;
+	contenedor.w=w;
+	contenedor.h=h;
+	SDL_SetClipRect(ventana, &contenedor);
 	SDL_FillRect(ventana, &area, color);
+	rectangleColor(ventana, area.x, area.y, area.x+area.w, area.y+area.h, 0x00ff00);
+	stringColor(ventana, area.x, area.y-9, c, C_TITTLE);
 	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 

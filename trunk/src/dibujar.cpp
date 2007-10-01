@@ -23,14 +23,13 @@ Dibujar::Dibujar(SDL_Surface *screen){
 
 Dibujar::~Dibujar(){
 }
-void SetClip(SDL_Surface *screen, int x1, int y1, int x2, int y2);
-void Dibujar::dibujarLinea(Frame *frame, Linea *linea) {
-      
+//void SetClip(SDL_Surface *screen, int x1, int y1, int x2, int y2);
+void Dibujar::dibujarLinea(Frame *frame, Linea *linea, double dh, double dv) {
     double y1= (frame->getH()+frame->getY())-linea->getY1();
     double y2= (frame->getH()+frame->getY())-linea->getY2();
     double x1= frame->getX()+linea->getX1();
     double x2= frame->getX()+linea->getX2();
-    lineColor(screen, (Sint16)x1/2, (Sint16)y1/2, (Sint16)x2/2, (Sint16)y2/2, 0xff0000ff);
+    lineColor(screen, (Sint16)x1, (Sint16)y1, (Sint16)x2, (Sint16)y2, 0xff0000ff);
     printf ("linea \t (%lf,%lf) (%lf,%lf)\n",x1,y1,x2,y2); 
     
 }

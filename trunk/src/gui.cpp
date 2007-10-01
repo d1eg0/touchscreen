@@ -42,10 +42,9 @@ int gestor (void *unusued){
     //SetClip(pantalla->GetPantalla(),0,0,200,200);
     //lineColor(pantalla->GetPantalla(), 0, 0, 100, 100, 0xff0000ff);
     //SDL_UpdateRect(pantalla->GetPantalla(),0,0,0,0);
-    framemapa->CargarFrame(0,0,(int)((float)SCREEN_W/10.0*8.0),SCREEN_H,0xf0);
-    lineColor(pantalla->getPantalla(), 0, 0, 100, 100, 0xff0000ff);
+    framemapa->CargarFrame(20,20,(int)((float)SCREEN_W/10.0*8.0),SCREEN_H-20,"Plano",0xf0);
     //SDL_SetClipRect(pantalla->getPantalla(), (SDL_Rect)&framemapa->getArea() );
-    plano.pintarMapa(pantalla->getPantalla(),framemapa);
+    plano.pintarMapa(pantalla->getPantalla(),framemapa,200);
     SDL_UpdateRect(pantalla->getPantalla(),0,0,0,0);
     while(!pantalla->salir()){
         pantalla->entrada();

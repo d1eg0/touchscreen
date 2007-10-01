@@ -10,7 +10,7 @@ public:
 	Frame(SDL_Surface *Ventana);
 	virtual ~Frame();
 
-	void CargarFrame(int x, int y, int w, int h, Uint32 color);
+	void CargarFrame(int x, int y, int w, int h,char *c, Uint32 color);
 	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
 	
 	//void InsertarTexto(char *_text);
