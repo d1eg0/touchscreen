@@ -36,7 +36,7 @@ public:
     Dibujar(SDL_Surface *screen);
     ~Dibujar();
     
-    void dibujarLinea(Frame *frame, Linea *linea);
+    void dibujarLinea(Frame *frame, Linea *linea, double dh, double dv);
 private:
     SDL_Surface *screen;
 
