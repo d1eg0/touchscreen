@@ -1,7 +1,11 @@
 #include "pantalla.h"
 #include "constantes.h"
 #include "boton.h"
-extern Boton *boton1;
+#include "mapa.h"
+extern Boton *botonMasZoom, *botonMenosZoom;
+extern Mapa plano;
+extern Frame *framemapa;
+
 Pantalla::Pantalla() 
 {
     Uint8 video_bpp;
@@ -19,7 +23,8 @@ Pantalla::Pantalla()
     screen=SDL_SetVideoMode(v_screen, h_screen, video_bpp, videoflags);
 //SDL_DOUBLEBUF|SDL_SWSURFACE);	
     SDL_SetAlpha(screen, SDL_SRCALPHA, 0);
-    //SDL_FillRect( screen, 0, SDL_MapRGB( screen->format, 200, 200, 200 ) );
+    Dibujar paleta(screen);
+    SDL_FillRect( screen, 0, 0x000000);
     SDL_UpdateRect(screen,0,0,0,0);
 	//SDL_ShowCursor(0);	//ocultar cursor
 }
@@ -65,9 +70,26 @@ void Pantalla::entrada()
 		case SDL_MOUSEBUTTONDOWN:
 			cout << "click" << endl;
 			cout << "x:" << event.motion.x << " y:" << event.motion.y <<  endl;
-			if(boton1->Presionado(event.motion.x,event.motion.y)){
-				cout << "dentro" << endl;
-			}else cout << "fuera" << endl;	
+			double factor=100.0/plano.getEscala();
+			double px=(event.motion.x-plano.getOX())*factor;
+			double py=(-event.motion.y+plano.getOY())*factor;
+			cout << "px:" << px << ", py:" << py << endl;
+			if(botonMasZoom->presionado(event.motion.x,event.motion.y)){
+				cout << "Z+dentro" << endl;
+				framemapa->limpiarFrame();
+				plano.escalarMapa(25);
+				SDL_UpdateRect(screen,0,0,0,0);
+			}else cout << "Zfuera" << endl;	
+			if(botonMenosZoom->presionado(event.motion.x,event.motion.y)){
+				cout << "Z-dentro" << endl;
+				framemapa->limpiarFrame();
+				plano.escalarMapa(-25);
+				SDL_UpdateRect(screen,0,0,0,0);
+			}else cout << "Zfuera" << endl;	
+			if(framemapa->getBM()->presionado(event.motion.x,event.motion.y)){
+				cout << "Mdentro" << endl;
+				framemapa->cerrarFrame();
+			}else cout << "Mfuera" << endl;	
 		
 
 	if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)){

@@ -9,8 +9,8 @@ extern Mapa plano;
 DxfParser::DxfParser(){}
 
 void DxfParser::addLine(const DL_LineData& data) {
-    std::cout << "Line: " << data.x1 << "/" << data.y1
-    << " " << data.x2 << "/" << data.y2 << std::endl;
+    //std::cout << "Line: " << data.x1 << "/" << data.y1
+    //<< " " << data.x2 << "/" << data.y2 << std::endl;
     Linea nuevalinea(attributes.getLayer().c_str(),data.x1,data.y1,data.x2,data.y2);
     
     int i=0;
@@ -26,7 +26,7 @@ void DxfParser::addLine(const DL_LineData& data) {
 }
 
 void DxfParser::addLayer(const DL_LayerData& data) {
-    cout << "Capa nueva:"<< data.name << endl;
+    //cout << "Capa nueva:"<< data.name << endl;
     Capa nuevacapa(data.name,attributes.getColor());
     plano.addCapa(nuevacapa);
 }

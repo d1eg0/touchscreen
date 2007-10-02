@@ -1,5 +1,6 @@
 #include "boton.h"
 #include "constantes.h"
+#include <SDL/SDL_gfxPrimitives.h>
 Boton::Boton(SDL_Surface *Ventana)
 {
 	area.h=20;
@@ -57,7 +58,7 @@ void Boto::LlevarSombra(bool Som)
 }
 
 */
-void Boton::CargarBoton(int x, int y, int w, int h, Uint32 color)
+void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 {
 	int wt, ht;
 	this->color=color;
@@ -71,11 +72,14 @@ void Boton::CargarBoton(int x, int y, int w, int h, Uint32 color)
 	contenedor.y=area.y + ((h - ht)/2);
 	contenedor.w=wt;
 	contenedor.h=ht;
-	SDL_FillRect(ventana, &area, color);
+	
+	SDL_SetClipRect(ventana, &area);
+	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, color);
+	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, 0xffffffFF);
 	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
-void Boton::DibujarBoton()
+void Boton::dibujarBoton()
 {
 	SDL_Rect sombra;
 	Uint32 ColorAux;
@@ -93,7 +97,9 @@ void Boton::DibujarBoton()
 			SDL_FillRect(Finestra, &Sombra,SDL_MapRGB(Finestra->format,0,0,0));
 			SDL_UpdateRect(Finestra,Sombra.x,Sombra.y,Sombra.w,Sombra.h);
 		} */
-		SDL_FillRect(ventana, &area, color);
+		//SDL_SetAlpha(ventana, SDL_SRCALPHA, 255);
+		//SDL_FillRect(ventana, &area, color);
+		boxColor(ventana,area.x,area.y,area.x+area.w,area.y+area.h,color);
 		SDL_UpdateRect(ventana,area.x,area.y,area.w,area.h);
 	}
 	else
@@ -190,8 +196,7 @@ int Boto::GetW()
 	return Area.w;
 }
 */
-
-bool Boton::Presionado(int x,int y)
+bool Boton::presionado(int x,int y)
 {
 	return (x>area.x)&&(x<area.x+area.w)&&
 		(y>area.y)&&(y<area.y+area.h);

@@ -19,12 +19,8 @@
 #include "linea.h"
 using namespace std;
 Linea::Linea(string capa, double x1, double y1, double x2, double y2){
-    cout << "a x1:" << x1 << endl;
-   printf("a x1: %lf \n",x1); 
     this->capa=capa;
     this->x1=x1;
-    cout << "d x1:" << this->x1 << endl;
-   printf("d x1: %lf \n",x1); 
     this->y1=y1;
     this->x2=x2;
     this->y2=y2;
