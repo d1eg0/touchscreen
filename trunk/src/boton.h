@@ -11,13 +11,13 @@ public:
 	Boton(SDL_Surface *Ventana);
 	virtual ~Boton();
 
-	void CargarBoton(int x, int y, int w, int h, Uint32 color);
+	void cargarBoton(int x, int y, int w, int h, char *c, Uint32 color);
 	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
 	
 	//void InsertarTexto(char *_text);
-	void DibujarBoton();
+	void dibujarBoton();
 
-	bool Presionado(int xm, int ym);
+	bool presionado(int xm, int ym);
 
 	//int GetX();
 	//int GetY();

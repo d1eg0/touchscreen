@@ -12,7 +12,8 @@
 #include <dxflib/dl_dxf.h>
 using namespace std;
 
-Boton *boton1;
+Boton *botonMasZoom;
+Boton *botonMenosZoom;
 Frame *framemapa;
 Mapa  plano;
 
@@ -29,7 +30,6 @@ void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
 int gestor (void *unusued){
     cout << "soy un hilo" << endl;
     Pantalla *pantalla=new Pantalla();
-    boton1=new Boton(pantalla->getPantalla());
     framemapa=new Frame(pantalla->getPantalla());
     SDL_Color Blanco = {255,255,255,0}; 
     //boton1->CargarBoton(200,200,120,120,0xff);
@@ -42,9 +42,19 @@ int gestor (void *unusued){
     //SetClip(pantalla->GetPantalla(),0,0,200,200);
     //lineColor(pantalla->GetPantalla(), 0, 0, 100, 100, 0xff0000ff);
     //SDL_UpdateRect(pantalla->GetPantalla(),0,0,0,0);
-    framemapa->CargarFrame(20,20,(int)((float)SCREEN_W/10.0*8.0),SCREEN_H-20,"Plano",0xf0);
-    //SDL_SetClipRect(pantalla->getPantalla(), (SDL_Rect)&framemapa->getArea() );
-    plano.pintarMapa(pantalla->getPantalla(),framemapa,200);
+
+    //Cargar el frame donde se sitúa el plano
+    framemapa->cargarFrame(20,20,(int)((float)SCREEN_W/10.0*6.0), (int)((float)SCREEN_H/10.0*6.0),"Plano",0xffffff);
+    plano.pintarMapa(pantalla->getPantalla(),framemapa,100);
+
+    //Botones Zoom
+    botonMasZoom=new Boton(pantalla->getPantalla());
+    botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, framemapa->getY()+framemapa->getH()+20, 20,20,"+",0xFFA500FF);
+
+    botonMenosZoom=new Boton(pantalla->getPantalla());
+    botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-70, framemapa->getY()+framemapa->getH()+20, 20,20,"-",0xFFA500FF);
+
+    //Actualizar cambios en la pantalla
     SDL_UpdateRect(pantalla->getPantalla(),0,0,0,0);
     while(!pantalla->salir()){
         pantalla->entrada();

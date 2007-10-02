@@ -8,8 +8,10 @@
 #define	    BORDER	2
 #define	    MARGEN	20
 
-//Colores
-#define	    C_ROJO	0xff0000ff
-#define	    C_VERDE	0x00ff00ff
-#define	    C_AZUL	0x0000ffff
-#define	    C_TITTLE	0xf0e68cff
+//Estado Frame
+#define	    CERRADO	0
+#define	    MAXIMO	1
+#define	    MINIMO	2
+
+//Tamaño caracter
+#define	    SIZE_C	8

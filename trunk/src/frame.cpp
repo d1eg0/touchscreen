@@ -1,5 +1,6 @@
 #include "frame.h"
 #include "constantes.h"
+#include "dibujar.h"
 #include <SDL/SDL_gfxPrimitives.h>
 
 Frame::Frame(SDL_Surface *Ventana)
@@ -16,24 +17,52 @@ Frame::~Frame()
 
 }
 
-void Frame::CargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
+void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 {
-	this->color=color;
-	area.h=h;
-	area.w=w;
-	area.x=x;
-	area.y=y;
-	//TTF_SizeText(Font,_texto,&wt,&ht);
+    Dibujar paleta(ventana);
+    this->color=color;
+    area.h=h;
+    area.w=w;
+    area.x=x;
+    area.y=y;
 
-	contenedor.x=area.x;
-	contenedor.y=area.y-MARGEN;
-	contenedor.w=w;
-	contenedor.h=h;
-	SDL_SetClipRect(ventana, &contenedor);
-	SDL_FillRect(ventana, &area, color);
-	rectangleColor(ventana, area.x, area.y, area.x+area.w, area.y+area.h, 0x00ff00);
-	stringColor(ventana, area.x, area.y-9, c, C_TITTLE);
-	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    estado=MINIMO;
+
+    contenedor.x=area.x;
+    contenedor.y=area.y-MARGEN;
+    contenedor.w=w+4;
+    contenedor.h=h;
+    SDL_SetClipRect(ventana, &contenedor);
+    //Fondo
+    SDL_FillRect(ventana, &area, color);
+    //Borde
+    rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xFFA500FF);
+    //Etiqueta
+    stringColor(ventana, area.x, area.y-9, c, 0xFFA500FF);
+    //Boton maximizar
+    max=new Boton(ventana);
+    max->cargarBoton(x+w-10,y-10,10,10,"X", 0xFFA500FF);
+    SDL_SetClipRect(ventana, &contenedor);
+    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+}
+
+void Frame::cerrarFrame(){
+    SDL_SetClipRect(ventana, &contenedor);
+    SDL_FillRect(ventana, &contenedor, 0x000000);
+    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    estado=CERRADO;
+}
+
+void Frame::limpiarFrame(){
+    SDL_SetClipRect(ventana, &area);
+    SDL_FillRect(ventana, &area, color);
+    //Borde
+    rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xFFA500FF);
+    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+}
+
+SDL_Surface* Frame::getVentana(){
+    return ventana;
 }
 
 bool Frame::Presionado(int x,int y)
@@ -63,3 +92,15 @@ SDL_Rect Frame::getArea(){
     return area;
 }
 
+Boton* Frame::getBM(){
+    return max;
+}
+
+Boton* Frame::getBm(){
+    return min;
+}
+
+Uint8 Frame::cambiarEstado(){
+    if(estado==MAXIMO)estado=MINIMO;
+    else estado=MAXIMO;
+}

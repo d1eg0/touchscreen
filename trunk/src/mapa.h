@@ -35,22 +35,28 @@ public:
     ~Mapa();
 
     void setOrigen(int x, int y);
+    double getOX();
+    double getOY();
+    double getDH();
+    double getDV();
+    double getEscala();
     vector<Capa>* getMapa();   
     void addCapa(Capa capa);
     void clearMapa();
     void escalarMapa(int escala);
     void pintarMapa(SDL_Surface *screen,Frame *frame, int escala);
     //Calculo de los desplazamientos para el centrado
-    void calcularDHV(SDL_Surface *screen, Frame *frame); //horizontal
+    void calcularDHV(SDL_Surface *screen, Frame *frame);
 
 private:
     vector<Capa> listaCapas;
     Dibujar *pincel;
+    Frame *frame;
     int escala; //0%..100%
     
     //Origen 0,0
-    int ox;
-    int oy;
+    double ox;
+    double oy;
     //Desplazamientos para el centrado: horizontal y vertical
     double dh;
     double dv;
