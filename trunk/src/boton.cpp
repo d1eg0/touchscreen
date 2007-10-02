@@ -1,6 +1,10 @@
 #include "boton.h"
 #include "constantes.h"
+#include <string>
 #include <SDL/SDL_gfxPrimitives.h>
+
+using namespace std;
+
 Boton::Boton(SDL_Surface *Ventana)
 {
 	area.h=20;
@@ -60,7 +64,6 @@ void Boto::LlevarSombra(bool Som)
 */
 void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 {
-	int wt, ht;
 	this->color=color;
 	area.h=h;
 	area.w=w;
@@ -68,14 +71,15 @@ void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 	area.y=y;
 	//TTF_SizeText(Font,_texto,&wt,&ht);
 
-	contenedor.x=area.x + ((w - wt)/2);
-	contenedor.y=area.y + ((h - ht)/2);
-	contenedor.w=wt;
-	contenedor.h=ht;
+	contenedor.x=area.x;
+	contenedor.y=area.y;
+	contenedor.w=w;
+	contenedor.h=h;
 	
 	SDL_SetClipRect(ventana, &area);
 	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, color);
-	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, 0xffffffFF);
+	string str(c);
+	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, 0xffffffFF);
 	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 

@@ -5,11 +5,13 @@
 #include <SDL/SDL_gfxPrimitives.h>
 #include "pantalla.h"
 #include "boton.h"
+#include "etiqueta.h"
 #include "frame.h"
 #include "constantes.h"
 #include "dxfparser.h"
 #include "mapa.h"
 #include <dxflib/dl_dxf.h>
+
 using namespace std;
 
 Boton *botonMasZoom;
@@ -54,6 +56,16 @@ int gestor (void *unusued){
     botonMenosZoom=new Boton(pantalla->getPantalla());
     botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-70, framemapa->getY()+framemapa->getH()+20, 20,20,"-",0xFFA500FF);
 
+    //Etiqueta Zoom
+    Etiqueta *e_zoom=new Etiqueta(pantalla->getPantalla());
+    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-170,
+	    framemapa->getY()+framemapa->getH()+10,
+	    70,
+	    20,
+	    "Zoom",
+	    0xFFA500FF,
+	    0xFFA500FF,
+	    0xFFFFFFFF);
     //Actualizar cambios en la pantalla
     SDL_UpdateRect(pantalla->getPantalla(),0,0,0,0);
     while(!pantalla->salir()){
