@@ -15,6 +15,7 @@ public:
 	
 	//void InsertarTexto(char *_text);
 	void dibujarEtiqueta();
+	void insertarTexto(char *c);
 
 
      

@@ -40,6 +40,7 @@ public:
     double getDH();
     double getDV();
     double getEscala();
+    char* getEscalaStr();
     vector<Capa>* getMapa();   
     void addCapa(Capa capa);
     void clearMapa();
@@ -47,6 +48,13 @@ public:
     void pintarMapa(SDL_Surface *screen,Frame *frame, int escala);
     //Calculo de los desplazamientos para el centrado
     void calcularDHV(SDL_Surface *screen, Frame *frame);
+    void centrarMapa(SDL_Surface *screen, Frame *frame);
+
+    //Desplazamientos
+    void despArriba();
+    void despAbajo();
+    void despIzquierda();
+    void despDerecha();
 
 private:
     vector<Capa> listaCapas;
@@ -60,6 +68,9 @@ private:
     //Desplazamientos para el centrado: horizontal y vertical
     double dh;
     double dv;
+    //Centro visual
+    double xm;
+    double ym;
       
 };
 #endif

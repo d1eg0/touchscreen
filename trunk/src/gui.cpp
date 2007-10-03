@@ -13,10 +13,13 @@
 #include <dxflib/dl_dxf.h>
 
 using namespace std;
-
+//Botones
 Boton *botonMasZoom;
 Boton *botonMenosZoom;
+Boton *botonArriba,*botonAbajo,*botonDerecha,*botonIzquierda;
+/////////
 Frame *framemapa;
+Etiqueta *e_vzoom;
 Mapa  plano;
 
 void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
@@ -47,25 +50,53 @@ int gestor (void *unusued){
 
     //Cargar el frame donde se sitúa el plano
     framemapa->cargarFrame(20,20,(int)((float)SCREEN_W/10.0*6.0), (int)((float)SCREEN_H/10.0*6.0),"Plano",0xffffff);
+    plano.centrarMapa(pantalla->getPantalla(),framemapa);
     plano.pintarMapa(pantalla->getPantalla(),framemapa,100);
 
     //Botones Zoom
     botonMasZoom=new Boton(pantalla->getPantalla());
-    botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, framemapa->getY()+framemapa->getH()+20, 20,20,"+",0xFFA500FF);
+    botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, framemapa->getY()+framemapa->getH()+30, 20,20,"+",0xFFA500FF);
 
     botonMenosZoom=new Boton(pantalla->getPantalla());
-    botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-70, framemapa->getY()+framemapa->getH()+20, 20,20,"-",0xFFA500FF);
+    botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-50, framemapa->getY()+framemapa->getH()+30, 20,20,"-",0xFFA500FF);
 
     //Etiqueta Zoom
     Etiqueta *e_zoom=new Etiqueta(pantalla->getPantalla());
-    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-170,
+    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
 	    framemapa->getY()+framemapa->getH()+10,
 	    70,
 	    20,
 	    "Zoom",
 	    0xFFA500FF,
+	    0x000000FF,
+	    0x000000FF);
+    e_vzoom=new Etiqueta(pantalla->getPantalla());
+    e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+	    framemapa->getY()+framemapa->getH()+50,
+	    70,
+	    20,
+	    plano.getEscalaStr(),
 	    0xFFA500FF,
-	    0xFFFFFFFF);
+	    0xFFA500FF,
+	    0x000000FF);
+
+
+    //Botones movimiento del mapa
+    //	Derecha
+    botonDerecha=new Boton(pantalla->getPantalla());
+    botonDerecha->cargarBoton(framemapa->getX()+140, framemapa->getY()+framemapa->getH()+30, 20,20,">",0xFFA500FF);
+    //	Izquierda
+    botonIzquierda=new Boton(pantalla->getPantalla());
+    botonIzquierda->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0xFFA500FF);
+    //	Arriba
+    botonArriba=new Boton(pantalla->getPantalla());
+    botonArriba->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0xFFA500FF);
+    //	Abajo
+    botonAbajo=new Boton(pantalla->getPantalla());
+    botonAbajo->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF);
+
+
+
     //Actualizar cambios en la pantalla
     SDL_UpdateRect(pantalla->getPantalla(),0,0,0,0);
     while(!pantalla->salir()){

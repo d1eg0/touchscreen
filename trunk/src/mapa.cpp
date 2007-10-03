@@ -16,13 +16,13 @@
  * =====================================================================================
  */
 #include "mapa.h"
-
+#include "constantes.h"
 Mapa::Mapa(){
-    escala=100;
-    ox=0;
-    oy=0;
-    dh=0;
-    dv=0;
+    this->escala=100;
+    this->ox=0;
+    this->oy=0;
+    this->dh=0;
+    this->dv=0;
 }
 
 Mapa::~Mapa(){
@@ -54,6 +54,13 @@ double Mapa::getEscala(){
     return escala;
 }
 
+char* Mapa::getEscalaStr(){
+    char *escala=(char *)malloc(sizeof(int)+sizeof(char));
+    sprintf(escala,"%d",(int)this->escala);
+    strcat(escala,"\%");
+    return escala;
+}
+
 vector<Capa>* Mapa::getMapa(){
     return &listaCapas;
 }
@@ -76,6 +83,7 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, int escala){
     this->oy=frame->getY()+frame->getH()+dv;
     vector<Capa>::iterator i_capa;
     vector<Linea>::iterator i_linea;
+
     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
 	cout << "Capa:" << (*i_capa).getNombre() << "," << (*i_capa).getColor() << ",size:" << (*(*i_capa).getCapa()).size() << endl;
 	vector<Linea> llineas=(*(*i_capa).getCapa());
@@ -91,6 +99,11 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, int escala){
 
 
 void Mapa::calcularDHV(SDL_Surface *screen, Frame *frame){   
+    dh=(frame->getW()*0.5-(xm*escala/100.0));
+    dv=-(frame->getH()*0.5-(ym*escala/100.0));	//negativo porque el eje Y+ apunta a Y-
+}
+
+void Mapa::centrarMapa(SDL_Surface *screen, Frame *frame){   
 
     vector<Capa>::iterator i_capa;
     vector<Linea>::iterator i_linea;
@@ -99,7 +112,6 @@ void Mapa::calcularDHV(SDL_Surface *screen, Frame *frame){
     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
 	vector<Linea> llineas=(*(*i_capa).getCapa());
 	for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
-	     printf("LINE     (%lf, %lf) (%lf, %lf)\n",(*i_linea).getX1(),(*i_linea).getY1(), (*i_linea).getX2(),(*i_linea).getY2());
 	    Linea lleida=(*i_linea);
 	    lleida.escalar(escala);
 	    if (lleida.getX1()>x_max){
@@ -116,30 +128,12 @@ void Mapa::calcularDHV(SDL_Surface *screen, Frame *frame){
 	    }
 	}
     }
-    printf("(Xmax:%lf, Ymax:%lf) --- (Xframe:%d, Yframe:%d)\n",x_max,y_max,frame->getX()+frame->getW(),frame->getY()+frame->getH());
-    dh=frame->getW()-x_max;
-    dv=frame->getH()-y_max;
-    dh*=0.5;
-    dv*=-0.5; //negativo porque el eje Y+ apunta a Y-
-    printf("Dh:%lf, Dv:%lf\n",dh,dv);
+    xm=x_max*0.5;
+    ym=y_max*0.5;
+    dh=(frame->getW()*0.5-xm);
+    dv=-(frame->getH()*0.5-ym);	//negativo porque el eje Y+ apunta a Y-
 
 }
-
-/*void Mapa::escalarMapa(int escala){   
-
-    this->escala+=escala;
-     vector<Capa>::iterator i_capa;
-     vector<Linea>::iterator i_linea;
-     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
-	 vector<Linea> llineas=(*(*i_capa).getCapa());
-	 for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
-	     Linea linealeida=(*i_linea);
-	     linealeida.escalar(escala);
-	     //printf("LINE     (%lf, %lf) (%lf, %lf)\n",linealeida.getX1(),linealeida.getY1(), linealeida.getX2(),linealeida.getY2());
-	     pincel->dibujarLinea(frame,&linealeida, dh, dv);
-	 }
-     }
-}*/
 
 void Mapa::escalarMapa(int escala){
     this->escala+=escala;
@@ -147,11 +141,25 @@ void Mapa::escalarMapa(int escala){
 }
 
 
+void Mapa::despArriba(){
+    this->ym-=FACTOR_DESP;
+    pintarMapa(frame->getVentana(),frame,this->escala);
+}
 
+void Mapa::despAbajo(){
+    this->ym+=FACTOR_DESP;
+    pintarMapa(frame->getVentana(),frame,this->escala);
+}
 
+void Mapa::despIzquierda(){
+    this->xm+=FACTOR_DESP;
+    pintarMapa(frame->getVentana(),frame,this->escala);
+}
 
-
-
+void Mapa::despDerecha(){
+    this->xm-=FACTOR_DESP;
+    pintarMapa(frame->getVentana(),frame,this->escala);
+}
 
 
 

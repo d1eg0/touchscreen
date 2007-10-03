@@ -33,18 +33,28 @@ void Etiqueta::cargarEtiqueta(int x, int y, int w, int h, char *c, Uint32 colorF
 	area.x=x;
 	area.y=y;
 	
-	contenedor.x=x;
-	contenedor.y=y;
-	contenedor.w=w;
-	contenedor.h=h;
+	contenedor.x=x-5;
+	contenedor.y=y-5;
+	contenedor.w=w+10;
+	contenedor.h=h+10;
 		
-	SDL_SetClipRect(ventana, &area);
+	SDL_SetClipRect(ventana, &contenedor);
 	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorRelleno);
-	string str(c);
-	printf( "++++++++++tamaño:%d\n", str.size());
+	rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorBorde);
 
+	string str(c);
 	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, colorFuente);
-	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+	//SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
+void Etiqueta::insertarTexto(char *c){
 
+    SDL_SetClipRect(ventana, &contenedor);
+    boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorRelleno);
+    rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorBorde);
+
+    string str(c);
+    stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, colorFuente);
+
+    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+}
