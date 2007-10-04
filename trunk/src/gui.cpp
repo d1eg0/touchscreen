@@ -14,10 +14,16 @@
 
 using namespace std;
 //Botones
+//  Zoom
 Boton *botonMasZoom;
 Boton *botonMenosZoom;
-Boton *botonArriba,*botonAbajo,*botonDerecha,*botonIzquierda;
-/////////
+//  Desplazar
+Boton *botonArriba,
+      *botonAbajo,
+      *botonDerecha,
+      *botonIzquierda,
+      *botonCentrar;
+///////////////////////
 Frame *framemapa;
 Etiqueta *e_vzoom;
 Mapa  plano;
@@ -94,6 +100,9 @@ int gestor (void *unusued){
     //	Abajo
     botonAbajo=new Boton(pantalla->getPantalla());
     botonAbajo->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF);
+    //	Centrar
+    botonCentrar=new Boton(pantalla->getPantalla());
+    botonCentrar->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
 
 
 

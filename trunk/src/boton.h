@@ -3,7 +3,7 @@
 #include <SDL/SDL.h>
 
 
-enum EstadoBoton {seleccionado=1, deseleccionado=0};
+enum EstadoBoton {activo=1, inactivo=0};
 
 class Boton  
 {
@@ -15,10 +15,10 @@ public:
 	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
 	
 	//void InsertarTexto(char *_text);
-	void dibujarBoton();
+//	void dibujarBoton();
 
 	bool presionado(int xm, int ym);
-
+	bool getEstado();
 	//int GetX();
 	//int GetY();
 	//int GetW();

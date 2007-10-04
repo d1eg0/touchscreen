@@ -19,6 +19,7 @@ public:
 
     SDL_Surface* getPantalla();
     void entrada();
+    void borrar();
     bool salir();
 
 

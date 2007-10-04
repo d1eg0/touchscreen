@@ -3,8 +3,13 @@
 #include "boton.h"
 #include "mapa.h"
 #include "etiqueta.h"
-extern Boton *botonMasZoom, *botonMenosZoom;
-extern Boton *botonDerecha,*botonIzquierda,*botonArriba,*botonAbajo;
+extern Boton *botonMasZoom, 
+       *botonMenosZoom;
+extern Boton *botonDerecha,
+       *botonIzquierda,
+       *botonArriba,
+       *botonAbajo,
+       *botonCentrar;
 extern Mapa plano;
 extern Frame *framemapa;
 extern Etiqueta *e_vzoom;
@@ -26,7 +31,6 @@ Pantalla::Pantalla()
     screen=SDL_SetVideoMode(v_screen, h_screen, video_bpp, videoflags);
 //SDL_DOUBLEBUF|SDL_SWSURFACE);	
     SDL_SetAlpha(screen, SDL_SRCALPHA, 0);
-    Dibujar paleta(screen);
     SDL_FillRect( screen, 0, 0x000000);
     SDL_UpdateRect(screen,0,0,0,0);
 	//SDL_ShowCursor(0);	//ocultar cursor
@@ -83,43 +87,60 @@ void Pantalla::entrada()
 				plano.escalarMapa(FACTOR_ZOOM);
 				e_vzoom->insertarTexto(plano.getEscalaStr());
 				SDL_UpdateRect(screen,0,0,0,0);
-			}else cout << "Zfuera" << endl;	
-			if(botonMenosZoom->presionado(event.motion.x,event.motion.y)){
+			}
+			else if(botonMenosZoom->presionado(event.motion.x,event.motion.y)){
 				cout << "Z-dentro" << endl;
 				framemapa->limpiarFrame();
 				plano.escalarMapa(-FACTOR_ZOOM);
 				e_vzoom->insertarTexto(plano.getEscalaStr());
 				SDL_UpdateRect(screen,0,0,0,0);
-			}else cout << "Zfuera" << endl;	
-			if(botonDerecha->presionado(event.motion.x,event.motion.y)){
+			}
+			else if(botonDerecha->presionado(event.motion.x,event.motion.y)){
 				cout << "Derecha" << endl;
 				framemapa->limpiarFrame();
 				plano.despDerecha();
 				SDL_UpdateRect(screen,0,0,0,0);
 			}
-			if(botonIzquierda->presionado(event.motion.x,event.motion.y)){
+			else if(botonIzquierda->presionado(event.motion.x,event.motion.y)){
 				cout << "Izquierda" << endl;
 				framemapa->limpiarFrame();
 				plano.despIzquierda();
 				SDL_UpdateRect(screen,0,0,0,0);
 			}
-			if(botonArriba->presionado(event.motion.x,event.motion.y)){
+			else if(botonArriba->presionado(event.motion.x,event.motion.y)){
 				cout << "Arriba" << endl;
 				framemapa->limpiarFrame();
 				plano.despArriba();
 				SDL_UpdateRect(screen,0,0,0,0);
 			}
-			if(botonAbajo->presionado(event.motion.x,event.motion.y)){
+			else if(botonAbajo->presionado(event.motion.x,event.motion.y)){
 				cout << "Abajo" << endl;
 				framemapa->limpiarFrame();
 				plano.despAbajo();
 				SDL_UpdateRect(screen,0,0,0,0);
 			}
-			
-			if(framemapa->getBM()->presionado(event.motion.x,event.motion.y)){
-				cout << "Mdentro" << endl;
+			else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
+				cout << "Centrar" << endl;
+				framemapa->limpiarFrame();
+				plano.centrarMapa(screen,framemapa);
+				plano.pintarMapa(screen,framemapa,(int)plano.getEscala());
+				SDL_UpdateRect(screen,0,0,0,0);
+			}
+			else if(framemapa->getBcerrar()->presionado(event.motion.x,event.motion.y)){
+				cout << "Bcerrar" << endl;
 				framemapa->cerrarFrame();
-			}else cout << "Mfuera" << endl;	
+			}	
+			else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
+				cout << "Bmaxmin" << endl;
+				this->borrar();
+				if(framemapa->getEstado()==MINIMO)
+				    framemapa->maxFrame();
+				else 
+				   framemapa->minFrame(); 
+				plano.centrarMapa(screen,framemapa);
+				plano.pintarMapa(screen,framemapa,100);
+				SDL_UpdateRect(screen,0,0,0,0);
+			}	
 		
 
 	if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)){
@@ -133,6 +154,17 @@ void Pantalla::entrada()
  
 		} 
 	} 
+}
+
+void Pantalla::borrar(){
+    SDL_Rect r;
+    r.x=0;
+    r.y=0;
+    r.w=SCREEN_W;
+    r.h=SCREEN_H;
+    SDL_SetClipRect(screen,&r);
+    SDL_FillRect( screen, 0, 0x000000);
+    SDL_UpdateRect(screen,0,0,0,0);
 }
 
 bool Pantalla::salir()

@@ -19,13 +19,17 @@ Boton::Boton(SDL_Surface *Ventana)
 	//TTF_SetFontStyle (Font, TTF_STYLE_NORMAL);
 
 	//HiHaSombra=true;
-	estado=deseleccionado;
+	estado=inactivo;
 
 }
 
 Boton::~Boton()
 {
 
+}
+
+bool Boton::getEstado(){
+    return estado;
 }
 /*
 void Boton::CanviaMidaText(int mida)
@@ -78,12 +82,14 @@ void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 	
 	SDL_SetClipRect(ventana, &area);
 	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, color);
+	rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xffffffff);
 	string str(c);
 	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, 0xffffffFF);
 	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+	estado=activo;
 }
 
-void Boton::dibujarBoton()
+/*void Boton::dibujarBoton()
 {
 	SDL_Rect sombra;
 	Uint32 ColorAux;
@@ -96,11 +102,11 @@ void Boton::dibujarBoton()
 
 	if(estado==deseleccionado)
 	{
-		/*if(HiHaSombra)
+		if(HiHaSombra)
 		{
 			SDL_FillRect(Finestra, &Sombra,SDL_MapRGB(Finestra->format,0,0,0));
 			SDL_UpdateRect(Finestra,Sombra.x,Sombra.y,Sombra.w,Sombra.h);
-		} */
+		} 
 		//SDL_SetAlpha(ventana, SDL_SRCALPHA, 255);
 		//SDL_FillRect(ventana, &area, color);
 		boxColor(ventana,area.x,area.y,area.x+area.w,area.y+area.h,color);
@@ -108,7 +114,7 @@ void Boton::dibujarBoton()
 	}
 	else
 	{
-	  /*  if(Color+(3*50)<255*255*255)
+	    if(Color+(3*50)<255*255*255)
 			ColorAux=Color+(3*50);
 		else
 			if(Color<255*255*255)
@@ -126,12 +132,12 @@ void Boton::dibujarBoton()
 
 		SDL_FillRect(Finestra, &Sombra, ColorAux);
 		SDL_UpdateRect(Finestra,Sombra.x,Sombra.y,Sombra.w,Sombra.h);
-		*/
+		
 	}
 
 	
   //  EscriureText();
-}
+}*/
 
 /*
 void Boto::InsereixText(char *_text)
@@ -202,7 +208,7 @@ int Boto::GetW()
 */
 bool Boton::presionado(int x,int y)
 {
-	return (x>area.x)&&(x<area.x+area.w)&&
+	return estado&&(x>area.x)&&(x<area.x+area.w)&&
 		(y>area.y)&&(y<area.y+area.h);
 }
 
