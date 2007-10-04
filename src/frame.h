@@ -14,6 +14,8 @@ public:
 	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
 	
     void cerrarFrame();
+    void maxFrame();
+    void minFrame();
     void limpiarFrame();
 
     bool Presionado(int xm, int ym);
@@ -23,17 +25,19 @@ public:
     int getW();
     int getH();
     SDL_Rect getArea();
-    Boton* getBM();
-    Boton* getBm();
-    Uint8 cambiarEstado();
+    Boton* getBcerrar();
+    Boton* getBmaxmin();
+    Uint8 getEstado();
+
 private:
-	SDL_Rect area;
-	SDL_Surface *ventana;
-	Uint32 color;
-	SDL_Rect contenedor;
-	Boton *max;
-	Boton *min;
-	Uint8 estado;
+    char* titulo;
+    SDL_Rect area,areamax;
+    SDL_Surface *ventana;
+    Uint32 color;
+    SDL_Rect contenedor,contenedormax;
+    Boton *bcerrar;
+    Boton *bmaxmin;
+    Uint8 estado;
 
 };
 
