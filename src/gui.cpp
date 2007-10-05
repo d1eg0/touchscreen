@@ -25,7 +25,8 @@ Boton *botonArriba,
       *botonCentrar;
 ///////////////////////
 Frame *framemapa;
-Etiqueta *e_vzoom;
+Etiqueta *e_zoom,
+	 *e_vzoom;
 Mapa  plano;
 
 void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
@@ -67,7 +68,7 @@ int gestor (void *unusued){
     botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-50, framemapa->getY()+framemapa->getH()+30, 20,20,"-",0xFFA500FF);
 
     //Etiqueta Zoom
-    Etiqueta *e_zoom=new Etiqueta(pantalla->getPantalla());
+    e_zoom=new Etiqueta(pantalla->getPantalla());
     e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
 	    framemapa->getY()+framemapa->getH()+10,
 	    70,

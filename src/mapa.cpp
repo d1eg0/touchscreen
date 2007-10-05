@@ -74,7 +74,7 @@ void Mapa::clearMapa(){
 }
 
 
-void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, int escala){   
+void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){   
     this->escala=escala;
     this->frame=frame;
     this->pincel=new Dibujar(screen);
@@ -85,7 +85,7 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, int escala){
     vector<Linea>::iterator i_linea;
 
     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
-	cout << "Capa:" << (*i_capa).getNombre() << "," << (*i_capa).getColor() << ",size:" << (*(*i_capa).getCapa()).size() << endl;
+	//cout << "Capa:" << (*i_capa).getNombre() << "," << (*i_capa).getColor() << ",size:" << (*(*i_capa).getCapa()).size() << endl;
 	vector<Linea> llineas=(*(*i_capa).getCapa());
 	for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
 	     Linea linealeida=(*i_linea);
@@ -94,7 +94,6 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, int escala){
 	     pincel->dibujarLinea(frame,&linealeida,dh,dv);
 	 }
      }
-    cout << "ox:" << ox << ", oy:" << oy << endl;
 }
 
 
@@ -113,7 +112,6 @@ void Mapa::centrarMapa(SDL_Surface *screen, Frame *frame){
 	vector<Linea> llineas=(*(*i_capa).getCapa());
 	for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
 	    Linea lleida=(*i_linea);
-	    lleida.escalar(escala);
 	    if (lleida.getX1()>x_max){
 		x_max=lleida.getX1();
 	    }
@@ -130,12 +128,9 @@ void Mapa::centrarMapa(SDL_Surface *screen, Frame *frame){
     }
     xm=x_max*0.5;
     ym=y_max*0.5;
-    dh=(frame->getW()*0.5-xm);
-    dv=-(frame->getH()*0.5-ym);	//negativo porque el eje Y+ apunta a Y-
-
 }
 
-void Mapa::escalarMapa(int escala){
+void Mapa::escalarMapa(double escala){
     this->escala+=escala;
     pintarMapa(frame->getVentana(),frame,this->escala);
 }
