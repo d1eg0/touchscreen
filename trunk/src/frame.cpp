@@ -110,10 +110,11 @@ void Frame::minFrame(){
 }
 
 void Frame::limpiarFrame(){
-    SDL_SetClipRect(ventana, &area);
-    SDL_FillRect(ventana, &area, color);
+    SDL_Rect a=this->getArea();
+    SDL_SetClipRect(ventana, &a);
+    SDL_FillRect(ventana, &a, color);
     //Borde
-    rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xFFA500FF);
+    rectangleColor(ventana, a.x, a.y, a.x+a.w-1, a.y+a.h-1, 0xFFA500FF);
     SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 

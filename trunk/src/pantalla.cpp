@@ -12,7 +12,7 @@ extern Boton *botonDerecha,
        *botonCentrar;
 extern Mapa plano;
 extern Frame *framemapa;
-extern Etiqueta *e_vzoom;
+extern Etiqueta *e_zoom,*e_vzoom;
 
 Pantalla::Pantalla() 
 {
@@ -123,7 +123,7 @@ void Pantalla::entrada()
 				cout << "Centrar" << endl;
 				framemapa->limpiarFrame();
 				plano.centrarMapa(screen,framemapa);
-				plano.pintarMapa(screen,framemapa,(int)plano.getEscala());
+				plano.pintarMapa(screen,framemapa,plano.getEscala());
 				SDL_UpdateRect(screen,0,0,0,0);
 			}
 			else if(framemapa->getBcerrar()->presionado(event.motion.x,event.motion.y)){
@@ -133,12 +133,88 @@ void Pantalla::entrada()
 			else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
 				cout << "Bmaxmin" << endl;
 				this->borrar();
-				if(framemapa->getEstado()==MINIMO)
+				if(framemapa->getEstado()==MINIMO){
 				    framemapa->maxFrame();
-				else 
-				   framemapa->minFrame(); 
-				plano.centrarMapa(screen,framemapa);
-				plano.pintarMapa(screen,framemapa,100);
+				    plano.pintarMapa(screen,framemapa,plano.getEscala());
+				    //Botones Zoom
+				    botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, framemapa->getY()+framemapa->getH()+30, 20,20,"+",0xFFA500FF);
+				    botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-50, framemapa->getY()+framemapa->getH()+30, 20,20,"-",0xFFA500FF);
+
+				    //Etiqueta Zoom
+				    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
+					    framemapa->getY()+framemapa->getH()+10,
+					    70,
+					    20,
+					    "Zoom",
+					    0xFFA500FF,
+					    0x000000FF,
+					    0x000000FF);
+
+				    e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+					    framemapa->getY()+framemapa->getH()+50,
+					    70,
+					    20,
+					    plano.getEscalaStr(),
+					    0xFFA500FF,
+					    0xFFA500FF,
+					    0x000000FF);
+    
+				    //Botones movimiento del mapa
+
+				    //	Derecha
+				    botonDerecha->cargarBoton(framemapa->getX()+140, framemapa->getY()+framemapa->getH()+30, 20,20,">",0xFFA500FF);
+				    //	Izquierda
+				    botonIzquierda->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0xFFA500FF);
+				    //	Arriba
+				    botonArriba->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0xFFA500FF);
+				    //	Abajo
+				    botonAbajo->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF);
+				    //	Centrar
+				    botonCentrar->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
+
+
+				}else{ 
+				    framemapa->minFrame(); 
+				    plano.pintarMapa(screen,framemapa,plano.getEscala());
+
+				    //Botones Zoom
+				    botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, framemapa->getY()+framemapa->getH()+30, 20,20,"+",0xFFA500FF);
+				    botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-50, framemapa->getY()+framemapa->getH()+30, 20,20,"-",0xFFA500FF);
+
+				    //Etiqueta Zoom
+				    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
+					    framemapa->getY()+framemapa->getH()+10,
+					    70,
+					    20,
+					    "Zoom",
+					    0xFFA500FF,
+					    0x000000FF,
+					    0x000000FF);
+
+				    e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+					    framemapa->getY()+framemapa->getH()+50,
+					    70,
+					    20,
+					    plano.getEscalaStr(),
+					    0xFFA500FF,
+					    0xFFA500FF,
+					    0x000000FF);
+    
+				    //Botones movimiento del mapa
+
+				    //	Derecha
+				    botonDerecha->cargarBoton(framemapa->getX()+140, framemapa->getY()+framemapa->getH()+30, 20,20,">",0xFFA500FF);
+				    //	Izquierda
+				    botonIzquierda->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0xFFA500FF);
+				    //	Arriba
+				    botonArriba->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0xFFA500FF);
+				    //	Abajo
+				    botonAbajo->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF);
+				    //	Centrar
+				    botonCentrar->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
+
+
+				}
 				SDL_UpdateRect(screen,0,0,0,0);
 			}	
 		
