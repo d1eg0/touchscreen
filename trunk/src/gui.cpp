@@ -118,7 +118,8 @@ int gestor (void *unusued){
 
 int main(int argc, char *argv[])
 {
-
+//    string mapadxf="maps/casa.dxf";
+    string mapadxf="maps/segonDxf.dxf";
 
     SDL_Thread *hilo;
     cout <<"Inicializando SDL." << endl;
@@ -126,7 +127,7 @@ int main(int argc, char *argv[])
     //Lectura Fichero DXF, introduce la estructura en plano
     DxfParser *parser_dxf=new DxfParser();
     DL_Dxf* dxf = new DL_Dxf();
-    if (!dxf->in("maps/casa.dxf", parser_dxf)) {
+    if (!dxf->in(mapadxf, parser_dxf)) {
 	std::cerr << "No se ha podido abrir el DXF.\n";
     }
     delete dxf;

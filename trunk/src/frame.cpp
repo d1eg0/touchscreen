@@ -67,9 +67,15 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 }
 
 void Frame::cerrarFrame(){
-    SDL_SetClipRect(ventana, &contenedor);
-    SDL_FillRect(ventana, &contenedor, 0x000000);
-    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    //no importa borrarlo porque hay q borrar la pantalla entera
+    /*if(estado==MAXIMO){
+	SDL_SetClipRect(ventana, &contenedormax);
+	SDL_FillRect(ventana, &contenedormax, 0x000000);
+    }else if (estado==MINIMO){
+	SDL_SetClipRect(ventana, &contenedor);
+	SDL_FillRect(ventana, &contenedor, 0x000000);
+    }
+    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);*/
     estado=CERRADO;
 }
 

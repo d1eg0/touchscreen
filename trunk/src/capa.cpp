@@ -31,10 +31,21 @@ vector<Linea>* Capa::getCapa(){
     return &listaLineas;
 }
 
+vector<Polilinea>* Capa::getPolilinea(){
+    return &listaPolilineas;
+}
+
 void Capa::addLinea(Linea linea){
     listaLineas.push_back(linea);
 }
 
+void Capa::addPolilinea(Polilinea polilinea){
+    listaPolilineas.push_back(polilinea);
+}
+
+void Capa::addVertice(Vertice vertice){
+    listaPolilineas.front().addVertice(vertice);
+}
 
 int Capa::getColor(){
     return color;
