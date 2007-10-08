@@ -7,7 +7,7 @@ SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs)
 EXTERN_LIBS = -L/usr/local/lib -ldxf -lSDL_gfx -L/usr/X11R6/lib -lX11
 PROGRAMA = gui
-OBJ = linea.o capa.o mapa.o dxfparser.o frame.o dibujar.o mouse.o etiqueta.o boton.o pantalla.o $(PROGRAMA).o
+OBJ = vertice.o linea.o polilinea.o capa.o mapa.o dxfparser.o frame.o dibujar.o mouse.o etiqueta.o boton.o pantalla.o $(PROGRAMA).o
 
 .SUFFIXES: .o .cpp
 

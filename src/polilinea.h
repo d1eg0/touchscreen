@@ -1,5 +1,5 @@
 /**
- *    \file  capa.h
+ *    \file  Polilinea.h
  *   \brief  
  *
  *  Detailed description starts here.
@@ -15,41 +15,35 @@
  *  GNU General Public License as published by the Free Software Foundation.
  * =====================================================================================
  */
-#ifndef CAPA_H
-#define CAPA_H
+#ifndef POLILINEA_H
+#define POLILINEA_H
 
 #include <iostream>
 #include <vector>
-#include "linea.h"
-#include "polilinea.h"
 #include "vertice.h"
 
 using namespace std;
 
 /**
- *  \class Capa
- *  \brief La clase Mapa está divida en capas
+ *  \class Polilinea
+ *  \brief La clase Capa está divida en Polilineas de vertices
  *   
  *  \par 
  */
 
-class Capa {
+class Polilinea {
 public:
-    Capa(string nombre, int color);
-    ~Capa();
+    Polilinea(int num, bool cerrado);
+    ~Polilinea();
 
-    vector<Linea>* getCapa();
-    vector<Polilinea>* getPolilinea();
-    void addLinea(Linea linea);
-    void addPolilinea(Polilinea polilinea);
+    vector<Vertice>* getPolilinea();
     void addVertice(Vertice vertice);
-    int getColor();
-    string getNombre();
+    bool getCerrado();
+    int getNumlineas();
 private:
-    vector<Linea> listaLineas;
-    vector<Polilinea> listaPolilineas;
-    string nombre;
-    int color;
+    vector<Vertice> listaVertices;
+    bool cerrado;
+    int numLineas;
 };
 #endif
 
