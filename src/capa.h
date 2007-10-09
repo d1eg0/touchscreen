@@ -45,6 +45,7 @@ public:
     void addVertice(Vertice vertice);
     int getColor();
     string getNombre();
+    void clear();
 private:
     vector<Linea> listaLineas;
     vector<Polilinea> listaPolilineas;

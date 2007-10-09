@@ -68,15 +68,16 @@ void DxfParser::addVertex(const DL_VertexData& data) {
     
     (*plano.getMapa())[i].getPolilinea()->back().addVertice(nuevovertice);*/
     string capa=attributes.getLayer().c_str();
-    cout <<    plano.getCapa(capa)->getPolilinea()->back().getNum() << endl;
     plano.getCapa(capa)->addVertice(nuevovertice);
+    cout <<    "N:" <<plano.getCapa(capa)->getPolilinea()->back().getNum() << endl;
     if (plano.getCapa(capa)->getPolilinea()->back().getNumTotal()==
 	    plano.getCapa(capa)->getPolilinea()->back().getNum()){
 	cout << "ultimo vertice" << endl;
-	vector<Linea> *vPolilineas=plano.getCapa(capa)->getPolilinea()->back().toLineas();
-	
+	vector<Linea> vPolilineas;
+	vPolilineas.swap((*plano.getCapa(capa)->getPolilinea()->back().toLineas()));
+	plano.getCapa(capa)->clear();	
 	vector<Linea>::iterator i_linea;
-	for(i_linea=vPolilineas->begin(); i_linea!=vPolilineas->end(); i_linea++){
+	for(i_linea=vPolilineas.begin(); i_linea!=vPolilineas.end(); i_linea++){
 	    plano.getCapa(capa)->addLinea((*i_linea));
 	}
     }

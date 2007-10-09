@@ -33,15 +33,16 @@ int Polilinea::getNum(){
 vector<Linea>* Polilinea::toLineas(){
     vector<Linea> *vLineas;
     vector<Vertice> parVertices;
-    
+    vLineas->clear();
     vector<Vertice>::iterator i_vertice;
     for(i_vertice=listaVertices.begin(); i_vertice!=listaVertices.end(); i_vertice++){
 	parVertices.push_back((*i_vertice));
 	if(parVertices.size()==2){
-	    Vertice v1,
-		    v2;
-	    v1=parVertices.front();
-	    v2=parVertices.back();
+cout << "pila\n\tx:" << parVertices.front().getX()<< " y: " << parVertices.front().getY() << endl;
+cout << "\tx:" << parVertices.back().getX()<< " y: " << parVertices.back().getY() << endl;
+	    Vertice v1(parVertices.front().getX(),parVertices.front().getY()),
+		    v2(parVertices.back().getX(),parVertices.back().getY());
+	    
 	    Linea nuevaLinea(capa,v1.getX(),
 		    v1.getY(),
 		    v2.getX(),
@@ -52,6 +53,11 @@ vector<Linea>* Polilinea::toLineas(){
 	}	
     }
     if (cerrado) {
+	cout << "x1: " <<vLineas->front().getX1() <<
+		"  y1: " <<vLineas->front().getY1() << 
+		"  x2: " <<vLineas->back().getX2() <<
+		"  y2: " <<vLineas->back().getY2() <<endl;
+
 	Linea lineaCerrar(capa,
 		vLineas->front().getX1(),
 		vLineas->front().getY1(),
