@@ -147,22 +147,22 @@ void Mapa::escalarMapa(double escala){
 
 
 void Mapa::despArriba(){
-    this->ym-=FACTOR_DESP;
-    pintarMapa(frame->getVentana(),frame,this->escala);
-}
-
-void Mapa::despAbajo(){
     this->ym+=FACTOR_DESP;
     pintarMapa(frame->getVentana(),frame,this->escala);
 }
 
+void Mapa::despAbajo(){
+    this->ym-=FACTOR_DESP;
+    pintarMapa(frame->getVentana(),frame,this->escala);
+}
+
 void Mapa::despIzquierda(){
-    this->xm+=FACTOR_DESP;
+    this->xm-=FACTOR_DESP;
     pintarMapa(frame->getVentana(),frame,this->escala);
 }
 
 void Mapa::despDerecha(){
-    this->xm-=FACTOR_DESP;
+    this->xm+=FACTOR_DESP;
     pintarMapa(frame->getVentana(),frame,this->escala);
 }
 

@@ -44,7 +44,7 @@ void Capa::addPolilinea(Polilinea polilinea){
 }
 
 void Capa::addVertice(Vertice vertice){
-    listaPolilineas.front().addVertice(vertice);
+    listaPolilineas.back().addVertice(vertice);
 }
 
 int Capa::getColor(){
@@ -55,3 +55,6 @@ string Capa::getNombre(){
     return nombre;
 }
 
+void Capa::clear(){
+    listaPolilineas.clear();
+}
