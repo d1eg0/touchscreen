@@ -15,16 +15,17 @@ void DxfParser::addLine(const DL_LineData& data) {
     //<< " " << data.x2 << "/" << data.y2 << std::endl;
     Linea nuevalinea(attributes.getLayer().c_str(),data.x1,data.y1,data.x2,data.y2);
     
-    int i=0;
+    /*int i=0;
     vector<Capa>::iterator i_capa;
     for(i_capa=(*plano.getMapa()).begin(); i_capa!=(*plano.getMapa()).end(); i_capa++){
 	 if ((*i_capa).getNombre()==nuevalinea.getCapa()){
 	     break;
 	 }
 	 i++;
-    }
+    }*/
 
-    (*plano.getMapa())[i].addLinea(nuevalinea);
+    //(*plano.getMapa())[i].addLinea(nuevalinea);
+    plano.getCapa(nuevalinea.getCapa())->addLinea(nuevalinea);
 }
 
 void DxfParser::addLayer(const DL_LayerData& data) {
@@ -38,8 +39,8 @@ void DxfParser::addPolyline(const DL_PolylineData& data) {
     bool cerrado;
     if(data.flags==1)cerrado=true;
     else cerrado=false;
-    Polilinea polilinea(data.number,cerrado);
-    int i=0;
+    Polilinea nuevapolilinea(data.number,cerrado,attributes.getLayer().c_str());
+    /*int i=0;
     vector<Capa>::iterator i_capa;
     for(i_capa=(*plano.getMapa()).begin(); i_capa!=(*plano.getMapa()).end(); i_capa++){
 	 if ((*i_capa).getNombre()==attributes.getLayer().c_str()){
@@ -48,14 +49,15 @@ void DxfParser::addPolyline(const DL_PolylineData& data) {
 	 i++;
     }
 
-    (*plano.getMapa())[i].addPolilinea(polilinea);
+    (*plano.getMapa())[i].addPolilinea(polilinea);*/
+    plano.getCapa(attributes.getLayer().c_str())->addPolilinea(nuevapolilinea);
 
 }
 
 void DxfParser::addVertex(const DL_VertexData& data) {
 
     Vertice nuevovertice(data.x,data.y);
-    int i=0;
+    /*int i=0;
     vector<Capa>::iterator i_capa;
     for(i_capa=(*plano.getMapa()).begin(); i_capa!=(*plano.getMapa()).end(); i_capa++){
 	 if ((*i_capa).getNombre()==attributes.getLayer().c_str()){
@@ -63,8 +65,21 @@ void DxfParser::addVertex(const DL_VertexData& data) {
 	 }
 	 i++;
     }
-
-    (*plano.getMapa())[i].getPolilinea()->back().addVertice(nuevovertice);
+    
+    (*plano.getMapa())[i].getPolilinea()->back().addVertice(nuevovertice);*/
+    string capa=attributes.getLayer().c_str();
+    cout <<    plano.getCapa(capa)->getPolilinea()->back().getNum() << endl;
+    plano.getCapa(capa)->addVertice(nuevovertice);
+    if (plano.getCapa(capa)->getPolilinea()->back().getNumTotal()==
+	    plano.getCapa(capa)->getPolilinea()->back().getNum()){
+	cout << "ultimo vertice" << endl;
+	vector<Linea> *vPolilineas=plano.getCapa(capa)->getPolilinea()->back().toLineas();
+	
+	vector<Linea>::iterator i_linea;
+	for(i_linea=vPolilineas->begin(); i_linea!=vPolilineas->end(); i_linea++){
+	    plano.getCapa(capa)->addLinea((*i_linea));
+	}
+    }
     cout << "\tVertex, capa:" << attributes.getLayer().c_str()<<" x:"<< data.x <<" y:" << data.y << endl;
 }
 

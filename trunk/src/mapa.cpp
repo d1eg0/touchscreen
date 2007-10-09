@@ -65,6 +65,16 @@ vector<Capa>* Mapa::getMapa(){
     return &listaCapas;
 }
 
+Capa* Mapa::getCapa(string c){
+    int i=0;
+    vector<Capa>::iterator i_capa;
+    for(i_capa=listaCapas.begin(); i_capa!=listaCapas.end(); i_capa++){
+	 if ((*i_capa).getNombre()==c){
+	     return &(*i_capa);
+	 }
+    }
+}
+
 void Mapa::addCapa(Capa capa){
     listaCapas.push_back(capa);
 }

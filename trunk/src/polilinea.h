@@ -21,7 +21,7 @@
 #include <iostream>
 #include <vector>
 #include "vertice.h"
-
+#include "linea.h"
 using namespace std;
 
 /**
@@ -33,17 +33,20 @@ using namespace std;
 
 class Polilinea {
 public:
-    Polilinea(int num, bool cerrado);
+    Polilinea(int num, bool cerrado, string capa);
     ~Polilinea();
 
     vector<Vertice>* getPolilinea();
     void addVertice(Vertice vertice);
     bool getCerrado();
-    int getNumlineas();
+    int getNumTotal();
+    int getNum();
+    vector<Linea>* toLineas();
 private:
+    string capa;
     vector<Vertice> listaVertices;
     bool cerrado;
-    int numLineas;
+    int numVertices;
 };
 #endif
 
