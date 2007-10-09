@@ -42,6 +42,7 @@ public:
     double getEscala();
     char* getEscalaStr();
     vector<Capa>* getMapa();   
+    Capa* getCapa(string c);
     void addCapa(Capa capa);
     void clearMapa();
     void escalarMapa(double escala);

@@ -1,8 +1,9 @@
 #include "polilinea.h"
 
-Polilinea::Polilinea(int num, bool cerrado){
-    this->numLineas=num;
+Polilinea::Polilinea(int num, bool cerrado, string capa){
+    this->numVertices=num;
     this->cerrado=cerrado;
+    this->capa=capa;
 }
 
 Polilinea::~Polilinea(){
@@ -21,6 +22,44 @@ bool Polilinea::getCerrado(){
     return cerrado;
 }
 
-int Polilinea::getNumlineas(){
-    return numLineas;
+int Polilinea::getNumTotal(){
+    return numVertices;
 }
+
+int Polilinea::getNum(){
+    return listaVertices.size();
+}
+
+vector<Linea>* Polilinea::toLineas(){
+    vector<Linea> *vLineas;
+    vector<Vertice> parVertices;
+    
+    vector<Vertice>::iterator i_vertice;
+    for(i_vertice=listaVertices.begin(); i_vertice!=listaVertices.end(); i_vertice++){
+	parVertices.push_back((*i_vertice));
+	if(parVertices.size()==2){
+	    Vertice v1,
+		    v2;
+	    v1=parVertices.front();
+	    v2=parVertices.back();
+	    Linea nuevaLinea(capa,v1.getX(),
+		    v1.getY(),
+		    v2.getX(),
+		    v2.getY());
+	    vLineas->push_back(nuevaLinea);
+	    parVertices.clear();
+	    parVertices.push_back(v2);
+	}	
+    }
+    if (cerrado) {
+	Linea lineaCerrar(capa,
+		vLineas->front().getX1(),
+		vLineas->front().getY1(),
+		vLineas->back().getX2(),
+		vLineas->back().getY2());
+	vLineas->push_back(lineaCerrar);
+    }
+    
+    return vLineas;
+}
+

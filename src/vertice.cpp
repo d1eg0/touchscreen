@@ -2,6 +2,8 @@
 
 using namespace std;
 
+Vertice::Vertice(){
+}
 Vertice::Vertice(double x, double y){
     //this->capa=capa;
     this->x=x;

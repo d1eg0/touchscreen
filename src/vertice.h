@@ -11,6 +11,7 @@
  */
 class Vertice {
 public:
+    Vertice();
     Vertice(double x, double y);
     ~Vertice();
     double getX();
