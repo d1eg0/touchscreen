@@ -24,7 +24,9 @@ Boton *botonArriba,
       *botonIzquierda,
       *botonCentrar;
 ///////////////////////
-Frame *framemapa;
+Frame *framemapa,
+      *frameradar,
+      *framestado;
 Etiqueta *e_zoom,
 	 *e_vzoom;
 Mapa  plano;
@@ -40,25 +42,40 @@ void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
 }
 
 int gestor (void *unusued){
-    cout << "soy un hilo" << endl;
     Pantalla *pantalla=new Pantalla();
-    framemapa=new Frame(pantalla->getPantalla());
     SDL_Color Blanco = {255,255,255,0}; 
-    //boton1->CargarBoton(200,200,120,120,0xff);
 
     SetClip(pantalla->getPantalla(),0,0,500,500);
-    //rectangleRGBA(pantalla->GetPantalla(), 5, 5, 100, 100, 255, 0, 0, 255);
-    //rectangleColor(pantalla->GetPantalla(), 5, 5, 100, 100, 0xff0000ff);
-    //circleRGBA(pantalla->GetPantalla(), 300, 300, 150, 255, 0, 0, 255);
-    //circleColor(pantalla->GetPantalla(), 300, 310, 150, 0xff0000ff );
-    //SetClip(pantalla->GetPantalla(),0,0,200,200);
-    //lineColor(pantalla->GetPantalla(), 0, 0, 100, 100, 0xff0000ff);
-    //SDL_UpdateRect(pantalla->GetPantalla(),0,0,0,0);
 
     //Cargar el frame donde se sitúa el plano
-    framemapa->cargarFrame(20,20,(int)((float)SCREEN_W/10.0*6.0), (int)((float)SCREEN_H/10.0*6.0),"Plano",0xffffff);
+    framemapa=new Frame(pantalla->getPantalla());
+    framemapa->cargarFrame(MARGEN,
+	    MARGEN,
+	    (int)((float)SCREEN_W/10.0*6.0), 
+	    (int)((float)SCREEN_H/10.0*8.0),
+	    "Plano",0xffffff);
     plano.centrarMapa(pantalla->getPantalla(),framemapa);
     plano.pintarMapa(pantalla->getPantalla(),framemapa,100);
+
+    //Cargar el frame donde se sitúa el plano
+    frameradar=new Frame(pantalla->getPantalla());
+    frameradar->cargarFrame(
+	    (int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
+	    SCREEN_H-(int)((float)SCREEN_H/10.0*4.0),
+	    (int)((float)SCREEN_W/10.0*2.5)+MARGEN, 
+	    (int)((float)SCREEN_H/10.0*4.0),
+	    "Radar",
+	    0xffffff);
+
+    //Cargar el frame donde se sitúa el plano
+    framestado=new Frame(pantalla->getPantalla());
+    framestado->cargarFrame(
+	    (int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
+	    MARGEN,
+	    (int)((float)SCREEN_W/10.0*2.5)+MARGEN, 
+	    (int)((float)SCREEN_H/10.0*5.5),
+	    "Estado",
+	    0xffffff);
 
     //Botones Zoom
     botonMasZoom=new Boton(pantalla->getPantalla());

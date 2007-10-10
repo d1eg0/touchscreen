@@ -7,10 +7,10 @@
 class Frame  
 {
 public:
-	Frame(SDL_Surface *Ventana);
-	virtual ~Frame();
+    Frame(SDL_Surface *Ventana);
+    virtual ~Frame();
 
-	void cargarFrame(int x, int y, int w, int h,char *c, Uint32 color);
+    void cargarFrame(int x, int y, int w, int h,char *c, Uint32 color);
 	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
 	
     void cerrarFrame();
