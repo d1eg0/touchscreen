@@ -38,8 +38,6 @@ vector<Linea>* Polilinea::toLineas(){
     for(i_vertice=listaVertices.begin(); i_vertice!=listaVertices.end(); i_vertice++){
 	parVertices.push_back((*i_vertice));
 	if(parVertices.size()==2){
-cout << "pila\n\tx:" << parVertices.front().getX()<< " y: " << parVertices.front().getY() << endl;
-cout << "\tx:" << parVertices.back().getX()<< " y: " << parVertices.back().getY() << endl;
 	    Vertice v1(parVertices.front().getX(),parVertices.front().getY()),
 		    v2(parVertices.back().getX(),parVertices.back().getY());
 	    
@@ -53,11 +51,6 @@ cout << "\tx:" << parVertices.back().getX()<< " y: " << parVertices.back().getY(
 	}	
     }
     if (cerrado) {
-	cout << "x1: " <<vLineas->front().getX1() <<
-		"  y1: " <<vLineas->front().getY1() << 
-		"  x2: " <<vLineas->back().getX2() <<
-		"  y2: " <<vLineas->back().getY2() <<endl;
-
 	Linea lineaCerrar(capa,
 		vLineas->front().getX1(),
 		vLineas->front().getY1(),

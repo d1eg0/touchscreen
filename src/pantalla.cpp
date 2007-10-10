@@ -18,7 +18,7 @@ Pantalla::Pantalla()
 {
     Uint8 video_bpp;
     Uint32 videoflags;
-    videoflags = SDL_SWSURFACE | SDL_SRCALPHA ;
+    videoflags = SDL_SWSURFACE | SDL_SRCALPHA |SDL_FULLSCREEN;
     h_screen=SCREEN_H;
     v_screen=SCREEN_W;
     sdl_quit=false;

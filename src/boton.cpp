@@ -84,7 +84,11 @@ void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, color);
 	rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xffffffff);
 	string str(c);
-	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, 0xffffffFF);
+	stringColor(ventana,
+		(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), 
+		(int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), 
+		c, 
+		0xffffffFF);
 	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 	estado=activo;
 }
