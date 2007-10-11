@@ -12,6 +12,7 @@ public:
 	virtual ~Boton();
 
 	void cargarBoton(int x, int y, int w, int h, char *c, Uint32 color);
+	void recargarBoton();
 	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
 	
 	//void InsertarTexto(char *_text);
@@ -23,7 +24,7 @@ public:
 	//int GetY();
 	//int GetW();
 	//int GetH();
-     
+	void desactivar();     
 
 private:
 	SDL_Rect area;

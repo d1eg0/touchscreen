@@ -16,6 +16,7 @@ public:
     void cerrarFrame();
     void maxFrame();
     void minFrame();
+    void desactivarFrame();
     void limpiarFrame();
 
     bool Presionado(int xm, int ym);

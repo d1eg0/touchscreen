@@ -35,8 +35,8 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 
     this->areamax.h=SCREEN_H-MARGEN;
     this->areamax.w=SCREEN_W-2*MARGEN;
-    this->areamax.x=x;
-    this->areamax.y=y;
+    this->areamax.x=MARGEN;
+    this->areamax.y=MARGEN;
     this->titulo=c;
     this->estado=MINIMO;
 
@@ -45,8 +45,8 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     this->contenedor.w=w+4;
     this->contenedor.h=h;
 
-    this->contenedormax.x=area.x;
-    this->contenedormax.y=area.y-MARGEN;
+    this->contenedormax.x=areamax.x;
+    this->contenedormax.y=areamax.y-MARGEN;
     this->contenedormax.w=SCREEN_W-MARGEN;
     this->contenedormax.h=SCREEN_H-4*MARGEN;
     
@@ -122,6 +122,10 @@ void Frame::minFrame(){
     SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
+void Frame::desactivarFrame(){
+    bmaxmin->desactivar();
+}
+
 void Frame::limpiarFrame(){
     SDL_Rect a=this->getArea();
     SDL_SetClipRect(ventana, &a);
@@ -129,6 +133,7 @@ void Frame::limpiarFrame(){
     //Borde
     rectangleColor(ventana, a.x, a.y, a.x+a.w-1, a.y+a.h-1, 0xFFA500FF);
     SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    bmaxmin->desactivar();
 }
 
 SDL_Surface* Frame::getVentana(){
