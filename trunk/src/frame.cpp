@@ -3,7 +3,7 @@
 #include "dibujar.h"
 #include <SDL/SDL_gfxPrimitives.h>
 
-Frame::Frame(SDL_Surface *Ventana)
+Frame::Frame(SDL_Surface *ventana)
 {
 	area.h=0;
 	area.w=0;
@@ -14,7 +14,8 @@ Frame::Frame(SDL_Surface *Ventana)
 	areamax.w=0;
 	areamax.x=0;
 	areamax.y=0;
-	ventana=Ventana;
+	this->ventana=ventana;
+	bmaxmin=new Boton(ventana);
 }
 
 Frame::~Frame()
@@ -58,9 +59,9 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     stringColor(ventana, area.x, area.y-9, c, 0xFFA500FF);
     //Boton maximizar
     bcerrar=new Boton(ventana);
-    bcerrar->cargarBoton(x+w-15,y-12,12,12,"X", 0xFFA500FF);
-    bmaxmin=new Boton(ventana);
-    bmaxmin->cargarBoton(x+w-30,y-12,12,12,"+", 0xFFA500FF);
+    //bcerrar->cargarBoton(x+w-15,y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
+    //bmaxmin=new Boton(ventana);
+    bmaxmin->cargarBoton(x+w-30,y-T_BOTON,T_BOTON,T_BOTON,"+", 0xFFA500FF);
     SDL_SetClipRect(ventana, &area);
     SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
@@ -88,10 +89,10 @@ void Frame::maxFrame(){
     //Etiqueta
     stringColor(ventana, areamax.x, areamax.y-9, titulo, 0xFFA500FF);
     //Boton maximizar
-    bcerrar=new Boton(ventana);
-    bcerrar->cargarBoton(areamax.x+areamax.w-15,areamax.y-12,12,12,"X", 0xFFA500FF);
-    bmaxmin=new Boton(ventana);
-    bmaxmin->cargarBoton(areamax.x+areamax.w-30,areamax.y-12,12,12,"-", 0xFFA500FF);
+    //bcerrar=new Boton(ventana);
+    //bcerrar->cargarBoton(areamax.x+areamax.w-15,areamax.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
+    //bmaxmin=new Boton(ventana);
+    bmaxmin->cargarBoton(areamax.x+areamax.w-30,areamax.y-T_BOTON,T_BOTON,T_BOTON,"-", 0xFFA500FF);
     SDL_SetClipRect(ventana, &areamax);
     SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
@@ -107,14 +108,14 @@ void Frame::minFrame(){
     stringColor(ventana, area.x, area.y-9, titulo, 0xFFA500FF);
     //Boton maximizar
     //bcerrar=new Boton(ventana);
-    //bcerrar->cargarBoton(area.x+area.w-15,area.y-12,12,12,"X", 0xFFA500FF);
+    //bcerrar->cargarBoton(area.x+area.w-15,area.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //Boton maximizar
-    bmaxmin=new Boton(ventana);
+    //bmaxmin=new Boton(ventana);
     bmaxmin->cargarBoton(
 	    area.x+area.w-30,
-	    area.y-12,
-	    26,
-	    26,
+	    area.y-T_BOTON,
+	    T_BOTON,
+	    T_BOTON,
 	    "+", 
 	    0xFFA500FF);
     SDL_SetClipRect(ventana, &area);

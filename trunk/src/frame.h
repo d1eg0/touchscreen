@@ -7,7 +7,7 @@
 class Frame  
 {
 public:
-    Frame(SDL_Surface *Ventana);
+    Frame(SDL_Surface *ventana);
     virtual ~Frame();
 
     void cargarFrame(int x, int y, int w, int h,char *c, Uint32 color);

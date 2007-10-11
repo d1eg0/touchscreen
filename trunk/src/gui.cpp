@@ -135,8 +135,8 @@ int gestor (void *unusued){
 
 int main(int argc, char *argv[])
 {
-//    string mapadxf="maps/casa.dxf";
-    string mapadxf="maps/segonDxf.dxf";
+    string mapadxf="maps/casa.dxf";
+//    string mapadxf="maps/segonDxf.dxf";
 
     SDL_Thread *hilo;
     cout <<"Inicializando SDL." << endl;
