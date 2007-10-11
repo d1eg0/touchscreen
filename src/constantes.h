@@ -23,3 +23,10 @@
 
 //Factor de desplazamiento del mapa
 #define	    FACTOR_DESP	25
+
+//Zoom máximo y mínimo
+#define	    ZOOM_MAX	300
+#define	    ZOOM_MIN	25
+
+//Tamaño boton
+#define	    T_BOTON	20
