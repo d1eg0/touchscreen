@@ -20,7 +20,7 @@ Pantalla::Pantalla()
 {
     Uint8 video_bpp;
     Uint32 videoflags;
-    videoflags = SDL_SWSURFACE | SDL_SRCALPHA ;
+    videoflags = SDL_SWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN;
     h_screen=SCREEN_H;
     v_screen=SCREEN_W;
     sdl_quit=false;
@@ -130,14 +130,14 @@ void Pantalla::entrada()
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(framemapa->getBcerrar()->presionado(event.motion.x,event.motion.y)){
-		cout << "Bcerrar" << endl;
 		framemapa->cerrarFrame();
 		this->borrar();
 	    }	
 	    else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
-		cout << "Bmaxmin" << endl;
 		this->borrar();
 		if(framemapa->getEstado()==MINIMO){
+		    frameradar->desactivarFrame();
+		    framestado->desactivarFrame();
 		    framemapa->maxFrame();
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
 		    //Botones Zoom
@@ -301,9 +301,94 @@ void Pantalla::entrada()
 			    0xffffff);
 
 		}
+
 		SDL_UpdateRect(screen,0,0,0,0);
-	    }	
-		
+	    }
+	    else if(frameradar->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
+		this->borrar();
+		if(frameradar->getEstado()==MINIMO){
+		    framemapa->desactivarFrame();
+		    framestado->desactivarFrame();
+		    frameradar->maxFrame(); 
+
+		}else if(frameradar->getEstado()==MAXIMO){
+		    frameradar->minFrame(); 
+		    framestado->minFrame(); 
+		    framemapa->minFrame();
+		    plano.pintarMapa(screen,framemapa,plano.getEscala());
+		    botonMasZoom->recargarBoton();
+		    botonMenosZoom->recargarBoton();
+		    botonDerecha->recargarBoton();
+		    botonIzquierda->recargarBoton();
+		    botonArriba->recargarBoton();
+		    botonAbajo->recargarBoton();
+		    botonCentrar->recargarBoton();
+
+		    //Etiqueta Zoom
+		    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
+			    framemapa->getY()+framemapa->getH()+10,
+			    70,
+			    20,
+			    "Zoom",
+			    0xFFA500FF,
+			    0x000000FF,
+			    0x000000FF);
+
+		    e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+			    framemapa->getY()+framemapa->getH()+50,
+			    70,
+			    20,
+			    plano.getEscalaStr(),
+			    0xFFA500FF,
+			    0xFFA500FF,
+			    0x000000FF);
+ 
+		}
+		SDL_UpdateRect(screen,0,0,0,0);
+	    }
+	    else if(framestado->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
+		this->borrar();
+		if(framestado->getEstado()==MINIMO){
+		    framemapa->desactivarFrame();
+		    frameradar->desactivarFrame();
+		    framestado->maxFrame(); 
+
+		}else if(framestado->getEstado()==MAXIMO){
+		    cout << "minframe" << endl;
+		    framestado->minFrame(); 
+		    frameradar->minFrame(); 
+		    framemapa->minFrame();
+		    plano.pintarMapa(screen,framemapa,plano.getEscala());
+		    botonMasZoom->recargarBoton();
+		    botonMenosZoom->recargarBoton();
+		    botonDerecha->recargarBoton();
+		    botonIzquierda->recargarBoton();
+		    botonArriba->recargarBoton();
+		    botonAbajo->recargarBoton();
+		    botonCentrar->recargarBoton();
+
+		    //Etiqueta Zoom
+		    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
+			    framemapa->getY()+framemapa->getH()+10,
+			    70,
+			    20,
+			    "Zoom",
+			    0xFFA500FF,
+			    0x000000FF,
+			    0x000000FF);
+
+		    e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+			    framemapa->getY()+framemapa->getH()+50,
+			    70,
+			    20,
+			    plano.getEscalaStr(),
+			    0xFFA500FF,
+			    0xFFA500FF,
+			    0x000000FF);
+
+		}
+		SDL_UpdateRect(screen,0,0,0,0);
+	    }
 
 	    if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)){
 	        cout << "boton: izquierdo" << endl;

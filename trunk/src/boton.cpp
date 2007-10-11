@@ -69,6 +69,7 @@ void Boto::LlevarSombra(bool Som)
 void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 {
 	this->color=color;
+	texto=c;
 	area.h=h;
 	area.w=w;
 	area.x=x;
@@ -93,6 +94,9 @@ void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 	estado=activo;
 }
 
+void Boton::recargarBoton(){
+    this->cargarBoton(area.x,area.y,area.w,area.h,texto,color);
+}
 /*void Boton::dibujarBoton()
 {
 	SDL_Rect sombra;
@@ -214,5 +218,9 @@ bool Boton::presionado(int x,int y)
 {
 	return estado&&(x>area.x)&&(x<area.x+area.w)&&
 		(y>area.y)&&(y<area.y+area.h);
+}
+
+void Boton::desactivar(){
+    estado=inactivo;
 }
 
