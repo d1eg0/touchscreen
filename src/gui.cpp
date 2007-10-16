@@ -108,19 +108,19 @@ int gestor (void *unusued){
     //Botones movimiento del mapa
     //	Derecha
     botonDerecha=new Boton(pantalla->getPantalla());
-    botonDerecha->cargarBoton(framemapa->getX()+140, framemapa->getY()+framemapa->getH()+30, 20,20,">",0xFFA500FF);
+    botonDerecha->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,">",0xFFA500FF);
     //	Izquierda
     botonIzquierda=new Boton(pantalla->getPantalla());
-    botonIzquierda->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0xFFA500FF);
+    botonIzquierda->cargarBoton(framemapa->getX()+60, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0xFFA500FF);
     //	Arriba
     botonArriba=new Boton(pantalla->getPantalla());
-    botonArriba->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0xFFA500FF);
+    botonArriba->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0xFFA500FF);
     //	Abajo
     botonAbajo=new Boton(pantalla->getPantalla());
-    botonAbajo->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF);
+    botonAbajo->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF);
     //	Centrar
     botonCentrar=new Boton(pantalla->getPantalla());
-    botonCentrar->cargarBoton(framemapa->getX()+120, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
+    botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
 
 
 
@@ -135,8 +135,8 @@ int gestor (void *unusued){
 
 int main(int argc, char *argv[])
 {
-    string mapadxf="maps/casa.dxf";
-//    string mapadxf="maps/segonDxf.dxf";
+//    string mapadxf="maps/casa.dxf";
+    string mapadxf="maps/segonDxf.dxf";
 
     SDL_Thread *hilo;
     cout <<"Inicializando SDL." << endl;

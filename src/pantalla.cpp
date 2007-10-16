@@ -35,7 +35,8 @@ Pantalla::Pantalla()
     SDL_SetAlpha(screen, SDL_SRCALPHA, 0);
     SDL_FillRect( screen, 0, 0x000000);
     SDL_UpdateRect(screen,0,0,0,0);
-	//SDL_ShowCursor(0);	//ocultar cursor
+
+    SDL_ShowCursor(SDL_DISABLE);	//ocultar cursor
 }
 
 Pantalla::~Pantalla() 
@@ -81,7 +82,9 @@ void Pantalla::entrada()
 	    double factor=100.0/plano.getEscala();
 	    double px=(event.motion.x-plano.getOX())*factor;
 	    double py=(-event.motion.y+plano.getOY())*factor;
-	    cout << "px:" << px << ", py:" << py << endl;
+	    if(framemapa->Presionado(event.motion.x,event.motion.y)){
+		cout << "\tpx:" << px << ", py:" << py << endl;
+	    }
 	    if(botonMasZoom->presionado(event.motion.x,event.motion.y)){
 	        if(plano.getEscala()<ZOOM_MAX){
 		    framemapa->limpiarFrame();
@@ -99,31 +102,26 @@ void Pantalla::entrada()
 		}
 	    }
 	    else if(botonDerecha->presionado(event.motion.x,event.motion.y)){
-		cout << "Derecha" << endl;
 		framemapa->limpiarFrame();
 		plano.despDerecha();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonIzquierda->presionado(event.motion.x,event.motion.y)){
-		cout << "Izquierda" << endl;
 		framemapa->limpiarFrame();
 		plano.despIzquierda();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonArriba->presionado(event.motion.x,event.motion.y)){
-		cout << "Arriba" << endl;
 		framemapa->limpiarFrame();
 		plano.despArriba();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonAbajo->presionado(event.motion.x,event.motion.y)){
-		cout << "Abajo" << endl;
 		framemapa->limpiarFrame();
 		plano.despAbajo();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
-		cout << "Centrar" << endl;
 		framemapa->limpiarFrame();
 		plano.centrarMapa(screen,framemapa);
 		plano.pintarMapa(screen,framemapa,plano.getEscala());
@@ -138,8 +136,14 @@ void Pantalla::entrada()
 		if(framemapa->getEstado()==MINIMO){
 		    frameradar->desactivarFrame();
 		    framestado->desactivarFrame();
-		    framemapa->maxFrame();
+		    framemapa->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,framemapa->getH());
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
+		    botonDerecha->recargarBoton();
+		    botonIzquierda->recargarBoton();
+		    botonAbajo->recargarBoton();
+		    botonArriba->recargarBoton();
+		    botonCentrar->recargarBoton();
+    		    //	Izquierda
 		    //Botones Zoom
 		    botonMasZoom->cargarBoton(
 			    framemapa->getX()+framemapa->getW()-100, 
@@ -174,7 +178,7 @@ void Pantalla::entrada()
 			    0xFFA500FF,
 			    0xFFA500FF,
 			    0x000000FF);
-    
+		    /* 
 		    //Botones movimiento del mapa
 		    //	Derecha
 		    botonDerecha->cargarBoton(framemapa->getX()+140, 
@@ -183,6 +187,7 @@ void Pantalla::entrada()
 			    20,
 			    ">",
 			    0xFFA500FF);
+			    
     		    //	Izquierda
 		    botonIzquierda->cargarBoton(framemapa->getX()+100, 
 			    framemapa->getY()+framemapa->getH()+30, 
@@ -211,6 +216,7 @@ void Pantalla::entrada()
 			    20,
 			    "C",
 			    0xFFA500FF);
+		    */
 		}else{ 
 		    framemapa->minFrame(); 
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
@@ -248,40 +254,49 @@ void Pantalla::entrada()
 		    //Botones movimiento del mapa
 
 		    //	Derecha
-		    botonDerecha->cargarBoton(framemapa->getX()+140, 
+		    /*botonDerecha->cargarBoton(framemapa->getX()+140, 
 			    framemapa->getY()+framemapa->getH()+30, 
 			    20,
 			    20,
 			    ">",
-			    0xFFA500FF);
+			    0xFFA500FF);*/
+		    botonDerecha->recargarBoton();
+		    botonIzquierda->recargarBoton();
+		    botonAbajo->recargarBoton();
+		    botonArriba->recargarBoton();
+		    botonCentrar->recargarBoton();
     		    //	Izquierda
-		    botonIzquierda->cargarBoton(framemapa->getX()+100, 
+		    /*botonIzquierda->cargarBoton(framemapa->getX()+100, 
 			    framemapa->getY()+framemapa->getH()+30, 
 			    20,
 			    20,
 			    "<",
 			    0xFFA500FF);
+			    */
+
 		    //	Arriba
-		    botonArriba->cargarBoton(framemapa->getX()+120, 
+		    /*botonArriba->cargarBoton(framemapa->getX()+120, 
 			    framemapa->getY()+framemapa->getH()+10, 
 			    20,
 			    20,
 			    "^",
-			    0xFFA500FF);
+			    0xFFA500FF);*/
 		    //	Abajo
-		    botonAbajo->cargarBoton(framemapa->getX()+120, 
+		    /*botonAbajo->cargarBoton(framemapa->getX()+120, 
 			    framemapa->getY()+framemapa->getH()+50, 
 			    20,
 			    20,
 			    "V",
 			    0xFFA500FF);
+			    */
 		    //	Centrar
-		    botonCentrar->cargarBoton(framemapa->getX()+120, 
+		    /*botonCentrar->cargarBoton(framemapa->getX()+120, 
 			    framemapa->getY()+framemapa->getH()+30, 
 			    20,
 			    20,
 			    "C",
 			    0xFFA500FF);
+			    */
 		    // Frame Radar
 		    frameradar->cargarFrame(
 			    (int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
@@ -309,8 +324,7 @@ void Pantalla::entrada()
 		if(frameradar->getEstado()==MINIMO){
 		    framemapa->desactivarFrame();
 		    framestado->desactivarFrame();
-		    frameradar->maxFrame(); 
-
+		    frameradar->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,SCREEN_H-2*MARGEN);
 		}else if(frameradar->getEstado()==MAXIMO){
 		    frameradar->minFrame(); 
 		    framestado->minFrame(); 
@@ -351,10 +365,9 @@ void Pantalla::entrada()
 		if(framestado->getEstado()==MINIMO){
 		    framemapa->desactivarFrame();
 		    frameradar->desactivarFrame();
-		    framestado->maxFrame(); 
+		    framestado->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,SCREEN_H-2*MARGEN);
 
 		}else if(framestado->getEstado()==MAXIMO){
-		    cout << "minframe" << endl;
 		    framestado->minFrame(); 
 		    frameradar->minFrame(); 
 		    framemapa->minFrame();
@@ -390,13 +403,13 @@ void Pantalla::entrada()
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 
-	    if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)){
+	    /*if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)){
 	        cout << "boton: izquierdo" << endl;
 	    }else if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(2)){
 	        cout << "boton: medio" << endl;
 	    }else if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(3)){
 	        cout << "boton: derecho" << endl;
-	    }
+	    }*/
 	    break;
  
     } 
