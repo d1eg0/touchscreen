@@ -14,7 +14,7 @@ public:
 	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
 	
     void cerrarFrame();
-    void maxFrame();
+    void maxFrame(int x, int y, int w,int h);
     void minFrame();
     void desactivarFrame();
     void limpiarFrame();
