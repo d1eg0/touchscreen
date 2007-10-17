@@ -40,7 +40,7 @@ void DxfParser::addVertex(const DL_VertexData& data) {
     {
 	vector<Linea> vPolilineas;
 	//vPolilineas.swap((*plano.getCapa(capa)->getPolilinea()->back().toLineas()));
-	vPolilineas=(*plano.getCapa(capa)->getPolilinea()->back().toLineas());
+	vPolilineas=plano.getCapa(capa)->getPolilinea()->back().toLineas();
 	 
 	plano.getCapa(capa)->clear();	
 	vector<Linea>::iterator i_linea;

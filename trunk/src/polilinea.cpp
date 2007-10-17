@@ -30,10 +30,10 @@ int Polilinea::getNum(){
     return listaVertices.size();
 }
 
-vector<Linea>* Polilinea::toLineas(){
-    vector<Linea> *vLineas;
+vector<Linea> Polilinea::toLineas(){
+    vector<Linea> vLineas;
     vector<Vertice> parVertices;
-    vLineas->clear();
+    vLineas.clear();
     vector<Vertice>::iterator i_vertice;
     for(i_vertice=listaVertices.begin(); i_vertice!=listaVertices.end(); i_vertice++){
 	parVertices.push_back((*i_vertice));
@@ -45,18 +45,18 @@ vector<Linea>* Polilinea::toLineas(){
 		    v1.getY(),
 		    v2.getX(),
 		    v2.getY());
-	    vLineas->push_back(nuevaLinea);
+	    vLineas.push_back(nuevaLinea);
 	    parVertices.clear();
 	    parVertices.push_back(v2);
 	}	
     }
     if (cerrado) {
 	Linea lineaCerrar(capa,
-		vLineas->front().getX1(),
-		vLineas->front().getY1(),
-		vLineas->back().getX2(),
-		vLineas->back().getY2());
-	vLineas->push_back(lineaCerrar);
+		vLineas.front().getX1(),
+		vLineas.front().getY1(),
+		vLineas.back().getX2(),
+		vLineas.back().getY2());
+	vLineas.push_back(lineaCerrar);
     }
     
     return vLineas;
