@@ -41,7 +41,7 @@ public:
     bool getCerrado();
     int getNumTotal();
     int getNum();
-    vector<Linea>* toLineas();
+    vector<Linea> toLineas();
 private:
     string capa;
     vector<Vertice> listaVertices;
