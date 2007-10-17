@@ -36,7 +36,7 @@ Pantalla::Pantalla()
     SDL_FillRect( screen, 0, 0x000000);
     SDL_UpdateRect(screen,0,0,0,0);
 
-    SDL_ShowCursor(SDL_DISABLE);	//ocultar cursor
+//    SDL_ShowCursor(SDL_DISABLE);	//ocultar cursor
 }
 
 Pantalla::~Pantalla() 
