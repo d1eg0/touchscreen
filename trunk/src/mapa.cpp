@@ -73,6 +73,7 @@ Capa* Mapa::getCapa(string c){
 	     return &(*i_capa);
 	 }
     }
+    cerr << "No existe la capa: " << c << endl;
 }
 
 void Mapa::addCapa(Capa capa){
@@ -95,11 +96,9 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){
     vector<Linea>::iterator i_linea;
 
     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
-	//cout << "Capa:" << (*i_capa).getNombre() << "," << (*i_capa).getColor() << ",size:" << (*(*i_capa).getCapa()).size() << endl;
 	vector<Linea> llineas=(*(*i_capa).getCapa());
 	for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
 	     Linea linealeida=(*i_linea);
-	     //printf("LINE     (%lf, %lf) (%lf, %lf)\n",linealeida.getX1(),linealeida.getY1(), linealeida.getX2(),linealeida.getY2());
 	     linealeida.escalar(escala);
 	     pincel->dibujarLinea(frame,&linealeida,dh,dv);
 	 }
