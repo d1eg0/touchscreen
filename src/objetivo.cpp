@@ -1,0 +1,36 @@
+#include "objetivo.h"
+#include "linea.h"
+#include "polilinea.h"
+Objetivo::Objetivo(double xp, double yp){
+    this->xp=xp;
+    this->yp=yp;
+}
+
+Objetivo::~Objetivo(){}
+
+bool Objetivo::interior(Polilinea polilinea){
+    int nc=0;
+    double da,db,alfa,xq;
+    vector<Linea> vLados;
+    vLados.clear();
+    vLados=polilinea.toLineas();
+    vector<Linea>::iterator i_lado;
+    for(i_lado=vLados.begin(); i_lado!=vLados.end(); i_lado++){
+	da=(*i_lado).getY1()-this->yp;
+	db=(*i_lado).getY2()-this->yp;
+	if ((da>=0 && db<0) || (db>=0 && da<0)){
+	    alfa=da/(da-db);
+	    xq=(*i_lado).getX1()+alfa*(
+		    (*i_lado).getX2()-(*i_lado).getX1());
+	    if(xq>this->xp)nc++;
+	}
+
+    }
+    if(nc%2==0)	{
+	cout << "objetivo fuera" << endl;
+	return false;
+    }else {
+	cout << "objetivo dentro" << endl;
+	return true;
+    }
+}

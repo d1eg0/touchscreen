@@ -3,6 +3,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
 #include <SDL/SDL_gfxPrimitives.h>
+#include <dxflib/dl_dxf.h>
 #include "pantalla.h"
 #include "boton.h"
 #include "etiqueta.h"
@@ -10,7 +11,7 @@
 #include "constantes.h"
 #include "dxfparser.h"
 #include "mapa.h"
-#include <dxflib/dl_dxf.h>
+#include "campotexto.h"
 
 using namespace std;
 //Botones
@@ -79,10 +80,22 @@ int gestor (void *unusued){
 
     //Botones Zoom
     botonMasZoom=new Boton(pantalla->getPantalla());
-    botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, framemapa->getY()+framemapa->getH()+30, 20,20,"+",0xFFA500FF);
+    botonMasZoom->cargarBoton(
+	    framemapa->getX()+framemapa->getW()-100, 
+	    framemapa->getY()+framemapa->getH()+30, 
+	    20,
+	    20,
+	    "+",
+	    0xFFA500FF);
 
     botonMenosZoom=new Boton(pantalla->getPantalla());
-    botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-50, framemapa->getY()+framemapa->getH()+30, 20,20,"-",0xFFA500FF);
+    botonMenosZoom->cargarBoton(
+	    framemapa->getX()+framemapa->getW()-50, 
+	    framemapa->getY()+framemapa->getH()+30, 
+	    20,
+	    20,
+	    "-",
+	    0xFFA500FF);
 
     //Etiqueta Zoom
     e_zoom=new Etiqueta(pantalla->getPantalla());
@@ -122,6 +135,32 @@ int gestor (void *unusued){
     botonCentrar=new Boton(pantalla->getPantalla());
     botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
 
+    Campotexto *c1=new Campotexto(
+	    framestado,
+	    "campo:",
+	    3,
+	    4,
+	    5,
+	    6
+	    );
+    c1->cargarCampotexto(
+	    framestado->getXc(),
+	    framestado->getYc(),
+	    0x000000FF,
+	    0x00FF00FF);
+Campotexto *c2=new Campotexto(
+	    framestado,
+	    "campo:",
+	    3,
+	    4,
+	    5,
+	    6
+	    );
+    c2->cargarCampotexto(
+	    framestado->getXc(),
+	    framestado->getYc(),
+	    0x000000FF,
+	    0x00FF00FF);
 
 
     //Actualizar cambios en la pantalla

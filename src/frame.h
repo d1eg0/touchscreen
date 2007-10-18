@@ -29,6 +29,8 @@ public:
     Boton* getBcerrar();
     Boton* getBmaxmin();
     Uint8 getEstado();
+    int getXc();
+    int getYc();
 
 private:
     char* titulo;
@@ -39,6 +41,7 @@ private:
     Boton *bcerrar;
     Boton *bmaxmin;
     Uint8 estado;
+    int xc,yc;//cordenadas de los campos
 
 };
 

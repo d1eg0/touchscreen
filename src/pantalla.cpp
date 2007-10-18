@@ -3,6 +3,7 @@
 #include "boton.h"
 #include "mapa.h"
 #include "etiqueta.h"
+#include "objetivo.h"
 extern Boton *botonMasZoom, 
        *botonMenosZoom;
 extern Boton *botonDerecha,
@@ -83,6 +84,11 @@ void Pantalla::entrada()
 	    double px=(event.motion.x-plano.getOX())*factor;
 	    double py=(-event.motion.y+plano.getOY())*factor;
 	    if(framemapa->Presionado(event.motion.x,event.motion.y)){
+		Objetivo objetivo(px,py);
+		//vector<Polilinea> *vpoli=plano.getCapa("Capa contorn")->getPolilinea();
+		cout << "size:" << plano.getCapa("CapaObjectiu")->getPolilinea()->size() << endl;
+		Polilinea poli=plano.getCapa("CapaObjectiu")->getPolilinea()->front();
+		if(objetivo.interior(poli))
 		cout << "\tpx:" << px << ", py:" << py << endl;
 	    }
 	    if(botonMasZoom->presionado(event.motion.x,event.motion.y)){

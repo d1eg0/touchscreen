@@ -25,6 +25,10 @@ Frame::~Frame()
 
 void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 {
+    //Cordenadas de los campos
+    xc=x+5;
+    yc=y+5;
+
     //Dibujar paleta(ventana);
     this->color=color;
 
@@ -194,3 +198,14 @@ Uint8 Frame::getEstado(){
     return estado;
 }
 
+int Frame::getXc(){
+    int txc=xc;
+    //xc+=SIZE_C;
+    return txc;
+}
+
+int Frame::getYc(){
+    int tyc=yc;
+    yc+=T_BOTON;
+    return tyc;
+}
