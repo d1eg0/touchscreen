@@ -1,9 +1,13 @@
 #include "objetivo.h"
 #include "linea.h"
 #include "polilinea.h"
-Objetivo::Objetivo(double xp, double yp){
+#include <SDL/SDL_gfxPrimitives.h>
+#include <SDL/SDL.h>
+Objetivo::Objetivo(Frame *frame, double xp, double yp){
+    this->frame=frame;
     this->xp=xp;
     this->yp=yp;
+    this->radio=5;
 }
 
 Objetivo::~Objetivo(){}
@@ -34,3 +38,11 @@ bool Objetivo::interior(Polilinea polilinea){
 	return true;
     }
 }
+
+void Objetivo::dibujar(int x, int y,bool zvalida){
+    SDL_Rect r=frame->getArea();
+    SDL_SetClipRect(frame->getVentana(),&r);
+    filledCircleColor(frame->getVentana(), x, y, radio, 0xff0000ff);
+    SDL_UpdateRect(frame->getVentana(),0,0,0,0);
+}
+

@@ -24,7 +24,7 @@ Boton *botonArriba,
       *botonDerecha,
       *botonIzquierda,
       *botonCentrar;
-///////////////////////
+// Frames
 Frame *framemapa,
       *frameradar,
       *framestado;

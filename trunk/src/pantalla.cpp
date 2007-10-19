@@ -84,12 +84,13 @@ void Pantalla::entrada()
 	    double px=(event.motion.x-plano.getOX())*factor;
 	    double py=(-event.motion.y+plano.getOY())*factor;
 	    if(framemapa->Presionado(event.motion.x,event.motion.y)){
-		Objetivo objetivo(px,py);
-		//vector<Polilinea> *vpoli=plano.getCapa("Capa contorn")->getPolilinea();
-		cout << "size:" << plano.getCapa("CapaObjectiu")->getPolilinea()->size() << endl;
+		Objetivo objetivo(framemapa,px,py);
+		objetivo.dibujar(event.motion.x,event.motion.y,false);
 		Polilinea poli=plano.getCapa("CapaObjectiu")->getPolilinea()->front();
-		if(objetivo.interior(poli))
-		cout << "\tpx:" << px << ", py:" << py << endl;
+		if(objetivo.interior(poli)){
+		    //this->alpha();
+		    cout << "\tpx:" << px << ", py:" << py << endl;
+		}
 	    }
 	    if(botonMasZoom->presionado(event.motion.x,event.motion.y)){
 	        if(plano.getEscala()<ZOOM_MAX){
@@ -430,6 +431,17 @@ void Pantalla::borrar(){
     r.h=SCREEN_H;
     SDL_SetClipRect(screen,&r);
     SDL_FillRect( screen, 0, 0x000000);
+    SDL_UpdateRect(screen,0,0,0,0);
+}
+
+void Pantalla::alpha(){
+    SDL_Rect r;
+    r.x=0;
+    r.y=0;
+    r.w=SCREEN_W;
+    r.h=SCREEN_H;
+    SDL_SetClipRect(screen,&r);
+    boxColor(screen, 0,0,SCREEN_W, SCREEN_H, 0x000083);
     SDL_UpdateRect(screen,0,0,0,0);
 }
 
