@@ -30,16 +30,5 @@ void Dibujar::dibujarLinea(Frame *frame, Linea *linea, double dh, double dv) {
     double x1= frame->getX()+linea->getX1()+dh;
     double x2= frame->getX()+linea->getX2()+dh;
     lineColor(screen, (Sint16)x1, (Sint16)y1, (Sint16)x2, (Sint16)y2, 0x000000ff);
-//    printf ("pintando linea... \t (%lf,%lf) (%lf,%lf)\n",x1,y1,x2,y2); 
-    
 }
-/*void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
- {
-    SDL_Rect clip;
-    clip.x = x1+BORDER;
-    clip.y = y1+BORDER;
-    clip.w = x2-x1-2*BORDER;
-    clip.h = y2-y1-2*BORDER;
-    SDL_SetClipRect(screen, &clip);
- }*/
 

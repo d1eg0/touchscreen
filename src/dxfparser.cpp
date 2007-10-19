@@ -39,10 +39,9 @@ void DxfParser::addVertex(const DL_VertexData& data) {
 	    plano.getCapa(capa)->getPolilinea()->back().getNum())
     {
 	vector<Linea> vPolilineas;
-	//vPolilineas.swap((*plano.getCapa(capa)->getPolilinea()->back().toLineas()));
 	vPolilineas=plano.getCapa(capa)->getPolilinea()->back().toLineas();
 	 
-	//plano.getCapa(capa)->clear();	
+	//plano.getCapa(capa)->clear(); //podria borrarse pero se necesitan las polilineas	
 	vector<Linea>::iterator i_linea;
 	for(i_linea=vPolilineas.begin(); i_linea!=vPolilineas.end(); i_linea++){
 	    plano.getCapa(capa)->addLinea((*i_linea));
