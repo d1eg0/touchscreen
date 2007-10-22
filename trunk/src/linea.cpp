@@ -26,6 +26,15 @@ Linea::Linea(string capa, double x1, double y1, double x2, double y2){
     this->y2=y2;
 }
 
+Linea::Linea(string capa, Punto v1, Punto v2){
+    this->capa=capa;
+    this->x1=v1.getX();
+    this->y1=v1.getY();
+    this->x2=v2.getX();
+    this->y2=v2.getY();
+}
+
+
 Linea::~Linea(){
 }
 
@@ -47,15 +56,3 @@ string Linea::getCapa(){
     return capa;
 }
 
-void Linea::escalar(double escala){
-    if (escala>500||escala<0)
-	cerr<<"Error: escala incorrecta"<<endl;
-    else{
-	double factor=100.0/escala;
-	this->x1/=factor;
-	this->y1/=factor;
-	this->x2/=factor;
-	this->y2/=factor;
-    }
-
-}

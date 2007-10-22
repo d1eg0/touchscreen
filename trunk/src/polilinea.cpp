@@ -10,11 +10,11 @@ Polilinea::~Polilinea(){
     listaVertices.clear();
 }
 
-vector<Vertice>* Polilinea::getPolilinea(){
+vector<Punto>* Polilinea::getPolilinea(){
     return &listaVertices;
 }
 
-void Polilinea::addVertice(Vertice vertice){
+void Polilinea::addVertice(Punto vertice){
     listaVertices.push_back(vertice);
 }
 
@@ -32,13 +32,13 @@ int Polilinea::getNum(){
 
 vector<Linea> Polilinea::toLineas(){
     vector<Linea> vLineas;
-    vector<Vertice> parVertices;
+    vector<Punto> parVertices;
     vLineas.clear();
-    vector<Vertice>::iterator i_vertice;
+    vector<Punto>::iterator i_vertice;
     for(i_vertice=listaVertices.begin(); i_vertice!=listaVertices.end(); i_vertice++){
 	parVertices.push_back((*i_vertice));
 	if(parVertices.size()==2){
-	    Vertice v1(parVertices.front().getX(),parVertices.front().getY()),
+	    Punto v1(parVertices.front().getX(),parVertices.front().getY()),
 		    v2(parVertices.back().getX(),parVertices.back().getY());
 	    
 	    Linea nuevaLinea(capa,v1.getX(),

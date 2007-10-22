@@ -5,7 +5,7 @@
 #include "linea.h"
 #include "capa.h"
 #include "polilinea.h"
-#include "vertice.h"
+#include "punto.h"
 using namespace std;
 extern Mapa plano;
 DxfParser::DxfParser(){}
@@ -32,9 +32,9 @@ void DxfParser::addPolyline(const DL_PolylineData& data) {
 
 void DxfParser::addVertex(const DL_VertexData& data) {
 
-    Vertice nuevovertice(data.x,data.y);
+    Punto nuevoPunto(data.x,data.y);
     string capa=attributes.getLayer().c_str();
-    plano.getCapa(capa)->addVertice(nuevovertice);
+    plano.getCapa(capa)->addVertice(nuevoPunto);
     if (plano.getCapa(capa)->getPolilinea()->back().getNumTotal()==
 	    plano.getCapa(capa)->getPolilinea()->back().getNum())
     {

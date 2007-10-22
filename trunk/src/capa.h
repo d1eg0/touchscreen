@@ -22,7 +22,7 @@
 #include <vector>
 #include "linea.h"
 #include "polilinea.h"
-#include "vertice.h"
+#include "punto.h"
 
 using namespace std;
 
@@ -42,7 +42,7 @@ public:
     vector<Polilinea>* getPolilinea();
     void addLinea(Linea linea);
     void addPolilinea(Polilinea polilinea);
-    void addVertice(Vertice vertice);
+    void addVertice(Punto vertice);
     int getColor();
     string getNombre();
     void clear();

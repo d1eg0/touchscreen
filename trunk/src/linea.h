@@ -19,7 +19,7 @@
 #define LINEA_H
 
 #include <dxflib/dl_dxf.h>
-
+#include "punto.h"
 /**
  *  \class Linea
  *  \brief linea del mapa asignada a una capa
@@ -29,13 +29,13 @@
 class Linea {
 public:
     Linea(string capa, double x1, double y1, double x2, double y2);
+    Linea(string capa, Punto v1, Punto v2);
     ~Linea();
     double getX1();
     double getY1();
     double getX2();
     double getY2();
     string getCapa();
-    void escalar(double escala);
 private:
     double x1,y1,x2,y2; 
     string capa;

@@ -12,7 +12,7 @@
 #include "dxfparser.h"
 #include "mapa.h"
 #include "campotexto.h"
-
+#include "objetivo.h"
 using namespace std;
 //Botones
 //  Zoom
@@ -31,7 +31,7 @@ Frame *framemapa,
 Etiqueta *e_zoom,
 	 *e_vzoom;
 Mapa  plano;
-
+Objetivo objetivo;
 void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
 {
     SDL_Rect clip;
@@ -148,7 +148,7 @@ int gestor (void *unusued){
 	    framestado->getYc(),
 	    0x000000FF,
 	    0x00FF00FF);
-Campotexto *c2=new Campotexto(
+    Campotexto *c2=new Campotexto(
 	    framestado,
 	    "campo:",
 	    3,
@@ -174,8 +174,8 @@ Campotexto *c2=new Campotexto(
 
 int main(int argc, char *argv[])
 {
-//    string mapadxf="maps/casa.dxf";
-    string mapadxf="maps/segonDxf.dxf";
+    string mapadxf="maps/modelo.dxf";
+//    string mapadxf="maps/segonDxf.dxf";
 
     SDL_Thread *hilo;
     cout <<"Inicializando SDL." << endl;
