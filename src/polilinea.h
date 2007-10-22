@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include <vector>
-#include "vertice.h"
+#include "punto.h"
 #include "linea.h"
 using namespace std;
 
@@ -36,15 +36,15 @@ public:
     Polilinea(int num, bool cerrado, string capa);
     ~Polilinea();
 
-    vector<Vertice>* getPolilinea();
-    void addVertice(Vertice vertice);
+    vector<Punto>* getPolilinea();
+    void addVertice(Punto vertice);
     bool getCerrado();
     int getNumTotal();
     int getNum();
     vector<Linea> toLineas();
 private:
     string capa;
-    vector<Vertice> listaVertices;
+    vector<Punto> listaVertices;
     bool cerrado;
     int numVertices;
 };

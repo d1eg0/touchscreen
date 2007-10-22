@@ -3,14 +3,27 @@
 #include "polilinea.h"
 #include <SDL/SDL_gfxPrimitives.h>
 #include <SDL/SDL.h>
+Objetivo::Objetivo(){
+    activo=false;
+}
+    
 Objetivo::Objetivo(Frame *frame, double xp, double yp){
     this->frame=frame;
     this->xp=xp;
     this->yp=yp;
-    this->radio=5;
+    this->radio=2;
+    this->activo=false;
 }
 
 Objetivo::~Objetivo(){}
+
+void Objetivo::setObjetivo(Frame *frame, double xp, double yp){
+    this->frame=frame;
+    this->xp=xp;
+    this->yp=yp;
+    this->radio=2;
+    this->activo=false;
+}
 
 bool Objetivo::interior(Polilinea polilinea){
     int nc=0;
@@ -40,9 +53,31 @@ bool Objetivo::interior(Polilinea polilinea){
 }
 
 void Objetivo::dibujar(int x, int y,bool zvalida){
+    valido=zvalida;
     SDL_Rect r=frame->getArea();
     SDL_SetClipRect(frame->getVentana(),&r);
-    filledCircleColor(frame->getVentana(), x, y, radio, 0xff0000ff);
+    Uint32 color;
+    if(zvalida)color=0x00ff00ff;
+    else color=0xff0000ff;
+    filledCircleColor(frame->getVentana(), x, y, radio, color);
     SDL_UpdateRect(frame->getVentana(),0,0,0,0);
+    activo=true;
+    cout << "o-- x:"<< xp << " y:" << yp <<endl <<
+	"\tp-- x:" << x << " y:" << y << endl;
+    
 }
 
+void Objetivo::desactivar(){
+    activo=false;
+}
+bool Objetivo::activado(){
+    return activo;
+}
+
+double Objetivo::getX(){
+    return xp;
+}
+
+double Objetivo::getY(){
+    return yp;
+}

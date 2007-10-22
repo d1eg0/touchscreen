@@ -43,8 +43,8 @@ void Capa::addPolilinea(Polilinea polilinea){
     listaPolilineas.push_back(polilinea);
 }
 
-void Capa::addVertice(Vertice vertice){
-    listaPolilineas.back().addVertice(vertice);
+void Capa::addVertice(Punto punto){
+    listaPolilineas.back().addVertice(punto);
 }
 
 int Capa::getColor(){

@@ -98,9 +98,12 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){
     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
 	vector<Linea> llineas=(*(*i_capa).getCapa());
 	for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
-	     Linea linealeida=(*i_linea);
-	     linealeida.escalar(escala);
-	     pincel->dibujarLinea(frame,&linealeida,dh,dv);
+	     Punto v1((*i_linea).getX1(),(*i_linea).getY1());
+	     Punto v2((*i_linea).getX2(),(*i_linea).getY2());
+	     v1.transformar(frame,dh,dv,escala);
+	     v2.transformar(frame,dh,dv,escala);
+	     Linea linea((*i_linea).getCapa(),v1,v2);
+	     pincel->dibujarLinea(frame,&linea);
 	 }
      }
 }

@@ -30,3 +30,23 @@
 
 //Tamaño boton
 #define	    T_BOTON	20
+
+//Zonas frame
+//	    Ventana
+//  ____________________________
+//  |				|
+//  |		1		|
+//  |....... ________...........|
+//  |	    |	    |		|
+//  |	    |	5   |		|
+//  |	2   |	    |	  4	|
+//  |	    |_______|		|			    
+//  |	    :	3   :		|
+//  |_______:_______:___________|
+//
+//
+#define	    Z_ARRIBA	0x1
+#define	    Z_IZQUIERDA 0x2
+#define	    Z_ABAJO	0x4
+#define	    Z_DERECHA	0x8
+#define	    Z_CENTRO	0x10
