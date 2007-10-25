@@ -3,7 +3,7 @@
 #include <SDL/SDL.h>
 
 
-enum EstadoBoton {activo=1, inactivo=0};
+enum EstadoBoton {activo=1, inactivo=0, z=3};
 
 class Boton  
 {

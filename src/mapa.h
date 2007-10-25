@@ -48,8 +48,8 @@ public:
     void escalarMapa(double escala);
     void pintarMapa(SDL_Surface *screen,Frame *frame, double escala);
     //Calculo de los desplazamientos para el centrado
-    void calcularDHV(SDL_Surface *screen, Frame *frame);
-    void centrarMapa(SDL_Surface *screen, Frame *frame);
+    void calcularDHV(Frame *frame);
+    void centrarMapa();
 
     //Desplazamientos
     void despArriba();

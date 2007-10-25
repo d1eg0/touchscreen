@@ -1,28 +1,28 @@
 #include "objetivo.h"
 #include "linea.h"
 #include "polilinea.h"
+#include "constantes.h"
 #include <SDL/SDL_gfxPrimitives.h>
 #include <SDL/SDL.h>
 Objetivo::Objetivo(){
-    activo=false;
+    ofijado=false;
 }
     
-Objetivo::Objetivo(Frame *frame, double xp, double yp){
-    this->frame=frame;
-    this->xp=xp;
-    this->yp=yp;
-    this->radio=2;
-    this->activo=false;
+Objetivo::Objetivo(Frame *frame, Mapa *plano, double xp, double yp){
+    this->setObjetivo(frame,plano,xp,yp);
 }
 
 Objetivo::~Objetivo(){}
 
-void Objetivo::setObjetivo(Frame *frame, double xp, double yp){
+void Objetivo::setObjetivo(Frame *frame, Mapa *plano, double xp, double yp){
     this->frame=frame;
+    this->plano=plano;
     this->xp=xp;
     this->yp=yp;
-    this->radio=2;
-    this->activo=false;
+    this->radio=3;
+    this->ofijado=false;
+    bsi=new Boton(frame->getVentana());
+    bno=new Boton(frame->getVentana());
 }
 
 bool Objetivo::interior(Polilinea polilinea){
@@ -44,34 +44,40 @@ bool Objetivo::interior(Polilinea polilinea){
 
     }
     if(nc%2==0)	{
-	cout << "objetivo fuera" << endl;
 	return false;
     }else {
-	cout << "objetivo dentro" << endl;
 	return true;
     }
 }
 
-void Objetivo::dibujar(int x, int y,bool zvalida){
+void Objetivo::dibujar(bool zvalida){
+    int tradio;
     valido=zvalida;
     SDL_Rect r=frame->getArea();
     SDL_SetClipRect(frame->getVentana(),&r);
+    tradio=(int)(radio*(plano->getEscala()/100.0)); 
     Uint32 color;
-    if(zvalida)color=0x00ff00ff;
+    if(valido)color=0x00ff00ff;
     else color=0xff0000ff;
-    filledCircleColor(frame->getVentana(), x, y, radio, color);
-    SDL_UpdateRect(frame->getVentana(),0,0,0,0);
-    activo=true;
-    cout << "o-- x:"<< xp << " y:" << yp <<endl <<
-	"\tp-- x:" << x << " y:" << y << endl;
     
+    Punto o(xp,yp);
+    o.cpantalla(frame,plano->getDH(),plano->getDV(),plano->getEscala());
+    filledCircleColor(frame->getVentana(), (int)o.getX(), (int)o.getY(), tradio, color);
+    filledCircleColor(frame->getVentana(), (int)o.getX(), (int)o.getY(), tradio-1, 0xffffffff);
+    this->preguntar();
+    SDL_UpdateRect(frame->getVentana(),0,0,0,0);
+    ofijado=true;
 }
 
 void Objetivo::desactivar(){
-    activo=false;
+    ofijado=false;
 }
-bool Objetivo::activado(){
-    return activo;
+bool Objetivo::getFijado(){
+    return ofijado;
+}
+
+bool Objetivo::getValido(){
+    return valido;
 }
 
 double Objetivo::getX(){
@@ -80,4 +86,39 @@ double Objetivo::getX(){
 
 double Objetivo::getY(){
     return yp;
+}
+
+void Objetivo::preguntar(){
+    Punto o(xp,yp);
+    o.cpantalla(frame,plano->getDH(),plano->getDV(),plano->getEscala());
+    double x1=o.getX();
+    double x2=(x1+4*SIZE_C)+SIZE_C*4;
+    double y1=o.getY()+SIZE_C*2;
+    //Corregir la posicion de la etiqueta
+    if(x2>frame->getX()+frame->getW()){
+	x1-=x2-(frame->getX()+frame->getW());
+    }
+    if(x1<frame->getX()){
+	x1=frame->getX();
+    }
+    if(y1<frame->getY()){
+	y1=frame->getY();
+    }
+    if(y1>frame->getY()+frame->getH()){
+	y1=frame->getY()+frame->getH()-SIZE_C*2;
+    }
+    bsi->cargarBoton(
+	    (int)x1,
+	    (int)y1,
+	    SIZE_C*4,
+	    SIZE_C*2,
+	    "Si",
+	    0xff0000ff);
+    bno->cargarBoton(
+	    (int)x1+SIZE_C*4,
+	    (int)y1,
+	    SIZE_C*4,
+	    SIZE_C*2,
+	    "No",
+	    0xff0000ff);
 }

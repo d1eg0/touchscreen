@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include "frame.h"
+#include "punto.h"
 using namespace std;
 class Pantalla
 {

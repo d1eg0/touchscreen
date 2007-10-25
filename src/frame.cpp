@@ -156,8 +156,8 @@ SDL_Surface* Frame::getVentana(){
 
 bool Frame::Presionado(int x,int y)
 {
-	return (x>area.x)&&(x<area.x+area.w)&&
-		(y>area.y)&&(y<area.y+area.h);
+	return (x>this->getX())&&(x<this->getX()+this->getW())&&
+		(y>this->getY())&&(y<this->getY()+this->getH());
 }
 
 

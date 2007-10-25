@@ -50,3 +50,9 @@
 #define	    Z_ABAJO	0x4
 #define	    Z_DERECHA	0x8
 #define	    Z_CENTRO	0x10
+
+
+//Identificadores de los clientes
+#define	    CLIENTEPLANO    0
+#define	    CLIENTELOG	    1
+#define	    CLIENTESENS	    2
