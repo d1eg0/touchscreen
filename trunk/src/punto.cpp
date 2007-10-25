@@ -21,13 +21,19 @@ double Punto::getY(){
     return y;
 }
 
-void Punto::transformar(Frame *frame, double dh, double dv,double escala){
-    double factor=100.0/escala;
-    this->y/=factor;
-    this->x/=factor;
+void Punto::cpantalla(Frame *frame, double dh, double dv,double escala){
+    double factor=escala/100.0;
+    this->y*=factor;
+    this->x*=factor;
     this->y= (frame->getH()+frame->getY())-this->y+dv;
     this->x= frame->getX()+this->x+dh;
 
+}
+
+void Punto::cplano(double x, double y, double escala, double ox, double oy){
+    double factor=100.0/escala;
+    this->x=(x-ox)*factor;
+    this->y=(-y+oy)*factor;
 }
 /*string Punto::getCapa(){
     return capa;

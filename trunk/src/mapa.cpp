@@ -89,7 +89,7 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){
     this->escala=escala;
     this->frame=frame;
     this->pincel=new Dibujar(screen);
-    this->calcularDHV(screen,frame);
+    this->calcularDHV(frame);
     this->ox=frame->getX()+dh;
     this->oy=frame->getY()+frame->getH()+dv;
     vector<Capa>::iterator i_capa;
@@ -100,8 +100,8 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){
 	for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
 	     Punto v1((*i_linea).getX1(),(*i_linea).getY1());
 	     Punto v2((*i_linea).getX2(),(*i_linea).getY2());
-	     v1.transformar(frame,dh,dv,escala);
-	     v2.transformar(frame,dh,dv,escala);
+	     v1.cpantalla(frame,dh,dv,escala);
+	     v2.cpantalla(frame,dh,dv,escala);
 	     Linea linea((*i_linea).getCapa(),v1,v2);
 	     pincel->dibujarLinea(frame,&linea);
 	 }
@@ -109,12 +109,12 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){
 }
 
 
-void Mapa::calcularDHV(SDL_Surface *screen, Frame *frame){   
+void Mapa::calcularDHV(Frame *frame){   
     dh=(frame->getW()*0.5-(xm*escala/100.0));
     dv=-(frame->getH()*0.5-(ym*escala/100.0));	//negativo porque el eje Y+ apunta a Y-
 }
 
-void Mapa::centrarMapa(SDL_Surface *screen, Frame *frame){   
+void Mapa::centrarMapa(){   
 
     vector<Capa>::iterator i_capa;
     vector<Linea>::iterator i_linea;
@@ -167,6 +167,7 @@ void Mapa::despDerecha(){
     this->xm+=FACTOR_DESP;
     pintarMapa(frame->getVentana(),frame,this->escala);
 }
+
 
 
 

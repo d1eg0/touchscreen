@@ -82,47 +82,62 @@ void Pantalla::entrada()
 	case SDL_MOUSEBUTTONDOWN:
 	    cout << "click" << endl;
 	    cout << "x:" << event.motion.x << " y:" << event.motion.y <<  endl;
-	    double factor=100.0/plano.getEscala();
-	    double px=(event.motion.x-plano.getOX())*factor;
-	    double py=(-event.motion.y+plano.getOY())*factor;
+	    Punto p;
+	    p.cplano(event.motion.x, event.motion.y,plano.getEscala(),plano.getOX(),plano.getOY());
 	    if(framemapa->Presionado(event.motion.x,event.motion.y)){
-		objetivo.setObjetivo(framemapa,px,py);
-		Polilinea contorno=plano.getCapa("CapaContorn")->getPolilinea()->front();
+		objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());
+		Polilinea contorno=
+		    plano.getCapa("CapaContorn")->getPolilinea()->front();
 		if(objetivo.interior(contorno)){
-		    vector<Polilinea> *obstaculos=plano.getCapa("CapaObstacles")->getPolilinea();
+		    vector<Polilinea> *obstaculos=
+			plano.getCapa("CapaObstacles")->getPolilinea();
+
 		    bool obstaculo=false;
 		    vector<Polilinea>::iterator i_obstaculo;
-		    for(i_obstaculo=obstaculos->begin();i_obstaculo!=obstaculos->end();i_obstaculo++){
+		    for(i_obstaculo=obstaculos->begin();
+			    i_obstaculo!=obstaculos->end();
+			    i_obstaculo++)
+		    {
 			if(objetivo.interior((*i_obstaculo))){
 			    obstaculo=true;
 			    break;
 			}
 		    }
-		    string pregunta;
+
+		    string titulo,
+			   pos,
+			   zona="pasillo";
 		    bool pos_correcta;
-		    Uint32 color_etiq;
+		    Uint32 color_etiq,
+			   sincolor=0x00000000,
+			   color_valor=0x00FF00FF;
+			    
 		    if(obstaculo){
 			cout << "error: obstaculo" << endl;
-			pregunta = "obstaculo!";//msg
+			titulo = " Obstaculo! ";//msg
+			ostringstream buffer;//msg
+			buffer << p.getX()<< "," << p.getY();//msg
+			pos=buffer.str();//msg
 			pos_correcta=false;//posicion incorrecta
-			this->setAlpha(framemapa,Z_CENTRO);//efecto alpha
+			//this->setAlpha(framemapa,Z_CENTRO);//efecto alpha
 			color_etiq=0xFF0000FF;//color
 		    }else{
+			titulo=" Objetivo ";
 			ostringstream buffer;//msg
-			buffer << "X:" << px<< " Y:" << py;//msg
-			pregunta=buffer.str();//msg
-			this->setAlpha(framemapa,Z_ABAJO);//efecto alpha
+			buffer << p.getX()<< "," << p.getY();//msg
+			pos=buffer.str();//msg
+			//this->setAlpha(framemapa,Z_ABAJO);//efecto alpha
 			//plano.pintarMapa(screen,framemapa,plano.getEscala());
 			pos_correcta=true;//posicion correcta
 			color_etiq=0x5757FFFF;//color
-			botonMasZoom->desactivar();
-			botonMenosZoom->desactivar();
+			//botonMasZoom->desactivar();
+			//botonMenosZoom->desactivar();
 		    }
-		    objetivo.dibujar(event.motion.x,event.motion.y,pos_correcta);
+		    objetivo.dibujar(pos_correcta);
 
 		    //Posicion de la etiqueta pregunta
 		    int x1=event.motion.x-50;
-		    int x2=x1+pregunta.size()*SIZE_C+10;
+		    int x2=x1+titulo.size()*SIZE_C+10;
 		    int y1=event.motion.y-50;
 		    //Corregir la posicion de la etiqueta
 		    if(x2>framemapa->getX()+framemapa->getW()){
@@ -134,28 +149,89 @@ void Pantalla::entrada()
 		    if(y1<framemapa->getY()){
 			y1=framemapa->getY();
 		    }
+		    
+		    //x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(titulo.size()*SIZE_C)*0.5);		    
+		    //y1=(int)(framemapa->getY()+framemapa->getH());
+		    //Etiquetas
+		    x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(10*SIZE_C)*0.5)-10;		    
+		    y1=(int)(framemapa->getY()+framemapa->getH()+5);
+		    //Limpiar Zona Etiquetas
+		    SDL_Rect r;
+		    r.x=x1;
+		    r.y=y1;
+		    r.w=SIZE_C*15;
+		    r.h=SIZE_C*5*2;
+		    SDL_SetClipRect(screen,&r);
+		    boxColor(screen,r.x,r.y,r.x+r.w,r.y+r.h,0x000000FF);
 
-		    Etiqueta *epregunta;
-		    epregunta=new Etiqueta(screen);
-		    epregunta->cargarEtiqueta(
+		    Etiqueta *info;
+		    info=new Etiqueta(screen);
+		    //titulo
+		    info->cargarEtiqueta(
 			    x1,
 			    y1,
-			    pregunta.size()*SIZE_C+10,
+			    titulo.size()*SIZE_C,
 			    SIZE_C*2,
-			    (char*)pregunta.c_str(),
+			    (char*)titulo.c_str(),//(char*)pregunta.c_str(),
 			    color_etiq,
 			    color_etiq,
+			    0x00000043);
+		    //Pos
+		    titulo="Pos:";
+		    y1+=SIZE_C*2;
+		    info->cargarEtiqueta(
+			    x1,
+			    y1,
+			    titulo.size()*SIZE_C,
+			    SIZE_C*2,
+			    (char*)titulo.c_str(),//(char*)pregunta.c_str(),
+			    color_etiq,
+			    sincolor,
+			    0x00000043);
+		    y1+=SIZE_C*2;
+		    info->cargarEtiqueta(
+			    x1,
+			    y1,
+			    pos.size()*SIZE_C,
+			    SIZE_C*2,
+			    (char*)pos.c_str(),//(char*)pregunta.c_str(),
+			    color_valor,
+			    sincolor,
+			    0x00000043);
+		    //Zona
+		    titulo="Zona:";
+		    y1+=SIZE_C*2;
+		    info->cargarEtiqueta(
+			    x1,
+			    y1,
+			    titulo.size()*SIZE_C,
+			    SIZE_C*2,
+			    (char*)titulo.c_str(),//(char*)pregunta.c_str(),
+			    color_etiq,
+			    sincolor,
+			    0x00000043);
+		    y1+=SIZE_C*2;
+		    info->cargarEtiqueta(
+			    x1,
+			    y1,
+			    zona.size()*SIZE_C,
+			    SIZE_C*2,
+			    (char*)zona.c_str(),//(char*)pregunta.c_str(),
+			    color_valor,
+			    sincolor,
 			    0x00000043);
 		    SDL_UpdateRect(screen,0,0,0,0);
 
 
-		    cout << "\tpx:" << px << ", py:" << py << endl;
+		    cout << "\tpx:" << p.getX() << ", py:" << p.getY() << endl;
 		}
 	    }
+	    
 	    if(botonMasZoom->presionado(event.motion.x,event.motion.y)){
 	        if(plano.getEscala()<ZOOM_MAX){
 		    framemapa->limpiarFrame();
 		    plano.escalarMapa(FACTOR_ZOOM);
+		    if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
 		    SDL_UpdateRect(screen,0,0,0,0);
 		}
@@ -165,36 +241,41 @@ void Pantalla::entrada()
 		    framemapa->limpiarFrame();
 		    plano.escalarMapa(-FACTOR_ZOOM);
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
+		    if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
 		    SDL_UpdateRect(screen,0,0,0,0);
 		}
 	    }
 	    else if(botonDerecha->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
 		plano.despDerecha();
-		Punto v(objetivo.getX(),objetivo.getY());
+		//Punto v(objetivo.getX(),objetivo.getY());
 		//v.transformar(framemapa, plano.getEscala(),plano.getDH(),plano.getDV());
-		objetivo.dibujar((int)v.getX(),(int)v.getY(), true);
+		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonIzquierda->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
 		plano.despIzquierda();
+		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonArriba->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
 		plano.despArriba();
+		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonAbajo->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
 		plano.despAbajo();
+		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
-		plano.centrarMapa(screen,framemapa);
+		plano.centrarMapa();
 		plano.pintarMapa(screen,framemapa,plano.getEscala());
+		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(framemapa->getBcerrar()->presionado(event.motion.x,event.motion.y)){

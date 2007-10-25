@@ -55,7 +55,7 @@ int gestor (void *unusued){
 	    (int)((float)SCREEN_W/10.0*6.0), 
 	    (int)((float)SCREEN_H/10.0*8.0),
 	    "Plano",0xffffff);
-    plano.centrarMapa(pantalla->getPantalla(),framemapa);
+    plano.centrarMapa();
     plano.pintarMapa(pantalla->getPantalla(),framemapa,100);
 
     //Cargar el frame donde se sitúa el plano
