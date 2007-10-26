@@ -20,14 +20,16 @@ public:
     double getX();
     double getY();
     void preguntar();
-    int responder(int x, int y);
+    int respuesta(int x, int y);
     bool preguntado();
-    void respondido();
+    void nopreguntar();
+    void load();
+    void store();
 private:
     Frame *frame;
     Mapa *plano;
-    double xp;
-    double yp;
+    double xp,xp_temp;
+    double yp,yp_temp;
     float radio;
     bool ofijado,
 	 valido,

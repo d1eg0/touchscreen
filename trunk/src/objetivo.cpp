@@ -16,13 +16,11 @@ Objetivo::Objetivo(Frame *frame, Mapa *plano, double xp, double yp){
 Objetivo::~Objetivo(){}
 
 void Objetivo::setObjetivo(Frame *frame, Mapa *plano, double xp, double yp){
-    ofijado=false;
     this->frame=frame;
     this->plano=plano;
     this->xp=xp;
     this->yp=yp;
     this->radio=3;
-    //this->ofijado=false;
     bsi=new Boton(frame->getVentana());
     bno=new Boton(frame->getVentana());
 }
@@ -66,7 +64,6 @@ void Objetivo::dibujar(bool zvalida){
     o.cpantalla(frame,plano->getDH(),plano->getDV(),plano->getEscala());
     filledCircleColor(frame->getVentana(), (int)o.getX(), (int)o.getY(), tradio, color);
     filledCircleColor(frame->getVentana(), (int)o.getX(), (int)o.getY(), tradio-1, 0xffffffff);
-    //if(!pregunta&&valido)this->preguntar();
     SDL_UpdateRect(frame->getVentana(),0,0,0,0);
 }
 
@@ -97,7 +94,7 @@ double Objetivo::getY(){
 void Objetivo::preguntar(){
     Punto o(xp,yp);
     o.cpantalla(frame,plano->getDH(),plano->getDV(),plano->getEscala());
-    double x1=o.getX();
+    double x1=o.getX()-SIZE_C*4;
     double x2=(x1+4*SIZE_C)+SIZE_C*4;
     double y1=o.getY()+SIZE_C*2;
     //Corregir la posicion de la etiqueta
@@ -130,7 +127,7 @@ void Objetivo::preguntar(){
     pregunta=true;
 }
 
-int Objetivo::responder(int x, int y){
+int Objetivo::respuesta(int x, int y){
     if (bsi->presionado(x,y))return RESPUESTA_SI;
     if (bno->presionado(x,y))return RESPUESTA_NO;
     return SIN_RESPUESTA;
@@ -140,8 +137,16 @@ bool Objetivo::preguntado(){
     return pregunta;
 }
 
-void Objetivo::respondido(){
+void Objetivo::nopreguntar(){
     pregunta=false;
-    frame->limpiarFrame();
 }
 
+void Objetivo::load(){
+    xp=xp_temp;
+    yp=yp_temp;
+}
+
+void Objetivo::store(){
+    xp_temp=xp;
+    yp_temp=yp;
+}
