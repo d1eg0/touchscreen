@@ -13,6 +13,8 @@
 #include "mapa.h"
 #include "campotexto.h"
 #include "objetivo.h"
+#include "clientecapa_alta.h"
+#include "clientecapa_baja.h"
 using namespace std;
 //Botones
 //  Zoom
@@ -32,6 +34,8 @@ Etiqueta *e_zoom,
 	 *e_vzoom;
 Mapa  plano;
 Objetivo objetivo;
+ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
+ClienteCapaBaja	clienteCapaBaja; //Sensores
 void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
 {
     SDL_Rect clip;
@@ -171,13 +175,19 @@ int gestor (void *unusued){
     return 1;
 }
 
+/*void cliente(){
+    Cliente cliente1;
+    
+}*/
+
 
 int main(int argc, char *argv[])
 {
     string mapadxf="maps/modelo.dxf";
 //    string mapadxf="maps/segonDxf.dxf";
-
     SDL_Thread *hilo;
+    clienteCapaAlta.Connect("localhost", 9999);
+    clienteCapaBaja.Connect("localhost", 9999);
     cout <<"Inicializando SDL." << endl;
    
     //Lectura Fichero DXF, introduce la estructura en plano
@@ -199,7 +209,7 @@ int main(int argc, char *argv[])
 	//Hilo que genera el GUI
 	hilo = SDL_CreateThread(gestor, NULL);
 	if (hilo == NULL){
-		cerr << "No se ha podido crear el hilo" << endl;
+		cerr << "No se ha podido crear el hilo que gestiona la interfaz" << endl;
 	}
 	SDL_WaitThread(hilo, NULL);
     }

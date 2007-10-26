@@ -5,6 +5,7 @@
 #include "etiqueta.h"
 #include "objetivo.h"
 #include <sstream>
+#include "clientecapa_alta.h"
 extern Boton *botonMasZoom, 
        *botonMenosZoom;
 extern Boton *botonDerecha,
@@ -18,6 +19,7 @@ extern Frame *framemapa,
        *framestado;
 extern Etiqueta *e_zoom,*e_vzoom;
 extern Objetivo objetivo;
+extern ClienteCapaAlta clienteCapaAlta;
 Pantalla::Pantalla() 
 {
     Uint8 video_bpp;
@@ -123,7 +125,6 @@ void Pantalla::entrada()
 			//this->setAlpha(framemapa,Z_CENTRO);//efecto alpha
 			color_etiq=0xFF0000FF;//color
 		    }else{
-			//objetivo.preguntar();
 			titulo=" Objetivo ";
 			ostringstream buffer;//msg
 			buffer << p.getX()<< "," << p.getY();//msg
@@ -138,24 +139,26 @@ void Pantalla::entrada()
 			objetivo.dibujar(!obstaculo);
 			if(!obstaculo)objetivo.preguntar();
 		    }else{
-			int respuesta=objetivo.responder(event.motion.x,event.motion.y);
+			int respuesta=objetivo.respuesta(event.motion.x,event.motion.y);
 			switch(respuesta){
 			    case SIN_RESPUESTA:
-			   break;
-			case RESPUESTA_SI:
-			    cout << "SI" << endl;
-			    objetivo.activar();
-			    objetivo.respondido();
-			    plano.pintarMapa(screen,framemapa,plano.getEscala());
-			    objetivo.dibujar(!obstaculo);
-			    break;
-			case RESPUESTA_NO:
-			    cout << "NO" << endl;
-			    objetivo.desactivar();
-			    objetivo.respondido();
-			    plano.pintarMapa(screen,framemapa,plano.getEscala());
-			    objetivo.dibujar(!obstaculo);
-			    break;	    
+				break;
+			    case RESPUESTA_SI:
+				objetivo.activar();
+				objetivo.nopreguntar();
+				framemapa->limpiarFrame();
+				plano.pintarMapa(screen,framemapa,plano.getEscala());
+				objetivo.dibujar(!obstaculo);
+				objetivo.store();//guardarlo
+				clienteCapaAlta.Send("objetivo fijado");
+				break;
+			    case RESPUESTA_NO:
+				objetivo.nopreguntar();
+				framemapa->limpiarFrame();
+				plano.pintarMapa(screen,framemapa,plano.getEscala());
+				if(objetivo.getFijado())objetivo.load();//cargarlo
+				objetivo.dibujar(!obstaculo);
+				break;	    
 			}
 		    }
 		    //Posicion de la etiqueta pregunta
@@ -173,8 +176,6 @@ void Pantalla::entrada()
 			y1=framemapa->getY();
 		    }
 		    
-		    //x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(titulo.size()*SIZE_C)*0.5);		    
-		    //y1=(int)(framemapa->getY()+framemapa->getH());
 		    //Etiquetas
 		    x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(10*SIZE_C)*0.5)-10;		    
 		    y1=(int)(framemapa->getY()+framemapa->getH()+5);
@@ -254,7 +255,11 @@ void Pantalla::entrada()
 	        if(plano.getEscala()<ZOOM_MAX){
 		    framemapa->limpiarFrame();
 		    plano.escalarMapa(FACTOR_ZOOM);
-		    if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar(objetivo.getValido());
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
 		    SDL_UpdateRect(screen,0,0,0,0);
 		}
@@ -264,7 +269,11 @@ void Pantalla::entrada()
 		    framemapa->limpiarFrame();
 		    plano.escalarMapa(-FACTOR_ZOOM);
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
-		    if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar(objetivo.getValido());
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    SDL_UpdateRect(screen,0,0,0,0);
 		}
 	    }
@@ -273,32 +282,52 @@ void Pantalla::entrada()
 		plano.despDerecha();
 		//Punto v(objetivo.getX(),objetivo.getY());
 		//v.transformar(framemapa, plano.getEscala(),plano.getDH(),plano.getDV());
-		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
+		if(objetivo.getFijado()){
+		    objetivo.load();
+		    objetivo.dibujar(objetivo.getValido());
+		}
+		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonIzquierda->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
 		plano.despIzquierda();
-		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
+		if(objetivo.getFijado()){
+		    objetivo.load();
+		    objetivo.dibujar(objetivo.getValido());
+		}
+		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonArriba->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
 		plano.despArriba();
-		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
+		if(objetivo.getFijado()){
+		    objetivo.load();
+		    objetivo.dibujar(objetivo.getValido());
+		}
+		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonAbajo->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
 		plano.despAbajo();
-		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
+		if(objetivo.getFijado()){
+		    objetivo.load();
+		    objetivo.dibujar(objetivo.getValido());
+		}
+		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame();
 		plano.centrarMapa();
 		plano.pintarMapa(screen,framemapa,plano.getEscala());
-		if(objetivo.getFijado())objetivo.dibujar(objetivo.getValido());
+		if(objetivo.getFijado()){
+		    objetivo.load();
+		    objetivo.dibujar(objetivo.getValido());
+		}
+		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(framemapa->getBcerrar()->presionado(event.motion.x,event.motion.y)){
@@ -312,6 +341,11 @@ void Pantalla::entrada()
 		    framestado->desactivarFrame();
 		    framemapa->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,framemapa->getH());
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar(objetivo.getValido());
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    botonDerecha->recargarBoton();
 		    botonIzquierda->recargarBoton();
 		    botonAbajo->recargarBoton();
@@ -394,6 +428,11 @@ void Pantalla::entrada()
 		}else{ 
 		    framemapa->minFrame(); 
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar(objetivo.getValido());
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    //Botones Zoom
 		    botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, 
 			    framemapa->getY()+framemapa->getH()+30, 
