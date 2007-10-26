@@ -13,12 +13,16 @@ public:
     //test del rayo en 2D
     bool interior(Polilinea polilinea);
     void dibujar(bool zvalida);
+    void activar();
     void desactivar();
     bool getFijado();
     bool getValido();
     double getX();
     double getY();
     void preguntar();
+    int responder(int x, int y);
+    bool preguntado();
+    void respondido();
 private:
     Frame *frame;
     Mapa *plano;
@@ -26,7 +30,8 @@ private:
     double yp;
     float radio;
     bool ofijado,
-	 valido;
+	 valido,
+	 pregunta;
     Boton *bsi,*bno;
 };
 #endif
