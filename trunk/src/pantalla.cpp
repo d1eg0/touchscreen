@@ -85,10 +85,12 @@ void Pantalla::entrada()
 	    Punto p;
 	    p.cplano(event.motion.x, event.motion.y,plano.getEscala(),plano.getOX(),plano.getOY());
 	    if(framemapa->Presionado(event.motion.x,event.motion.y)){
-		objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());
+		
+		if(!objetivo.preguntado())objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());		
 		Polilinea contorno=
 		    plano.getCapa("CapaContorn")->getPolilinea()->front();
 		if(objetivo.interior(contorno)){
+		    
 		    vector<Polilinea> *obstaculos=
 			plano.getCapa("CapaObstacles")->getPolilinea();
 
@@ -118,23 +120,44 @@ void Pantalla::entrada()
 			ostringstream buffer;//msg
 			buffer << p.getX()<< "," << p.getY();//msg
 			pos=buffer.str();//msg
-			pos_correcta=false;//posicion incorrecta
 			//this->setAlpha(framemapa,Z_CENTRO);//efecto alpha
 			color_etiq=0xFF0000FF;//color
 		    }else{
+			//objetivo.preguntar();
 			titulo=" Objetivo ";
 			ostringstream buffer;//msg
 			buffer << p.getX()<< "," << p.getY();//msg
 			pos=buffer.str();//msg
 			//this->setAlpha(framemapa,Z_ABAJO);//efecto alpha
 			//plano.pintarMapa(screen,framemapa,plano.getEscala());
-			pos_correcta=true;//posicion correcta
 			color_etiq=0x5757FFFF;//color
 			//botonMasZoom->desactivar();
 			//botonMenosZoom->desactivar();
 		    }
-		    objetivo.dibujar(pos_correcta);
-
+		    if(!objetivo.preguntado()){
+			objetivo.dibujar(!obstaculo);
+			if(!obstaculo)objetivo.preguntar();
+		    }else{
+			int respuesta=objetivo.responder(event.motion.x,event.motion.y);
+			switch(respuesta){
+			    case SIN_RESPUESTA:
+			   break;
+			case RESPUESTA_SI:
+			    cout << "SI" << endl;
+			    objetivo.activar();
+			    objetivo.respondido();
+			    plano.pintarMapa(screen,framemapa,plano.getEscala());
+			    objetivo.dibujar(!obstaculo);
+			    break;
+			case RESPUESTA_NO:
+			    cout << "NO" << endl;
+			    objetivo.desactivar();
+			    objetivo.respondido();
+			    plano.pintarMapa(screen,framemapa,plano.getEscala());
+			    objetivo.dibujar(!obstaculo);
+			    break;	    
+			}
+		    }
 		    //Posicion de la etiqueta pregunta
 		    int x1=event.motion.x-50;
 		    int x2=x1+titulo.size()*SIZE_C+10;
@@ -553,6 +576,9 @@ void Pantalla::entrada()
 		}
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
+		
+
+
 
 	    /*if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)){
 	        cout << "boton: izquierdo" << endl;

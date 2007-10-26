@@ -56,3 +56,9 @@
 #define	    CLIENTEPLANO    0
 #define	    CLIENTELOG	    1
 #define	    CLIENTESENS	    2
+
+//Respuesta
+#define	    SIN_RESPUESTA   0
+#define	    RESPUESTA_SI    1
+#define	    RESPUESTA_NO    2
+

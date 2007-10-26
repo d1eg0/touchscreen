@@ -6,6 +6,7 @@
 #include <SDL/SDL.h>
 Objetivo::Objetivo(){
     ofijado=false;
+    this->pregunta=false;
 }
     
 Objetivo::Objetivo(Frame *frame, Mapa *plano, double xp, double yp){
@@ -15,12 +16,13 @@ Objetivo::Objetivo(Frame *frame, Mapa *plano, double xp, double yp){
 Objetivo::~Objetivo(){}
 
 void Objetivo::setObjetivo(Frame *frame, Mapa *plano, double xp, double yp){
+    ofijado=false;
     this->frame=frame;
     this->plano=plano;
     this->xp=xp;
     this->yp=yp;
     this->radio=3;
-    this->ofijado=false;
+    //this->ofijado=false;
     bsi=new Boton(frame->getVentana());
     bno=new Boton(frame->getVentana());
 }
@@ -64,14 +66,18 @@ void Objetivo::dibujar(bool zvalida){
     o.cpantalla(frame,plano->getDH(),plano->getDV(),plano->getEscala());
     filledCircleColor(frame->getVentana(), (int)o.getX(), (int)o.getY(), tradio, color);
     filledCircleColor(frame->getVentana(), (int)o.getX(), (int)o.getY(), tradio-1, 0xffffffff);
-    this->preguntar();
+    //if(!pregunta&&valido)this->preguntar();
     SDL_UpdateRect(frame->getVentana(),0,0,0,0);
+}
+
+void Objetivo::activar(){
     ofijado=true;
 }
 
 void Objetivo::desactivar(){
     ofijado=false;
 }
+
 bool Objetivo::getFijado(){
     return ofijado;
 }
@@ -121,4 +127,21 @@ void Objetivo::preguntar(){
 	    SIZE_C*2,
 	    "No",
 	    0xff0000ff);
+    pregunta=true;
 }
+
+int Objetivo::responder(int x, int y){
+    if (bsi->presionado(x,y))return RESPUESTA_SI;
+    if (bno->presionado(x,y))return RESPUESTA_NO;
+    return SIN_RESPUESTA;
+}
+
+bool Objetivo::preguntado(){
+    return pregunta;
+}
+
+void Objetivo::respondido(){
+    pregunta=false;
+    frame->limpiarFrame();
+}
+
