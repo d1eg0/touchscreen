@@ -1,11 +1,13 @@
 #include <SolarSockets/SolarSockets++.h>
 #include <fstream>
 #include "clientecapa_alta.h"
-
+#include "campo.h"
+extern Campo *c1;
 void ClienteCapaAlta::onConnect()
 {
     //cout << this->getStatus() << endl;
     while(this->getStatus()==1001){}//Esperar la conexion
+    //c1->updateValor(3);
     ifstream::pos_type size;
     char * memblock;
     ifstream myFile ("maps/modelo.dxf", ios::in|ios::binary|ios::ate );

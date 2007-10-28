@@ -12,10 +12,11 @@ public:
     void setObjetivo(Frame *frame, Mapa *plano, double xp, double yp);
     //test del rayo en 2D
     bool interior(Polilinea polilinea);
-    void dibujar(bool zvalida);
+    void dibujar();
     void activar();
     void desactivar();
     bool getFijado();
+    void setValido(bool valido);
     bool getValido();
     double getX();
     double getY();

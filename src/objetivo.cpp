@@ -50,9 +50,8 @@ bool Objetivo::interior(Polilinea polilinea){
     }
 }
 
-void Objetivo::dibujar(bool zvalida){
+void Objetivo::dibujar(){
     int tradio;
-    valido=zvalida;
     SDL_Rect r=frame->getArea();
     SDL_SetClipRect(frame->getVentana(),&r);
     tradio=(int)(radio*(plano->getEscala()/100.0)); 
@@ -77,6 +76,10 @@ void Objetivo::desactivar(){
 
 bool Objetivo::getFijado(){
     return ofijado;
+}
+
+void Objetivo::setValido(bool valido){
+    this->valido=valido;
 }
 
 bool Objetivo::getValido(){

@@ -38,6 +38,7 @@ Objetivo objetivo;
 // Comunicacion
 ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
 ClienteCapaBaja	clienteCapaBaja; //Sensores
+Campo *c1;
 void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
 {
     SDL_Rect clip;
@@ -141,27 +142,23 @@ int gestor (void *unusued){
     botonCentrar=new Boton(pantalla->getPantalla());
     botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
 
-    Campo *c1=new Campo(
+    c1=new Campo(
 	    framestado,
-	    "campo:",
-	    3,
-	    4,
-	    5,
-	    6,
-	    false);
+	    "conexion:",
+	    true);
+    c1->valorStr("bad");
+    c1->valorNum(5,3,4,5);
     c1->cargarCampo(
 	    framestado->getXc(),
 	    framestado->getYc(),
 	    0x000000FF,
 	    0x00FF00FF);
+    //c1->updateValor(4);
     Campo *c2=new Campo(
 	    framestado,
 	    "campo:",
-	    3,
-	    4,
-	    5,
-	    6,
 	    true);
+    c2->valorStr("bad");
     c2->cargarCampo(
 	    framestado->getXc(),
 	    framestado->getYc(),
