@@ -9,39 +9,47 @@ using namespace std;
 class Campo  
 {
 public:
-	Campo(Frame *frame, 
-		string nombre, 
-		float valor, 
-		float vmax, 
-		float vmin, 
-		float incremento,
-		bool estatico);
-	virtual ~Campo();
+    Campo(Frame *frame, 
+	    string nombre, 
+	    bool estatico);
+    virtual ~Campo();
 
-	void cargarCampo(int x, int y,  Uint32 colorNombre, Uint32 colorValor);
-	
-	//void updateValor(float valor);
+    void cargarCampo(int x, int y,  Uint32 colorNombre, Uint32 colorValor);
+    void valorStr(string valor);	
+    void valorNum(
+	    float valor, 
+	    float vmax, 
+	    float vmin, 
+	    float incremento
+	    );	
+    void updateValor(float valor);
+    void updateValor(string valor);
+    void aumentar();
+    void disminuir();
+    int presionado(int x, int y);
 
 
 private:
-	Frame *frame;
+    Frame *frame;
 
-	string nombre;
-	SDL_Rect arean;
-	float valor;
-	bool estatico;
-	SDL_Rect areav;
+    string nombre;
+    SDL_Rect arean;
+    float valor;
+    string valorstr;
+    bool estatico,
+	 numerico;
+    SDL_Rect areav;
 
-	float minvalor;
-	float maxvalor;
-	float incremento;
+    float minvalor;
+    float maxvalor;
+    float incremento;
 
-	Uint32 colorNombre;
-	Uint32 colorValor;
+    Uint32 colorNombre;
+    Uint32 colorValor;
 
 
-	Boton *bmas;
-	Boton *bmenos;
+    Boton *bmas;
+    Boton *bmenos;
 };
 
 #endif

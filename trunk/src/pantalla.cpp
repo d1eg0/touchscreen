@@ -86,7 +86,30 @@ void Pantalla::entrada()
 	    cout << "x:" << event.motion.x << " y:" << event.motion.y <<  endl;
 	    Punto p;
 	    p.cplano(event.motion.x, event.motion.y,plano.getEscala(),plano.getOX(),plano.getOY());
-	    if(framemapa->Presionado(event.motion.x,event.motion.y)){
+	    if(objetivo.preguntado()){
+		int respuesta=objetivo.respuesta(event.motion.x,event.motion.y);
+		switch(respuesta){
+		    case SIN_RESPUESTA:
+			break;
+		    case RESPUESTA_SI:
+			objetivo.activar();
+			objetivo.nopreguntar();
+			framemapa->limpiarFrame();
+			plano.pintarMapa(screen,framemapa,plano.getEscala());
+			objetivo.dibujar();
+			objetivo.store();//guardarlo
+			clienteCapaAlta.Send("objetivo fijado");
+			break;
+		    case RESPUESTA_NO:
+			objetivo.nopreguntar();
+			framemapa->limpiarFrame();
+			plano.pintarMapa(screen,framemapa,plano.getEscala());
+			if(objetivo.getFijado())objetivo.load();//cargarlo
+			objetivo.dibujar();
+			break;	    
+		}
+	    }
+	    else if(!objetivo.preguntado()&&framemapa->Presionado(event.motion.x,event.motion.y)){
 		
 		if(!objetivo.preguntado())objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());		
 		Polilinea contorno=
@@ -96,14 +119,14 @@ void Pantalla::entrada()
 		    vector<Polilinea> *obstaculos=
 			plano.getCapa("CapaObstacles")->getPolilinea();
 
-		    bool obstaculo=false;
+		    objetivo.setValido(true);
 		    vector<Polilinea>::iterator i_obstaculo;
 		    for(i_obstaculo=obstaculos->begin();
 			    i_obstaculo!=obstaculos->end();
 			    i_obstaculo++)
 		    {
 			if(objetivo.interior((*i_obstaculo))){
-			    obstaculo=true;
+			    objetivo.setValido(false);
 			    break;
 			}
 		    }
@@ -116,7 +139,7 @@ void Pantalla::entrada()
 			   sincolor=0x00000000,
 			   color_valor=0x00FF00FF;
 			    
-		    if(obstaculo){
+		    if(!objetivo.getValido()){
 			cout << "error: obstaculo" << endl;
 			titulo = " Obstaculo! ";//msg
 			ostringstream buffer;//msg
@@ -136,31 +159,10 @@ void Pantalla::entrada()
 			//botonMenosZoom->desactivar();
 		    }
 		    if(!objetivo.preguntado()){
-			objetivo.dibujar(!obstaculo);
-			if(!obstaculo)objetivo.preguntar();
-		    }else{
-			int respuesta=objetivo.respuesta(event.motion.x,event.motion.y);
-			switch(respuesta){
-			    case SIN_RESPUESTA:
-				break;
-			    case RESPUESTA_SI:
-				objetivo.activar();
-				objetivo.nopreguntar();
-				framemapa->limpiarFrame();
-				plano.pintarMapa(screen,framemapa,plano.getEscala());
-				objetivo.dibujar(!obstaculo);
-				objetivo.store();//guardarlo
-				clienteCapaAlta.Send("objetivo fijado");
-				break;
-			    case RESPUESTA_NO:
-				objetivo.nopreguntar();
-				framemapa->limpiarFrame();
-				plano.pintarMapa(screen,framemapa,plano.getEscala());
-				if(objetivo.getFijado())objetivo.load();//cargarlo
-				objetivo.dibujar(!obstaculo);
-				break;	    
-			}
+			objetivo.dibujar();
+			if(objetivo.getValido())objetivo.preguntar();
 		    }
+
 		    //Posicion de la etiqueta pregunta
 		    int x1=event.motion.x-50;
 		    int x2=x1+titulo.size()*SIZE_C+10;
@@ -257,7 +259,7 @@ void Pantalla::entrada()
 		    plano.escalarMapa(FACTOR_ZOOM);
 		    if(objetivo.getFijado()){
 			objetivo.load();
-			objetivo.dibujar(objetivo.getValido());
+			objetivo.dibujar();
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
@@ -271,7 +273,7 @@ void Pantalla::entrada()
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
 		    if(objetivo.getFijado()){
 			objetivo.load();
-			objetivo.dibujar(objetivo.getValido());
+			objetivo.dibujar();
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    SDL_UpdateRect(screen,0,0,0,0);
@@ -284,7 +286,7 @@ void Pantalla::entrada()
 		//v.transformar(framemapa, plano.getEscala(),plano.getDH(),plano.getDV());
 		if(objetivo.getFijado()){
 		    objetivo.load();
-		    objetivo.dibujar(objetivo.getValido());
+		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
@@ -294,7 +296,7 @@ void Pantalla::entrada()
 		plano.despIzquierda();
 		if(objetivo.getFijado()){
 		    objetivo.load();
-		    objetivo.dibujar(objetivo.getValido());
+		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
@@ -304,7 +306,7 @@ void Pantalla::entrada()
 		plano.despArriba();
 		if(objetivo.getFijado()){
 		    objetivo.load();
-		    objetivo.dibujar(objetivo.getValido());
+		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
@@ -314,7 +316,7 @@ void Pantalla::entrada()
 		plano.despAbajo();
 		if(objetivo.getFijado()){
 		    objetivo.load();
-		    objetivo.dibujar(objetivo.getValido());
+		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
@@ -325,7 +327,7 @@ void Pantalla::entrada()
 		plano.pintarMapa(screen,framemapa,plano.getEscala());
 		if(objetivo.getFijado()){
 		    objetivo.load();
-		    objetivo.dibujar(objetivo.getValido());
+		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
 		SDL_UpdateRect(screen,0,0,0,0);
@@ -343,7 +345,7 @@ void Pantalla::entrada()
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
 		    if(objetivo.getFijado()){
 			objetivo.load();
-			objetivo.dibujar(objetivo.getValido());
+			objetivo.dibujar();
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    botonDerecha->recargarBoton();
@@ -430,7 +432,7 @@ void Pantalla::entrada()
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
 		    if(objetivo.getFijado()){
 			objetivo.load();
-			objetivo.dibujar(objetivo.getValido());
+			objetivo.dibujar();
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    //Botones Zoom
