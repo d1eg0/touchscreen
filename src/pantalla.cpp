@@ -120,14 +120,14 @@ void Pantalla::entrada()
 			cout << "error: obstaculo" << endl;
 			titulo = " Obstaculo! ";//msg
 			ostringstream buffer;//msg
-			buffer << p.getX()<< "," << p.getY();//msg
+			buffer << (int)p.getX()<< "," << (int)p.getY();//msg
 			pos=buffer.str();//msg
 			//this->setAlpha(framemapa,Z_CENTRO);//efecto alpha
 			color_etiq=0xFF0000FF;//color
 		    }else{
 			titulo=" Objetivo ";
 			ostringstream buffer;//msg
-			buffer << p.getX()<< "," << p.getY();//msg
+			buffer << (int)p.getX()<< "," << (int)p.getY();//msg
 			pos=buffer.str();//msg
 			//this->setAlpha(framemapa,Z_ABAJO);//efecto alpha
 			//plano.pintarMapa(screen,framemapa,plano.getEscala());

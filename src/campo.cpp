@@ -1,16 +1,17 @@
-#include "campotexto.h"
+#include "campo.h"
 #include "constantes.h"
 #include <string>
 #include <SDL/SDL_gfxPrimitives.h>
 
 using namespace std;
 
-Campotexto::Campotexto(Frame *frame, 
+Campo::Campo(Frame *frame, 
 	string nombre, 
 	float valor, 
 	float vmax, 
 	float vmin, 
-	float incremento)
+	float incremento,
+	bool estatico)
 {
     this->frame=frame;
     this->nombre=nombre;
@@ -18,17 +19,20 @@ Campotexto::Campotexto(Frame *frame,
     this->maxvalor=vmax;
     this->minvalor=vmin;
     this->incremento=incremento;
-    bmas=new Boton(frame->getVentana());
-    bmenos=new Boton(frame->getVentana());
+    this->estatico=estatico;
+    if(!estatico){
+	bmas=new Boton(frame->getVentana());
+	bmenos=new Boton(frame->getVentana());
+    }
 }
 
-Campotexto::~Campotexto()
+Campo::~Campo()
 {
 
 }
 
 
-void Campotexto::cargarCampotexto(int x, int y, Uint32 colorNombre, Uint32 colorValor)
+void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 {
     this->colorNombre=colorNombre;
     this->colorValor=colorValor;
@@ -60,21 +64,22 @@ void Campotexto::cargarCampotexto(int x, int y, Uint32 colorNombre, Uint32 color
 	    (int)(areav.y+(areav.h*0.5)-(SIZE_C*0.5)), 
 	    valorc, 
 	    colorValor);
-    
-    bmas->cargarBoton(	    
-	    areav.x+areav.w+20, 
-	    y, 
-	    20,
-	    20,
-	    "+",
-	    0x01F33EFF);
-    bmenos->cargarBoton(	    
-	    areav.x+areav.w+40, 
-	    y, 
-	    20,
-	    20,
-	    "-",
-	    0xFF4848FF);
+    if(!this->estatico){
+	bmas->cargarBoton(	    
+		areav.x+areav.w+20, 
+		y, 
+		20,
+		20,
+		"+",
+		0x01F33EFF);
+	bmenos->cargarBoton(	    
+		areav.x+areav.w+40, 
+		y, 
+		20,
+		20,
+		"-",
+		0xFF4848FF);
+    }
 	//SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 

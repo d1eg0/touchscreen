@@ -2,7 +2,7 @@
 #include "constantes.h"
 #include <string>
 #include <SDL/SDL_gfxPrimitives.h>
-
+//#include <SDL/SDL_ttf.h>
 using namespace std;
 
 Boton::Boton(SDL_Surface *Ventana)
@@ -15,9 +15,29 @@ Boton::Boton(SDL_Surface *Ventana)
 	ventana=Ventana;
 	Sizef=16;
 	//fuente= TTF_OpenFont("georgia.ttf",Sizef);
-	Stylef=0;
-	//TTF_SetFontStyle (Font, TTF_STYLE_NORMAL);
+	    
 
+/*	if(TTF_Init()==-1) {
+	        printf("TTF_Init: %s\n", TTF_GetError());
+		    exit(2);
+	}
+
+	fuente=TTF_OpenFont("font.ttf", 16);
+	if(!fuente) {
+	        printf("TTF_OpenFont: %s\n", TTF_GetError());
+	
+	}
+	SDL_Color color={255,0,0};
+if(!(surfacef=TTF_RenderText_Blended(fuente,"Hello World!",color))) {
+    //handle error here, perhaps print TTF_GetError at least
+} else {
+    SDL_BlitSurface(surfacef,NULL,ventana,NULL);
+    //perhaps we can reuse it, but I assume not for simplicity.
+    SDL_FreeSurface(surfacef);
+}
+	//Stylef=0;
+//	TTF_SetFontStyle (font, TTF_STYLE_NORMAL);
+*/
 	//HiHaSombra=true;
 	estado=inactivo;
 

@@ -110,20 +110,21 @@ void Objetivo::preguntar(){
     if(y1>frame->getY()+frame->getH()){
 	y1=frame->getY()+frame->getH()-SIZE_C*2;
     }
+    Uint32 colorbotones=0x4682B4FF;	
     bsi->cargarBoton(
 	    (int)x1,
 	    (int)y1,
 	    SIZE_C*4,
 	    SIZE_C*2,
 	    "Si",
-	    0xff0000ff);
+	    colorbotones);
     bno->cargarBoton(
 	    (int)x1+SIZE_C*4,
 	    (int)y1,
 	    SIZE_C*4,
 	    SIZE_C*2,
 	    "No",
-	    0xff0000ff);
+	    colorbotones);
     pregunta=true;
 }
 

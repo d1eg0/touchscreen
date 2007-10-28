@@ -11,7 +11,7 @@
 #include "constantes.h"
 #include "dxfparser.h"
 #include "mapa.h"
-#include "campotexto.h"
+#include "campo.h"
 #include "objetivo.h"
 #include "clientecapa_alta.h"
 #include "clientecapa_baja.h"
@@ -30,10 +30,12 @@ Boton *botonArriba,
 Frame *framemapa,
       *frameradar,
       *framestado;
+// Etiquetas
 Etiqueta *e_zoom,
 	 *e_vzoom;
 Mapa  plano;
 Objetivo objetivo;
+// Comunicacion
 ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
 ClienteCapaBaja	clienteCapaBaja; //Sensores
 void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
@@ -62,7 +64,7 @@ int gestor (void *unusued){
     plano.centrarMapa();
     plano.pintarMapa(pantalla->getPantalla(),framemapa,100);
 
-    //Cargar el frame donde se sitúa el plano
+    //Cargar el frame donde se sitúa el radar
     frameradar=new Frame(pantalla->getPantalla());
     frameradar->cargarFrame(
 	    (int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
@@ -72,7 +74,7 @@ int gestor (void *unusued){
 	    "Radar",
 	    0xffffff);
 
-    //Cargar el frame donde se sitúa el plano
+    //Cargar el frame donde se sitúa el estado
     framestado=new Frame(pantalla->getPantalla());
     framestado->cargarFrame(
 	    (int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
@@ -139,28 +141,28 @@ int gestor (void *unusued){
     botonCentrar=new Boton(pantalla->getPantalla());
     botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
 
-    Campotexto *c1=new Campotexto(
+    Campo *c1=new Campo(
 	    framestado,
 	    "campo:",
 	    3,
 	    4,
 	    5,
-	    6
-	    );
-    c1->cargarCampotexto(
+	    6,
+	    false);
+    c1->cargarCampo(
 	    framestado->getXc(),
 	    framestado->getYc(),
 	    0x000000FF,
 	    0x00FF00FF);
-    Campotexto *c2=new Campotexto(
+    Campo *c2=new Campo(
 	    framestado,
 	    "campo:",
 	    3,
 	    4,
 	    5,
-	    6
-	    );
-    c2->cargarCampotexto(
+	    6,
+	    true);
+    c2->cargarCampo(
 	    framestado->getXc(),
 	    framestado->getYc(),
 	    0x000000FF,
