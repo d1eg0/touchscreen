@@ -5,16 +5,16 @@
 
 using namespace std;
 
-Campo::Campo(Frame *frame, 
+Campo::Campo(SDL_Surface *surface, 
 	string nombre, 
 	bool estatico)
 {
-    this->frame=frame;
+    this->surface=surface;
     this->nombre=nombre;
     this->estatico=estatico;
     if(!estatico){
-	bmas=new Boton(frame->getVentana());
-	bmenos=new Boton(frame->getVentana());
+	bmas=new Boton(surface);
+	bmenos=new Boton(surface);
     }
 }
 
@@ -34,10 +34,10 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
     this->arean.h=SIZE_C*2;
     
 		
-    SDL_SetClipRect(frame->getVentana(),  &arean);
+    SDL_SetClipRect(surface,  &arean);
 
     stringColor(
-	    frame->getVentana(),
+	    surface,
 	   (int)( arean.x+(arean.w*0.5)-(SIZE_C*nombre.size()*0.5)), 
 	    (int)(arean.y+(arean.h*0.5)-(SIZE_C*0.5)), 
 	    nombre.c_str(), 
@@ -50,9 +50,9 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 	this->areav.y=y;
 	this->areav.w=SIZE_C*string(valorc).size();
 	this->areav.h=SIZE_C*2;
-	SDL_SetClipRect(frame->getVentana(),  &areav);
+	SDL_SetClipRect(surface,  &areav);
 	stringColor(
-		frame->getVentana(),
+		surface,
 		areav.x, 
 		(int)(areav.y+(areav.h*0.5)-(SIZE_C*0.5)), 
 		valorc, 
@@ -62,9 +62,9 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 	this->areav.y=y;
 	this->areav.w=SIZE_C*valorstr.size();
 	this->areav.h=SIZE_C*2;
-	SDL_SetClipRect(frame->getVentana(),  &areav);
+	SDL_SetClipRect(surface,  &areav);
 	stringColor(
-		frame->getVentana(),
+		surface,
 		areav.x, 
 		(int)(areav.y+(areav.h*0.5)-(SIZE_C*0.5)), 
 		valorstr.c_str(), 
@@ -104,44 +104,45 @@ void Campo::valorNum(float valor, float vmax, float vmin, float incremento){
 
 void Campo::updateValor(float valor){
     this->valor=valor;
-    char *valorc=(char *)malloc(sizeof(float));
+   char *valorc=(char *)malloc(sizeof(float));
     sprintf(valorc,"%5.3f",this->valor);
     this->areav.w=SIZE_C*string(valorc).size();
-    SDL_SetClipRect(frame->getVentana(),  &areav);
+    SDL_SetClipRect(surface,  &areav);
     boxColor(
-	    frame->getVentana(),
+	    surface,
 	    areav.x,
 	    areav.y,
 	    areav.x+areav.w,
 	    areav.y+areav.h,
 	    0x000000ff);
     stringColor(
-	frame->getVentana(),
+	surface,
 	areav.x, 
 	(int)(areav.y+(areav.h*0.5)-(SIZE_C*0.5)), 
 	valorc, 
 	colorValor);
-    SDL_UpdateRect(frame->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
+    SDL_UpdateRect(surface, 0, 0, SCREEN_W, SCREEN_H);
+    
 }
 
 void Campo::updateValor(string valor){
     this->valorstr=valor;
     this->areav.w=SIZE_C*valorstr.size();
-    SDL_SetClipRect(frame->getVentana(),  &areav);
+    SDL_SetClipRect(surface,  &areav);
     boxColor(
-	    frame->getVentana(),
+	    surface,
 	    areav.x,
 	    areav.y,
 	    areav.x+areav.w,
 	    areav.y+areav.h,
 	    0x000000ff);
     stringColor(
-	frame->getVentana(),
+	surface,
 	areav.x, 
 	(int)(areav.y+(areav.h*0.5)-(SIZE_C*0.5)), 
 	valorstr.c_str(), 
 	colorValor);
-    SDL_UpdateRect(frame->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
+    SDL_UpdateRect(surface, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 void Campo::aumentar(){

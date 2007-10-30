@@ -53,8 +53,8 @@
 
 
 //Identificadores de los clientes
-#define	    CLIENTEPLANO    0
-#define	    CLIENTELOG	    1
+#define	    TRAMAPLANO    0
+#define	    TRAMAOBJETIVO	    1
 #define	    CLIENTESENS	    2
 
 //Respuesta

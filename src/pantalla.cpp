@@ -20,17 +20,18 @@ extern Frame *framemapa,
 extern Etiqueta *e_zoom,*e_vzoom;
 extern Objetivo objetivo;
 extern ClienteCapaAlta clienteCapaAlta;
-Pantalla::Pantalla() 
+Pantalla::Pantalla(SDL_Surface *screen) 
 {
-    Uint8 video_bpp;
-    Uint32 videoflags;
-    videoflags = SDL_SWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN;
+    this->screen=screen;
+//    Uint8 video_bpp;
+//    Uint32 videoflags;
+//    videoflags = SDL_SWSURFACE | SDL_SRCALPHA ;
     h_screen=SCREEN_H;
     v_screen=SCREEN_W;
     sdl_quit=false;
     alpha=false;
     info = SDL_GetVideoInfo();
-    if ( info->vfmt->BitsPerPixel > 8 ) {
+/*    if ( info->vfmt->BitsPerPixel > 8 ) {
 	video_bpp = info->vfmt->BitsPerPixel;
     } else {
 	video_bpp = 16;
@@ -40,7 +41,7 @@ Pantalla::Pantalla()
     SDL_SetAlpha(screen, SDL_SRCALPHA, 0);
     SDL_FillRect( screen, 0, 0x000000);
     SDL_UpdateRect(screen,0,0,0,0);
-
+*/
 //    SDL_ShowCursor(SDL_DISABLE);	//ocultar cursor
 }
 
@@ -69,6 +70,7 @@ void Pantalla::entrada()
 	    {
 		case SDLK_ESCAPE :
 		    cout << "teclado:scape" << endl;
+		    SDL_Quit();
 		    sdl_quit = true;
 		    break;			    
 	    }
@@ -79,6 +81,7 @@ void Pantalla::entrada()
 	case SDL_QUIT:
 	    //Boton de salir
 	    sdl_quit = true;
+	    SDL_Quit();
 	    break;
  
 	case SDL_MOUSEBUTTONDOWN:
@@ -98,7 +101,8 @@ void Pantalla::entrada()
 			plano.pintarMapa(screen,framemapa,plano.getEscala());
 			objetivo.dibujar();
 			objetivo.store();//guardarlo
-			clienteCapaAlta.Send("objetivo fijado");
+			clienteCapaAlta.Send("1 "+objetivo.toString());
+			cout << "objetivo:" <<objetivo.toString() << endl;
 			break;
 		    case RESPUESTA_NO:
 			objetivo.nopreguntar();
