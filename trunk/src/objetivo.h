@@ -26,6 +26,7 @@ public:
     void nopreguntar();
     void load();
     void store();
+    string toString();
 private:
     Frame *frame;
     Mapa *plano;
@@ -33,7 +34,7 @@ private:
     double yp,yp_temp;
     float radio;
     bool ofijado,
-	 valido,
+	 valido,valido_temp,
 	 pregunta;
     Boton *bsi,*bno;
 };

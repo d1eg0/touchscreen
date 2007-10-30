@@ -29,7 +29,7 @@ Dibujar::~Dibujar(){
     x= frame->getX()+x+dh;
 
 }*/
-void Dibujar::dibujarLinea(Frame *frame, Linea *linea) {
+void Dibujar::dibujarLinea(Frame *frame, Linea *linea, Uint32 color) {
     /*double y1= (frame->getH()+frame->getY())-linea->getY1()+dv;
     double y2= (frame->getH()+frame->getY())-linea->getY2()+dv;
     double x1= frame->getX()+linea->getX1()+dh;
@@ -41,6 +41,6 @@ void Dibujar::dibujarLinea(Frame *frame, Linea *linea) {
     y2=linea->getY2();
     //transformar(frame,x1,y1,dh,dv,escala);
     //transformar(frame,x2,y2,dh,dv,escala);
-    lineColor(screen, (Sint16)x1, (Sint16)y1, (Sint16)x2, (Sint16)y2, 0x000000ff);
+    lineColor(screen, (Sint16)x1, (Sint16)y1, (Sint16)x2, (Sint16)y2, color);
 }
 

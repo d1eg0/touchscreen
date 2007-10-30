@@ -4,6 +4,8 @@
 #include "constantes.h"
 #include <SDL/SDL_gfxPrimitives.h>
 #include <SDL/SDL.h>
+#include <iostream>
+#include <sstream>
 Objetivo::Objetivo(){
     ofijado=false;
     this->pregunta=false;
@@ -148,9 +150,26 @@ void Objetivo::nopreguntar(){
 void Objetivo::load(){
     xp=xp_temp;
     yp=yp_temp;
+    valido=valido_temp;
 }
 
 void Objetivo::store(){
     xp_temp=xp;
     yp_temp=yp;
+    valido_temp=valido;
 }
+
+string Objetivo::toString(){
+    string xpstr,ypstr;
+    stringstream buffer;
+    buffer.clear(); 
+    buffer << xp;
+    buffer >> xpstr;
+
+    buffer.clear(); 
+    buffer << yp;
+    buffer >>ypstr;
+    
+    return xpstr+" "+ypstr;
+}
+

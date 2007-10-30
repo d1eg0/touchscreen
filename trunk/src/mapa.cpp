@@ -103,7 +103,7 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){
 	     v1.cpantalla(frame,dh,dv,escala);
 	     v2.cpantalla(frame,dh,dv,escala);
 	     Linea linea((*i_linea).getCapa(),v1,v2);
-	     pincel->dibujarLinea(frame,&linea);
+	     pincel->dibujarLinea(frame,&linea,0x000000ff);
 	 }
      }
 }

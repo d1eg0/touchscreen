@@ -2,14 +2,14 @@
 #define CAMPO_H
 #include <SDL/SDL.h>
 #include <string>
-#include "frame.h"
+#include "boton.h"
 
 using namespace std;
 
 class Campo  
 {
 public:
-    Campo(Frame *frame, 
+    Campo(SDL_Surface *surface, 
 	    string nombre, 
 	    bool estatico);
     virtual ~Campo();
@@ -30,7 +30,7 @@ public:
 
 
 private:
-    Frame *frame;
+    SDL_Surface *surface;
 
     string nombre;
     SDL_Rect arean;

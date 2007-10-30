@@ -18,7 +18,7 @@ private:
     const SDL_VideoInfo *info;
 
 public:
-    Pantalla();
+    Pantalla(SDL_Surface *screen);
     ~Pantalla();
 
     SDL_Surface* getPantalla();

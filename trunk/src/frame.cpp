@@ -150,6 +150,12 @@ void Frame::limpiarFrame(){
     //bmaxmin->desactivar();
 }
 
+void Frame::activarFrame(){
+    SDL_Rect a=this->getArea();
+    SDL_SetClipRect(ventana, &a);
+}
+
+
 SDL_Surface* Frame::getVentana(){
     return ventana;
 }
