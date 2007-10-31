@@ -26,7 +26,9 @@ void DxfParser::addPolyline(const DL_PolylineData& data) {
     if(data.flags==1)cerrado=true;
     else cerrado=false;
     Polilinea nuevapolilinea(data.number,cerrado,attributes.getLayer().c_str());
-
+    if(attributes.getLayer()=="CapaHabitacions"){
+	nuevapolilinea.setHabitacion(nombre);
+    }
     plano.getCapa(attributes.getLayer().c_str())->addPolilinea(nuevapolilinea);
 }
 
@@ -47,5 +49,10 @@ void DxfParser::addVertex(const DL_VertexData& data) {
 	    plano.getCapa(capa)->addLinea((*i_linea));
 	}
     }
+}
+
+void DxfParser::addBlock(const DL_BlockData& data){
+    if(data.name[0]!='*')
+	nombre=data.name.c_str();
 }
 

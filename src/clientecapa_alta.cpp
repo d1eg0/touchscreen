@@ -7,6 +7,7 @@
 extern SDL_mutex *mutexCapaAlta;
 void ClienteCapaAlta::onConnect()
 {
+    caminonuevo=false;
     //cout << this->getStatus() << endl;
     if(SDL_mutexP(mutexCapaAlta)==0){
 	cout << "\tE:antes" << endl;
@@ -37,9 +38,6 @@ void ClienteCapaAlta::onConnect()
 	//Send(memblock,size);
 	Send("hola");
     }else cerr << "Error: No se puede abrir el fichero" << endl;
-
-    //cout << "Conectado :)" << endl;
-    //Send("***te mando el fichero\n\r");
 }
 void ClienteCapaAlta::onDataArrival(string Data)
 {
@@ -72,6 +70,7 @@ void ClienteCapaAlta::onDataArrival(string Data)
 	cout << "x:"<< x << " y:" << y << endl;
 	listaPuntos.push_back(p);
     }
+    caminonuevo=true;
 }
 void ClienteCapaAlta::onDataArrival(const char* Data, unsigned int Length)
 {
@@ -89,8 +88,11 @@ void ClienteCapaAlta::onError(int ssError){
     cerr << ssError <<":Error de conexion" << endl;
 }
 
-
+bool ClienteCapaAlta::caminoNuevo(){
+    return caminonuevo;
+}
 vector<Punto> ClienteCapaAlta::getCamino(){
+    caminonuevo=false;
     return listaPuntos;
 }
 

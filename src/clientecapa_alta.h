@@ -10,8 +10,10 @@ class ClienteCapaAlta : public ssPPClient
 {
 public:
     vector<Punto> getCamino();
+    bool caminoNuevo();
     volatile float valor;
 private:
+    bool caminonuevo;
     vector<Punto> listaPuntos;
     void onConnect();
     void onDataArrival(string Data);

@@ -62,3 +62,5 @@
 #define	    RESPUESTA_SI    1
 #define	    RESPUESTA_NO    2
 
+//Colores
+#define	    COLORCAMINO	    0xff0000ff

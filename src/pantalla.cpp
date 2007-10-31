@@ -135,9 +135,22 @@ void Pantalla::entrada()
 			}
 		    }
 
+		    string zona="no id";
+		    vector<Polilinea> *habitaciones=
+			plano.getCapa("CapaHabitacions")->getPolilinea();
+		    vector<Polilinea>::iterator i_habitacion;
+		    for(i_habitacion=habitaciones->begin();
+			    i_habitacion!=habitaciones->end();
+			    i_habitacion++)
+		    {
+			if(objetivo.interior((*i_habitacion))){
+			    zona=(*i_habitacion).getHabitacion();
+			    break;
+			}
+		    }
+		    
 		    string titulo,
-			   pos,
-			   zona="pasillo";
+			   pos;
 		    bool pos_correcta;
 		    Uint32 color_etiq,
 			   sincolor=0x00000000,

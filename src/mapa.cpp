@@ -80,6 +80,9 @@ void Mapa::addCapa(Capa capa){
     listaCapas.push_back(capa);
 }
 
+void Mapa::setCamino(vector<Linea> camino){
+    this->camino=camino;
+}
 void Mapa::clearMapa(){
     listaCapas.clear();
 }
@@ -96,18 +99,33 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){
     vector<Linea>::iterator i_linea;
 
     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
-	vector<Linea> llineas=(*(*i_capa).getCapa());
-	for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
-	     Punto v1((*i_linea).getX1(),(*i_linea).getY1());
-	     Punto v2((*i_linea).getX2(),(*i_linea).getY2());
-	     v1.cpantalla(frame,dh,dv,escala);
-	     v2.cpantalla(frame,dh,dv,escala);
-	     Linea linea((*i_linea).getCapa(),v1,v2);
-	     pincel->dibujarLinea(frame,&linea,0x000000ff);
-	 }
+	if((*i_capa).getNombre()!="CapaHabitacions"){
+	    vector<Linea> llineas=(*(*i_capa).getCapa());
+	    for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
+		 Punto v1((*i_linea).getX1(),(*i_linea).getY1());
+		 Punto v2((*i_linea).getX2(),(*i_linea).getY2());
+		 v1.cpantalla(frame,dh,dv,escala);
+		 v2.cpantalla(frame,dh,dv,escala);
+		 Linea linea((*i_linea).getCapa(),v1,v2);
+		 pincel->dibujarLinea(frame,&linea,0x000000ff);
+	     }
+	}
      }
+    this->pintarCamino(screen,frame,escala);
 }
 
+void Mapa::pintarCamino(SDL_Surface *screen, Frame *frame, double escala){
+    vector<Linea>::iterator i_linea;
+    for(i_linea=camino.begin(); i_linea!=camino.end(); i_linea++){
+	 Punto v1((*i_linea).getX1(),(*i_linea).getY1());
+	 Punto v2((*i_linea).getX2(),(*i_linea).getY2());
+	 v1.cpantalla(frame,dh,dv,escala);
+	 v2.cpantalla(frame,dh,dv,escala);
+	 Linea linea("",v1,v2);
+	 pincel->dibujarLinea(frame,&linea,COLORCAMINO);
+     }
+
+}
 
 void Mapa::calcularDHV(Frame *frame){   
     dh=(frame->getW()*0.5-(xm*escala/100.0));

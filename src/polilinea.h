@@ -42,8 +42,11 @@ public:
     int getNumTotal();
     int getNum();
     vector<Linea> toLineas();
+    void setHabitacion(string nombre);
+    string getHabitacion();
 private:
     string capa;
+    string nombre_hab;
     vector<Punto> listaVertices;
     bool cerrado;
     int numVertices;
