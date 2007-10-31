@@ -4,6 +4,7 @@ Polilinea::Polilinea(int num, bool cerrado, string capa){
     this->numVertices=num;
     this->cerrado=cerrado;
     this->capa=capa;
+    this->nombre_hab="";
 }
 
 Polilinea::~Polilinea(){
@@ -62,3 +63,10 @@ vector<Linea> Polilinea::toLineas(){
     return vLineas;
 }
 
+void Polilinea::setHabitacion(string nombre){
+    this->nombre_hab=nombre;
+}
+
+string Polilinea::getHabitacion(){
+    return nombre_hab;
+}
