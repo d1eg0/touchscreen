@@ -5,9 +5,10 @@
 #include <sstream>
 #include <iostream>
 extern SDL_mutex *mutexCapaAlta;
+extern SDL_cond *caminoNuevoCond;
 void ClienteCapaAlta::onConnect()
 {
-    caminonuevo=false;
+    //caminonuevo=false;
     //cout << this->getStatus() << endl;
     if(SDL_mutexP(mutexCapaAlta)==0){
 	cout << "\tE:antes" << endl;
@@ -70,7 +71,9 @@ void ClienteCapaAlta::onDataArrival(string Data)
 	cout << "x:"<< x << " y:" << y << endl;
 	listaPuntos.push_back(p);
     }
-    caminonuevo=true;
+    //Activar la condicion del thread gestor_capaalta
+    SDL_CondSignal(caminoNuevoCond);
+    //caminonuevo=true;
 }
 void ClienteCapaAlta::onDataArrival(const char* Data, unsigned int Length)
 {
@@ -88,11 +91,11 @@ void ClienteCapaAlta::onError(int ssError){
     cerr << ssError <<":Error de conexion" << endl;
 }
 
-bool ClienteCapaAlta::caminoNuevo(){
+/*bool ClienteCapaAlta::caminoNuevo(){
     return caminonuevo;
-}
+}*/
 vector<Punto> ClienteCapaAlta::getCamino(){
-    caminonuevo=false;
+//    caminonuevo=false;
     return listaPuntos;
 }
 

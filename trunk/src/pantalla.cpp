@@ -101,7 +101,7 @@ void Pantalla::entrada()
 			plano.pintarMapa(screen,framemapa,plano.getEscala());
 			objetivo.dibujar();
 			objetivo.store();//guardarlo
-			clienteCapaAlta.Send("1 "+objetivo.toString());
+			clienteCapaAlta.Send("@ "+objetivo.toString());
 			cout << "objetivo:" <<objetivo.toString() << endl;
 			break;
 		    case RESPUESTA_NO:

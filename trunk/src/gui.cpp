@@ -40,6 +40,7 @@ Mapa  plano;
 Objetivo objetivo;
 // Mutex
 SDL_mutex *mutexCapaAlta;
+SDL_cond *caminoNuevoCond;
 Campo *c2;
 // Comunicacion
 ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
@@ -57,6 +58,7 @@ void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
 int main(int argc, char *argv[])
 {
     mutexCapaAlta=SDL_CreateMutex();
+    caminoNuevoCond=SDL_CreateCond();
     string mapadxf="maps/modelo.dxf";
 //    string mapadxf="maps/segonDxf.dxf";
     SDL_Thread *hilo;
