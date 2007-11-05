@@ -35,7 +35,6 @@ class Dibujar {
 public:
     Dibujar(SDL_Surface *screen);
     ~Dibujar();
-    //void transformar(Frame *frame, double &x, double &y,double dh, double dv,double escala);
     void dibujarLinea(Frame *frame, Linea *linea, Uint32 color);
 private:
     SDL_Surface *screen;
