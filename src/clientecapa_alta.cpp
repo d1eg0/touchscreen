@@ -1,32 +1,17 @@
-#include <SolarSockets/SolarSockets++.h>
-#include <fstream>
 #include "clientecapa_alta.h"
 #include <SDL/SDL_thread.h>
 #include <sstream>
 #include <iostream>
+
 extern SDL_mutex *mutexCapaAlta;
 extern SDL_cond *caminoNuevoCond;
+
 void ClienteCapaAlta::onConnect()
 {
-    //caminonuevo=false;
     //cout << this->getStatus() << endl;
-    if(SDL_mutexP(mutexCapaAlta)==0){
-	cout << "\tE:antes" << endl;
-	//Entrada sección crítica
-	valor=0;
-	//Salida seccion critica
-	SDL_mutexV(mutexCapaAlta);
-	cout << "\tS:antes" << endl;
-    }
+    cout << "ClienteCapaAlta: conectando..." << endl;
     while(this->getStatus()==1001){}//Esperar la conexion
-    if(SDL_mutexP(mutexCapaAlta)==0){
-	cout << "\tE:despues" << endl;
-	//Entrada sección crítica
-	valor=1;
-	//Salida seccion critica
-	SDL_mutexV(mutexCapaAlta);
-	cout << "\tS:despues" << endl;
-    }
+    cout << "ClienteCapaAlta: conectado!" << endl;
     ifstream::pos_type size;
     char * memblock;
     ifstream myFile ("maps/modelo.dxf", ios::in|ios::binary|ios::ate );
@@ -36,78 +21,52 @@ void ClienteCapaAlta::onConnect()
 	myFile.seekg (0, ios::beg);
 	myFile.read (memblock, size);
 	myFile.close();
-	//Send(memblock,size);
-	Send("hola");
+	Send(memblock,size);
+	cout << "Tx-Bytes:" << getNumBytesSent() << " Bloques:" << getNumBlocksSent() <<endl;
+	//Send("hola");
     }else cerr << "Error: No se puede abrir el fichero" << endl;
 }
-void ClienteCapaAlta::onDataArrival(string Data)
+//void ClienteCapaAlta::onDataArrival(const char* Cadena, unsigned int Length)
+void ClienteCapaAlta::onLineArrival(string Cadena)
 {
-    cout << "Datos:" << Data << endl;   
-    listaPuntos.clear();
-    string coord=Data,xstr,ystr;
-    size_t pos;
-    pos=coord.find_first_of(" ");
-    while (pos!=string::npos)
-    {	
-	xstr=coord.substr(0,pos);
-	coord.erase(0,pos+1);
-	cout << "dato:\"" << coord << "\""<< endl;
-	pos=coord.find_first_of(" ");	
-	if(pos==string::npos){
-	    ystr=coord;
-	}else{
-	    ystr=coord.substr(0,pos);	
-	    coord.erase(0,pos+1);
-	}
-	stringstream buffer;
+    cout << "\t****ClienteCapaAlta recibe:\"" << Cadena <<"\"" << endl;   
+    cout << "Rx-Bytes:" << getNumBytesReceived() << " Bloques:" << getNumBlocksReceived() <<endl;
+    string Data(Cadena);
+    //buffer << Data <<" ";
+    if(Data.find("ERROR")==string::npos){
 	double x,y;
-	buffer.clear();
-	buffer << xstr;
-	buffer >> x;
-	buffer.clear();
-	buffer << ystr;
-	buffer >> y;
+	char *pblanco;
+	//Data=buffer.str();
+	x=strtod(Data.c_str(),&pblanco);
+	y=strtod(pblanco,&pblanco);
 	Punto p(x,y);
 	cout << "x:"<< x << " y:" << y << endl;
+	SDL_mutexP(mutexCapaAlta);
 	listaPuntos.push_back(p);
-    }
-    //Activar la condicion del thread gestor_capaalta
-    SDL_CondSignal(caminoNuevoCond);
-    //caminonuevo=true;
-}
-void ClienteCapaAlta::onDataArrival(const char* Data, unsigned int Length)
-{
-    cout << "hola" << endl;
-}
-void ClienteCapaAlta::onError(int ssError){
-    if(SDL_mutexP(mutexCapaAlta)==0){
-	cout << "\tE:error" << endl;
-	//Entrada sección crítica
-	valor=0;
-	//Salida seccion critica
 	SDL_mutexV(mutexCapaAlta);
-	cout << "\tS:error" << endl;
+	//si hay un dolar es final de datos
+	if(Data.find("$")!=string::npos){
+	    SDL_CondSignal(caminoNuevoCond);
+	}
     }
+    
+    //Activar la condicion del thread gestor_capaalta
+}
+/*void ClienteCapaAlta::onDataArrival(const char* Data, unsigned int Length)
+{
+    cout << "\t***Binario" << endl;
+    //cout << "data:" << Data << endl;
+}*/
+
+void ClienteCapaAlta::onError(int ssError){
     cerr << ssError <<":Error de conexion" << endl;
 }
 
-/*bool ClienteCapaAlta::caminoNuevo(){
-    return caminonuevo;
-}*/
 vector<Punto> ClienteCapaAlta::getCamino(){
-//    caminonuevo=false;
     return listaPuntos;
 }
 
-float ClienteCapaAlta::getValor(){
-    float valorbkp;
-    if(SDL_mutexP(mutexCapaAlta)){
-	cout << "\tE" << endl;
-	//Entrada sección crítica
-	valorbkp=this->valor;
-	//Salida seccion critica
-	SDL_mutexV(mutexCapaAlta);
-	cout << "\tS" << endl;
-    }
-    return valorbkp;
+void ClienteCapaAlta::clearCamino(){
+    listaPuntos.clear();
 }
+

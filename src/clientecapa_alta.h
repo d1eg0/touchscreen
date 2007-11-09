@@ -3,6 +3,8 @@
 
 #include <SolarSockets/SolarSockets++.h>
 #include <fstream>
+#include <sstream>
+#include <iostream>
 #include <vector>
 #include "punto.h"
 
@@ -10,16 +12,15 @@ class ClienteCapaAlta : public ssPPClient
 {
 public:
     vector<Punto> getCamino();
-//    bool caminoNuevo();
-    volatile float valor;
+    void clearCamino();
 private:
- //   bool caminonuevo;
+    stringstream buffer;
     vector<Punto> listaPuntos;
     void onConnect();
-    void onDataArrival(string Data);
-    void onDataArrival(const char* Data, unsigned int Length);
+    //void onDataArrival(string Data);
+    //void onDataArrival(const char* Cadena, unsigned int Length);
+    void onLineArrival(string Cadena);
     void onError(int ssError);
-    float getValor();
 };
 #endif
 

@@ -100,10 +100,12 @@ void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 	contenedor.y=area.y;
 	contenedor.w=w;
 	contenedor.h=h;
-	
+
+	if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
 	SDL_SetClipRect(ventana, &area);
 	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, color);
 	rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xffffffff);
+	if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
 	string str(c);
 	stringColor(ventana,
 		(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), 

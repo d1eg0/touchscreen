@@ -113,6 +113,7 @@ void Frame::maxFrame(int x,int y,int w,int h){
 
 void Frame::minFrame(){
     estado=MINIMO;
+    if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
     SDL_SetClipRect(ventana, &contenedor);
     //Fondo
     SDL_FillRect(ventana, &area, color);
@@ -120,6 +121,7 @@ void Frame::minFrame(){
     rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xFFA500FF);
     //Etiqueta
     stringColor(ventana, area.x, area.y-9, titulo, 0xFFA500FF);
+    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(area.x+area.w-15,area.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
@@ -140,13 +142,16 @@ void Frame::desactivarFrame(){
     bmaxmin->desactivar();
 }
 
-void Frame::limpiarFrame(){
+void Frame::limpiarFrame(bool refresh){
     SDL_Rect a=this->getArea();
+    if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
     SDL_SetClipRect(ventana, &a);
     SDL_FillRect(ventana, &a, color);
     //Borde
     rectangleColor(ventana, a.x, a.y, a.x+a.w-1, a.y+a.h-1, 0xFFA500FF);
-    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    if (refresh)
+	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     //bmaxmin->desactivar();
 }
 

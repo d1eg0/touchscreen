@@ -17,8 +17,12 @@
 #include "clientecapa_baja.h"
 #include "gestorestado.h"
 #include "gestorcamino.h"
+#include "radar.h"
+
 using namespace std;
+
 SDL_Surface *surfacePrincipal;
+Pantalla *pantalla;
 //Botones
 //  Zoom
 Boton *botonMasZoom;
@@ -38,13 +42,16 @@ Etiqueta *e_zoom,
 	 *e_vzoom;
 Mapa  plano;
 Objetivo objetivo;
+Radar *radar;
 // Mutex
 SDL_mutex *mutexCapaAlta;
+SDL_mutex *mutexCapaBaja;
 SDL_cond *caminoNuevoCond;
+SDL_cond *sensorNuevoCond;
 Campo *c2;
 // Comunicacion
 ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
-//ClienteCapaBaja	clienteCapaBaja; //Sensores
+ClienteCapaBaja	clienteCapaBaja; //Sensores
 void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
 {
     SDL_Rect clip;
@@ -55,13 +62,14 @@ void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
     SDL_SetClipRect(screen, &clip);
 }
 
+
+
 int main(int argc, char *argv[])
 {
-    mutexCapaAlta=SDL_CreateMutex();
-    caminoNuevoCond=SDL_CreateCond();
+
+
     string mapadxf="maps/modelo.dxf";
 //    string mapadxf="maps/segonDxf.dxf";
-    SDL_Thread *hilo;
     cout <<"Inicializando SDL." << endl;
    
     //Lectura Fichero DXF, introduce la estructura en plano
@@ -82,7 +90,7 @@ int main(int argc, char *argv[])
     } else {
 	Uint8 video_bpp;
 	Uint32 videoflags;
-	videoflags = SDL_SWSURFACE | SDL_SRCALPHA ;
+	videoflags = SDL_HWSURFACE | SDL_SRCALPHA ;
 	int h_screen=SCREEN_H;
 	int v_screen=SCREEN_W;
 	const SDL_VideoInfo *info;
@@ -96,11 +104,10 @@ int main(int argc, char *argv[])
 	SDL_SetAlpha(surfacePrincipal, SDL_SRCALPHA, 0);
 	SDL_FillRect(surfacePrincipal, 0, 0x000000);
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
-    
-	Pantalla *pantalla=new Pantalla(surfacePrincipal);
+	pantalla=new Pantalla(surfacePrincipal);
 	SDL_Color Blanco = {255,255,255,0}; 
 
-	SetClip(surfacePrincipal,0,0,500,500);
+	//SetClip(surfacePrincipal,0,0,500,500);
 
 	//Cargar el frame donde se sitúa el plano
 	framemapa=new Frame(surfacePrincipal);
@@ -121,7 +128,7 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_H/10.0*4.0),
 		"Radar",
 		0xffffff);
-
+	radar=new Radar(frameradar);
 	//Cargar el frame donde se sitúa el estado
 	framestado=new Frame(surfacePrincipal);
 	framestado->cargarFrame(
@@ -216,24 +223,27 @@ int main(int argc, char *argv[])
 
 	//Actualizar cambios en la pantalla
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
-	clienteCapaAlta.Connect("localhost", 9999);
-	//GestorEstado gestorEstado;  //Gestiona el estado
-	GestorCamino gestorCamino(surfacePrincipal);  //Gestiona el estado
-	
-	//clienteCapaBaja.Connect("localhost", 9999);
 
+	//////////  Comunicacion    ////////////
+	    //CapaAlta: mapa, camino y objetivo
+	mutexCapaAlta=SDL_CreateMutex();
+	caminoNuevoCond=SDL_CreateCond();
+	clienteCapaAlta.setSizeBlock(2048);
+	clienteCapaAlta.Connect("192.168.1.5", 9999);
+	GestorCamino gestorCamino(surfacePrincipal);  //Gestiona el estado
+
+	    //CapaBaja: sensores y estado
+	mutexCapaBaja=SDL_CreateMutex();
+	sensorNuevoCond=SDL_CreateCond();
+	//clienteCapaBaja.Connect("192.168.1.5", 9998);
+	//GestorEstado gestorEstado;  //Gestiona el estado
+
+	//Gestion del input
 	while(!pantalla->salir()){
 	    pantalla->entrada();
 	} 
+	delete radar;
  
-//SDL_Delay(5000);
-	//Hilo que genera el GUI
-//	hilo = SDL_CreateThread(gestor, surfacePrincipal);
-//	if (hilo == NULL){
-//		cerr << "No se ha podido crear el hilo que gestiona la interfaz" << endl;
-//	}
-//	SDL_WaitThread(hilo, NULL);
     }
-    //SDL_KillThread(gestorCapaAlta);
     SDL_Quit();
 }

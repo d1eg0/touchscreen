@@ -17,7 +17,7 @@ public:
     void maxFrame(int x, int y, int w,int h);
     void minFrame();
     void desactivarFrame();
-    void limpiarFrame();
+    void limpiarFrame(bool refresh);
     void activarFrame();
 
     bool Presionado(int xm, int ym);

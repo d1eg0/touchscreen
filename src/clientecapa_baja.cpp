@@ -1,20 +1,55 @@
-#include <SolarSockets/SolarSockets++.h>
-#include <fstream>
 #include "clientecapa_baja.h"
+
+extern SDL_cond* sensorNuevoCond;
+extern SDL_mutex* mutexCapaBaja;
 
 void ClienteCapaBaja::onConnect()
 {
     //cout << this->getStatus() << endl;
     while(this->getStatus()==1001){}//Esperar la conexion
+    //Send("hola");
 
 }
 void ClienteCapaBaja::onDataArrival(string Data)
 {
-cout << "Datos:" << Data << endl;
+    cout << "ClienteCapaBaja recibe:" << Data << endl;   
+    SDL_mutexP(mutexCapaBaja);//Entrada seccion critica
+    listaValores.clear();
+    string valores=Data,vstr;
+    stringstream buffer;
+    double valor;
+    size_t pos;
+    pos=valores.find_first_of(" ");
+    while (pos!=string::npos)
+    {	
+	vstr=valores.substr(0,pos);
+	valores.erase(0,pos+1);
+	cout << "dato:\"" << valores << "\""<< endl;
+	pos=valores.find_first_of(" ");	
+	buffer.clear();
+	buffer << vstr;
+	buffer >> valor;
+	cout << "v:"<< valor << endl; 
+	listaValores.push_back(valor);
+    }
+    vstr=valores;
+    buffer.clear();
+    buffer << vstr;
+    buffer >> valor;
+    cout << "v:"<< valor << endl; 
+    listaValores.push_back(valor);
+
+    //Activar la condicion del thread gestor_capabaja
+    SDL_mutexV(mutexCapaBaja);//Salida seccion critica
+    SDL_CondSignal(sensorNuevoCond);
+ 
 }
 void ClienteCapaBaja::onError(int ssError){
-  cerr << ssError <<":Error de conexion" << endl;
+    cerr << ssError <<":Error de conexion" << endl;
 }
 
+vector<double> ClienteCapaBaja::getValores(){
+    return listaValores;
+}
 
 
