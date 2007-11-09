@@ -42,7 +42,7 @@ int initCamino(void *p){
 	SDL_CondWait( caminoNuevoCond, mutexCapaAlta);
 	cout<< "gestor camino: sigo" << endl;
 	vector<Punto> tlistaPuntos;
-	//if(clienteCapaAlta.caminoNuevo()){
+
 	listaPuntos=clienteCapaAlta.getCamino();
 	clienteCapaAlta.clearCamino();	
 
@@ -51,7 +51,7 @@ int initCamino(void *p){
 	if(listaPuntos.empty()){
 	    cout << "Error: camino no posible" << endl;
 
-	    //pantalla->setAlpha(framemapa,Z_CENTRO);
+	    pantalla->setAlpha(framemapa,Z_CENTRO);
 	    Etiqueta error(pantalla->getPantalla());
 	    string msgerror="No hay camino a ese punto";
 	    error.cargarEtiqueta(
@@ -61,12 +61,10 @@ int initCamino(void *p){
 		   20, 
 		   (char*)msgerror.c_str(), 
 		   0xff0000ff, 
-		   0xff0000ff, 
-		   0x00ff00ff );
+		   0xffffffff, 
+		   0x00000030 );
 	    SDL_Delay(2000);
-	    framemapa->limpiarFrame(false);
 	    plano.pintarMapa(pantalla->getPantalla(),framemapa,plano.getEscala());
-	    framemapa->refrescarFrame();
 
 	}else{ 
 	    cout << "hay algo" << endl;
@@ -76,14 +74,11 @@ int initCamino(void *p){
 	    vector<Punto>::iterator i_punto;
 	    for(i_punto=listaPuntos.begin();i_punto!=listaPuntos.end();i_punto++)
 		camino.addVertice((*i_punto));
-	    framemapa->activarFrame();
 	    vector<Linea>caminoLineas=camino.toLineas();
 	    plano.setCamino(caminoLineas);
 	    plano.pintarCamino(screen,framemapa,plano.getEscala());
-	    SDL_UpdateRect(screen, 0, 0, SCREEN_W, SCREEN_H);
 	    
 	}
-	//}
 	SDL_mutexV(mutexCapaAlta);
     }
     return 1;

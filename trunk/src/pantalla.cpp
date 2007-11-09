@@ -79,8 +79,6 @@ void Pantalla::entrada()
 		    sdl_quit = true;
 		    break;			    
 	    }
- 
-	    //KeyDown( event.key.keysym.sym );
 	    break;
  
 	case SDL_QUIT:
@@ -173,11 +171,7 @@ void Pantalla::entrada()
 			ostringstream buffer;//msg
 			buffer << (int)p.getX()<< "," << (int)p.getY();//msg
 			pos=buffer.str();//msg
-			//this->setAlpha(framemapa,Z_ABAJO);//efecto alpha
-			//plano.pintarMapa(screen,framemapa,plano.getEscala());
 			color_etiq=0x5757FFFF;//color
-			//botonMasZoom->desactivar();
-			//botonMenosZoom->desactivar();
 		    }
 		    if(!objetivo.preguntado()){
 			objetivo.dibujar();
@@ -208,10 +202,13 @@ void Pantalla::entrada()
 		    r.y=y1;
 		    r.w=SIZE_C*15;
 		    r.h=SIZE_C*5*2;
+		    extern SDL_mutex *semVideo;
+		    SDL_mutexP(semVideo);
 		    if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
 		    SDL_SetClipRect(screen,&r);
 		    boxColor(screen,r.x,r.y,r.x+r.w,r.y+r.h,0x000000FF);
 		    if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+		    SDL_mutexV(semVideo);
 
 		    Etiqueta *info;
 		    info=new Etiqueta(screen);
@@ -221,7 +218,7 @@ void Pantalla::entrada()
 			    y1,
 			    titulo.size()*SIZE_C,
 			    SIZE_C*2,
-			    (char*)titulo.c_str(),//(char*)pregunta.c_str(),
+			    (char*)titulo.c_str(),
 			    color_etiq,
 			    color_etiq,
 			    0x00000043);
@@ -233,7 +230,7 @@ void Pantalla::entrada()
 			    y1,
 			    titulo.size()*SIZE_C,
 			    SIZE_C*2,
-			    (char*)titulo.c_str(),//(char*)pregunta.c_str(),
+			    (char*)titulo.c_str(),
 			    color_etiq,
 			    sincolor,
 			    0x00000043);
@@ -243,7 +240,7 @@ void Pantalla::entrada()
 			    y1,
 			    pos.size()*SIZE_C,
 			    SIZE_C*2,
-			    (char*)pos.c_str(),//(char*)pregunta.c_str(),
+			    (char*)pos.c_str(),
 			    color_valor,
 			    sincolor,
 			    0x00000043);
@@ -255,7 +252,7 @@ void Pantalla::entrada()
 			    y1,
 			    titulo.size()*SIZE_C,
 			    SIZE_C*2,
-			    (char*)titulo.c_str(),//(char*)pregunta.c_str(),
+			    (char*)titulo.c_str(),
 			    color_etiq,
 			    sincolor,
 			    0x00000043);
@@ -265,11 +262,10 @@ void Pantalla::entrada()
 			    y1,
 			    zona.size()*SIZE_C,
 			    SIZE_C*2,
-			    (char*)zona.c_str(),//(char*)pregunta.c_str(),
+			    (char*)zona.c_str(),
 			    color_valor,
 			    sincolor,
 			    0x00000043);
-		    SDL_UpdateRect(screen,0,0,0,0);
 
 
 		    cout << "\tpx:" << p.getX() << ", py:" << p.getY() << endl;
@@ -430,7 +426,7 @@ void Pantalla::entrada()
 		    
 		}
 
-		SDL_UpdateRect(screen,0,0,0,0);
+		//SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(frameradar->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
 		this->borrar();
@@ -453,7 +449,7 @@ void Pantalla::entrada()
 		    this->minimizar();
 		    radar->recargar(false);
 		}
-		SDL_UpdateRect(screen,0,0,0,0);
+		//SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(framestado->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
 		this->borrar();
@@ -483,7 +479,6 @@ void Pantalla::entrada()
 		    SDL_CondSignal(condSincRadar);
 		    
 		}
-		SDL_UpdateRect(screen,0,0,0,0);
 	    }
 		
 
@@ -549,6 +544,8 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 	r.y=0;
 	r.w=SCREEN_W;
 	r.h=SCREEN_H;
+	extern SDL_mutex *semVideo;
+	SDL_mutexP(semVideo);
 	SDL_SetClipRect(screen,&r);
 
 	int i;
@@ -583,6 +580,7 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 	    //SDL_UpdateRect(screen,0,0,0,0);
 	    usleep(1000);
 	}
+	SDL_mutexV(semVideo);
 	//alpha=true;
     }
 }
