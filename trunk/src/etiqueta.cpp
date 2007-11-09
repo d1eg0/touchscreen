@@ -45,13 +45,14 @@ void Etiqueta::cargarEtiqueta(int x, int y, int w, int h, char *c, Uint32 colorF
 	string str(c);
 	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, colorFuente);
 	if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
-	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+	SDL_UpdateRect(ventana, area.x, area.y, area.w, area.h);
+//	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 void Etiqueta::insertarTexto(char *c){
 
-    if(SDL_MUSTLOCK(ventana)) SDL_LockSurface(ventana);	
     SDL_SetClipRect(ventana, &contenedor);
+    if(SDL_MUSTLOCK(ventana)) SDL_LockSurface(ventana);	
     boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorRelleno);
     rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorBorde);
 
@@ -59,5 +60,5 @@ void Etiqueta::insertarTexto(char *c){
     stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, colorFuente);
 
     if(SDL_MUSTLOCK(ventana)) SDL_UnlockSurface(ventana);
-    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    SDL_UpdateRect(ventana, area.x, area.y, area.w, area.h);
 }

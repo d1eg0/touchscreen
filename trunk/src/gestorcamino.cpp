@@ -51,22 +51,22 @@ int initCamino(void *p){
 	if(listaPuntos.empty()){
 	    cout << "Error: camino no posible" << endl;
 
-	    pantalla->setAlpha(framemapa,Z_CENTRO);
+	    //pantalla->setAlpha(framemapa,Z_CENTRO);
 	    Etiqueta error(pantalla->getPantalla());
-	    string msgerror="No hay camino";
+	    string msgerror="No hay camino a ese punto";
 	    error.cargarEtiqueta(
 		   (int)((framemapa->getX()+framemapa->getW()*0.5)-(msgerror.size()*SIZE_C*0.5)), 
 		   (int)((framemapa->getY()+framemapa->getW()*0.5)-SIZE_C*0.5), 
-		   SIZE_C*msgerror.size(), 
+		   SIZE_C*msgerror.size()+20, 
 		   20, 
 		   (char*)msgerror.c_str(), 
 		   0xff0000ff, 
 		   0xff0000ff, 
 		   0x00ff00ff );
-	    sleep(2);
+	    SDL_Delay(2000);
 	    framemapa->limpiarFrame(false);
 	    plano.pintarMapa(pantalla->getPantalla(),framemapa,plano.getEscala());
-
+	    framemapa->refrescarFrame();
 
 	}else{ 
 	    cout << "hay algo" << endl;

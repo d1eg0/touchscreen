@@ -21,7 +21,7 @@ void ClienteCapaAlta::onConnect()
 	myFile.seekg (0, ios::beg);
 	myFile.read (memblock, size);
 	myFile.close();
-	Send(memblock,size);
+//	Send(memblock,size);
 	cout << "Tx-Bytes:" << getNumBytesSent() << " Bloques:" << getNumBlocksSent() <<endl;
 	//Send("hola");
     }else cerr << "Error: No se puede abrir el fichero" << endl;
@@ -48,7 +48,7 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
 	if(Data.find("$")!=string::npos){
 	    SDL_CondSignal(caminoNuevoCond);
 	}
-    }
+    }else SDL_CondSignal(caminoNuevoCond);
     
     //Activar la condicion del thread gestor_capaalta
 }

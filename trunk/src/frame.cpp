@@ -55,12 +55,14 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     this->contenedormax.h=SCREEN_H-MARGEN;
   */  
     SDL_SetClipRect(ventana, &contenedor);
+    if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
     //Fondo
     SDL_FillRect(ventana, &area, color);
     //Borde
     rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xFFA500FF);
     //Etiqueta
     stringColor(ventana, area.x, area.y-9, c, 0xFFA500FF);
+    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     //Boton maximizar
     bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(x+w-15,y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
@@ -96,19 +98,21 @@ void Frame::maxFrame(int x,int y,int w,int h){
     this->contenedormax.h=h+MARGEN;
 
     SDL_SetClipRect(ventana, &contenedormax);
+    if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
     //Fondo
     SDL_FillRect(ventana, &areamax, color);
     //Borde
     rectangleColor(ventana, areamax.x, areamax.y, areamax.x+areamax.w-1, areamax.y+areamax.h-1, 0xFFA500FF);
     //Etiqueta
     stringColor(ventana, areamax.x, areamax.y-9, titulo, 0xFFA500FF);
+    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(areamax.x+areamax.w-15,areamax.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //bmaxmin=new Boton(ventana);
     bmaxmin->cargarBoton(areamax.x+areamax.w-2*T_BOTON,areamax.y-T_BOTON,2*T_BOTON,T_BOTON,"-", 0xFFA500FF);
     SDL_SetClipRect(ventana, &areamax);
-    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 void Frame::minFrame(){
@@ -135,7 +139,7 @@ void Frame::minFrame(){
 	    "+", 
 	    0xFFA500FF);
     SDL_SetClipRect(ventana, &area);
-    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 void Frame::desactivarFrame(){
@@ -149,9 +153,9 @@ void Frame::limpiarFrame(bool refresh){
     SDL_FillRect(ventana, &a, color);
     //Borde
     rectangleColor(ventana, a.x, a.y, a.x+a.w-1, a.y+a.h-1, 0xFFA500FF);
+    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     if (refresh)
 	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
-    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     //bmaxmin->desactivar();
 }
 
@@ -160,6 +164,11 @@ void Frame::activarFrame(){
     SDL_SetClipRect(ventana, &a);
 }
 
+void Frame::refrescarFrame(){
+    SDL_Rect a=this->getArea();
+    //SDL_SetClipRect(ventana, &a);
+    SDL_UpdateRect(ventana, a.x, a.y, a.w, a.h);
+}
 
 SDL_Surface* Frame::getVentana(){
     return ventana;

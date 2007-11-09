@@ -19,6 +19,7 @@ public:
     void desactivarFrame();
     void limpiarFrame(bool refresh);
     void activarFrame();
+    void refrescarFrame();
 
     bool Presionado(int xm, int ym);
     SDL_Surface* getVentana();

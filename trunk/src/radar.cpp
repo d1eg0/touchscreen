@@ -34,6 +34,11 @@ Radar::Radar(Frame *frame){
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_UnlockSurface(frame->getVentana());
     SDL_UpdateRect(frame->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
     s= SDL_CreateThread(escan, (void*)this);
+    if ( s == NULL ) {
+        fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
+        exit(1);
+    }
+
 }
 
 Radar::~Radar(){
@@ -92,9 +97,16 @@ Frame *Radar::getFrame(){
     return frame;
 }
 int escan(void *r){
+    extern SDL_mutex *mutexSincRadar;
+    extern SDL_cond *condSincRadar;
+    extern bool pauseRadar;
     Radar *escaner=(Radar*)r;
     Uint16 ang=90;
+    SDL_Delay(1000);
     while(1){
+	SDL_mutexP(mutexSincRadar);
+	    if(pauseRadar)SDL_CondWait(condSincRadar,mutexSincRadar);
+	SDL_mutexV(mutexSincRadar);
 	escaner->getFrame()->limpiarFrame(false);
 	escaner->recargar(false);
 	escaner->getFrame()->activarFrame();
@@ -104,10 +116,11 @@ int escan(void *r){
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-80, 0xff000020);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-85, 0xff000020);
     if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_UnlockSurface(escaner->getFrame()->getVentana());
-	SDL_UpdateRect(escaner->getFrame()->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
+//	SDL_UpdateRect(escaner->getFrame()->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
+	escaner->getFrame()->refrescarFrame();
 	ang++;
 	ang%=360;
-	usleep(10000);
+	SDL_Delay(50);
     }
     return 0;
 }

@@ -44,10 +44,16 @@ Mapa  plano;
 Objetivo objetivo;
 Radar *radar;
 // Mutex
+//  Sincroniza el hilo gestor camino con la recepcion de datos
 SDL_mutex *mutexCapaAlta;
-SDL_mutex *mutexCapaBaja;
 SDL_cond *caminoNuevoCond;
+//  Sincroniza el hilo gestor camino con la recepcion de datos
+SDL_mutex *mutexCapaBaja;
 SDL_cond *sensorNuevoCond;
+//  Sincroniza el radar
+SDL_mutex *mutexSincRadar;
+SDL_cond *condSincRadar;
+bool pauseRadar;
 Campo *c2;
 // Comunicacion
 ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
@@ -128,6 +134,11 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_H/10.0*4.0),
 		"Radar",
 		0xffffff);
+	//Mutex para sinc el radar
+	mutexSincRadar=SDL_CreateMutex();
+	pauseRadar=false;
+	condSincRadar=SDL_CreateCond();
+	//Cargar el radar en el frame
 	radar=new Radar(frameradar);
 	//Cargar el frame donde se sitúa el estado
 	framestado=new Frame(surfacePrincipal);
@@ -228,8 +239,8 @@ int main(int argc, char *argv[])
 	    //CapaAlta: mapa, camino y objetivo
 	mutexCapaAlta=SDL_CreateMutex();
 	caminoNuevoCond=SDL_CreateCond();
-	clienteCapaAlta.setSizeBlock(2048);
-	clienteCapaAlta.Connect("192.168.1.5", 9999);
+	//clienteCapaAlta.Connect("192.168.1.5", 9999);
+	clienteCapaAlta.Connect("localhost", 9999);
 	GestorCamino gestorCamino(surfacePrincipal);  //Gestiona el estado
 
 	    //CapaBaja: sensores y estado
@@ -243,6 +254,7 @@ int main(int argc, char *argv[])
 	    pantalla->entrada();
 	} 
 	delete radar;
+	delete pantalla;
  
     }
     SDL_Quit();
