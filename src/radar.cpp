@@ -100,6 +100,7 @@ int escan(void *r){
     extern SDL_mutex *mutexSincRadar;
     extern SDL_cond *condSincRadar;
     extern bool pauseRadar;
+    extern SDL_mutex *semVideo;
     Radar *escaner=(Radar*)r;
     Uint16 ang=90;
     SDL_Delay(1000);
@@ -110,12 +111,14 @@ int escan(void *r){
 	escaner->getFrame()->limpiarFrame(false);
 	escaner->recargar(false);
 	escaner->getFrame()->activarFrame();
+	SDL_mutexP(semVideo);
 	if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_LockSurface(escaner->getFrame()->getVentana());
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang, 0xff000090);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-75, 0xff000020);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-80, 0xff000020);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-85, 0xff000020);
-    if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_UnlockSurface(escaner->getFrame()->getVentana());
+	if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_UnlockSurface(escaner->getFrame()->getVentana());
+	SDL_mutexV(semVideo);
 //	SDL_UpdateRect(escaner->getFrame()->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
 	escaner->getFrame()->refrescarFrame();
 	ang++;
