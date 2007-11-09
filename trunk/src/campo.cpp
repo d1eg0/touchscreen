@@ -34,6 +34,7 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
     this->arean.h=SIZE_C*2;
     
 		
+    SDL_LockSurface(surface);
     SDL_SetClipRect(surface,  &arean);
 
     stringColor(
@@ -86,6 +87,7 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 		"-",
 		0xFF4848FF);
     }
+    SDL_UnlockSurface(surface);
 	//SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 void Campo::valorStr(string valor){
@@ -107,6 +109,7 @@ void Campo::updateValor(float valor){
    char *valorc=(char *)malloc(sizeof(float));
     sprintf(valorc,"%5.3f",this->valor);
     this->areav.w=SIZE_C*string(valorc).size();
+    SDL_LockSurface(surface);
     SDL_SetClipRect(surface,  &areav);
     boxColor(
 	    surface,
@@ -122,12 +125,14 @@ void Campo::updateValor(float valor){
 	valorc, 
 	colorValor);
     SDL_UpdateRect(surface, 0, 0, SCREEN_W, SCREEN_H);
+    SDL_UnlockSurface(surface);
     
 }
 
 void Campo::updateValor(string valor){
     this->valorstr=valor;
     this->areav.w=SIZE_C*valorstr.size();
+    SDL_LockSurface(surface);
     SDL_SetClipRect(surface,  &areav);
     boxColor(
 	    surface,
@@ -143,6 +148,7 @@ void Campo::updateValor(string valor){
 	valorstr.c_str(), 
 	colorValor);
     SDL_UpdateRect(surface, 0, 0, SCREEN_W, SCREEN_H);
+    SDL_UnlockSurface(surface);
 }
 
 void Campo::aumentar(){

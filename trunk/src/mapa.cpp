@@ -81,6 +81,7 @@ void Mapa::addCapa(Capa capa){
 }
 
 void Mapa::setCamino(vector<Linea> camino){
+    this->camino.clear();
     this->camino=camino;
 }
 void Mapa::clearMapa(){

@@ -30,6 +30,8 @@ void Dibujar::dibujarLinea(Frame *frame, Linea *linea, Uint32 color) {
     x2=linea->getX2();
     y1=linea->getY1();
     y2=linea->getY2();
+    if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
     lineColor(screen, (Sint16)x1, (Sint16)y1, (Sint16)x2, (Sint16)y2, color);
+    if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
 }
 

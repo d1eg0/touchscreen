@@ -26,7 +26,7 @@ public:
     void borrar();
     void setAlpha(Frame *frame, Uint8 zona);
     bool salir();
-
+    void minimizar();
 
 };
 #endif
