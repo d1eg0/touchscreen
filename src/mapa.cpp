@@ -98,7 +98,7 @@ void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){
     this->oy=frame->getY()+frame->getH()+dv;
     vector<Capa>::iterator i_capa;
     vector<Linea>::iterator i_linea;
-
+    frame->limpiarFrame(false);
     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
 	if((*i_capa).getNombre()!="CapaHabitacions"){
 	    vector<Linea> llineas=(*(*i_capa).getCapa());
@@ -125,7 +125,7 @@ void Mapa::pintarCamino(SDL_Surface *screen, Frame *frame, double escala){
 	 Linea linea("",v1,v2);
 	 pincel->dibujarLinea(frame,&linea,COLORCAMINO);
      }
-
+    frame->refrescarFrame();
 }
 
 void Mapa::calcularDHV(Frame *frame){   

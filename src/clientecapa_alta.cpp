@@ -26,7 +26,7 @@ void ClienteCapaAlta::onConnect()
 	//Send("hola");
     }else cerr << "Error: No se puede abrir el fichero" << endl;
 }
-//void ClienteCapaAlta::onDataArrival(const char* Cadena, unsigned int Length)
+
 void ClienteCapaAlta::onLineArrival(string Cadena)
 {
     cout << "\t****ClienteCapaAlta recibe:\"" << Cadena <<"\"" << endl;   
@@ -52,11 +52,6 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
     
     //Activar la condicion del thread gestor_capaalta
 }
-/*void ClienteCapaAlta::onDataArrival(const char* Data, unsigned int Length)
-{
-    cout << "\t***Binario" << endl;
-    //cout << "data:" << Data << endl;
-}*/
 
 void ClienteCapaAlta::onError(int ssError){
     cerr << ssError <<":Error de conexion" << endl;

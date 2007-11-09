@@ -1,6 +1,7 @@
 #include "frame.h"
 #include "constantes.h"
 #include "dibujar.h"
+#include "etiqueta.h"
 #include <SDL/SDL_gfxPrimitives.h>
 
 Frame::Frame(SDL_Surface *ventana)
@@ -55,17 +56,19 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     this->contenedormax.w=SCREEN_W-MARGEN;
     this->contenedormax.h=SCREEN_H-MARGEN;
   */  
-    SDL_mutexP(semVideo);
-    SDL_SetClipRect(ventana, &contenedor);
-    if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
-    //Fondo
-    SDL_FillRect(ventana, &area, color);
-    //Borde
-    rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xFFA500FF);
+    this->limpiarFrame(true);
     //Etiqueta
-    stringColor(ventana, area.x, area.y-9, c, 0xFFA500FF);
-    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
-    SDL_mutexV(semVideo);
+    Etiqueta etitulo(ventana);
+    etitulo.cargarEtiqueta(
+	    area.x,
+	    area.y-15,
+	    string(titulo).size()*SIZE_C,
+	    SIZE_C*2,
+	    titulo,
+	    0xFFA500FF,
+	    0,
+	    0);
+
     //Boton maximizar
     bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(x+w-15,y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
@@ -100,35 +103,42 @@ void Frame::maxFrame(int x,int y,int w,int h){
     this->contenedormax.w=w;
     this->contenedormax.h=h+MARGEN;
 
-    SDL_SetClipRect(ventana, &contenedormax);
-    if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
-    //Fondo
-    SDL_FillRect(ventana, &areamax, color);
-    //Borde
-    rectangleColor(ventana, areamax.x, areamax.y, areamax.x+areamax.w-1, areamax.y+areamax.h-1, 0xFFA500FF);
+    this->limpiarFrame(true);
     //Etiqueta
-    stringColor(ventana, areamax.x, areamax.y-9, titulo, 0xFFA500FF);
-    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
+    Etiqueta etitulo(ventana);
+    etitulo.cargarEtiqueta(
+	    areamax.x,
+	    areamax.y-15,
+	    string(titulo).size()*SIZE_C,
+	    SIZE_C*2,
+	    titulo,
+	    0xFFA500FF,
+	    0,
+	    0);
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(areamax.x+areamax.w-15,areamax.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //bmaxmin=new Boton(ventana);
     bmaxmin->cargarBoton(areamax.x+areamax.w-2*T_BOTON,areamax.y-T_BOTON,2*T_BOTON,T_BOTON,"-", 0xFFA500FF);
-    SDL_SetClipRect(ventana, &areamax);
+    //SDL_SetClipRect(ventana, &areamax);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 void Frame::minFrame(){
     estado=MINIMO;
-    if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
-    SDL_SetClipRect(ventana, &contenedor);
-    //Fondo
-    SDL_FillRect(ventana, &area, color);
-    //Borde
-    rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xFFA500FF);
+    this->limpiarFrame(true);
     //Etiqueta
-    stringColor(ventana, area.x, area.y-9, titulo, 0xFFA500FF);
-    if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
+    Etiqueta etitulo(ventana);
+    etitulo.cargarEtiqueta(
+	    area.x,
+	    area.y-15,
+	    string(titulo).size()*SIZE_C,
+	    SIZE_C*2,
+	    titulo,
+	    0xFFA500FF,
+	    0,
+	    0);
+	
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(area.x+area.w-15,area.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
@@ -141,7 +151,7 @@ void Frame::minFrame(){
 	    T_BOTON,
 	    "+", 
 	    0xFFA500FF);
-    SDL_SetClipRect(ventana, &area);
+    //SDL_SetClipRect(ventana, &area);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
@@ -151,6 +161,8 @@ void Frame::desactivarFrame(){
 
 void Frame::limpiarFrame(bool refresh){
     SDL_Rect a=this->getArea();
+    extern SDL_mutex *semVideo;
+    SDL_mutexP(semVideo);
     if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
     SDL_SetClipRect(ventana, &a);
     SDL_FillRect(ventana, &a, color);
@@ -158,19 +170,25 @@ void Frame::limpiarFrame(bool refresh){
     rectangleColor(ventana, a.x, a.y, a.x+a.w-1, a.y+a.h-1, 0xFFA500FF);
     if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     if (refresh)
-	SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+	SDL_UpdateRect(ventana, a.x, a.y, a.w, a.h);
+    SDL_mutexV(semVideo);
     //bmaxmin->desactivar();
 }
 
 void Frame::activarFrame(){
     SDL_Rect a=this->getArea();
+    extern SDL_mutex *semVideo;
+    SDL_mutexP(semVideo);
     SDL_SetClipRect(ventana, &a);
+    SDL_mutexV(semVideo);
 }
 
 void Frame::refrescarFrame(){
     SDL_Rect a=this->getArea();
-    //SDL_SetClipRect(ventana, &a);
+    extern SDL_mutex *semVideo;
+    SDL_mutexP(semVideo);
     SDL_UpdateRect(ventana, a.x, a.y, a.w, a.h);
+    SDL_mutexV(semVideo);
 }
 
 SDL_Surface* Frame::getVentana(){

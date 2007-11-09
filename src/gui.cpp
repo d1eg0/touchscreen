@@ -60,17 +60,6 @@ Campo *c2;
 // Comunicacion
 ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
 ClienteCapaBaja	clienteCapaBaja; //Sensores
-void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
-{
-    SDL_Rect clip;
-    clip.x = x1+BORDER;
-    clip.y = y1+BORDER;
-    clip.w = x2-x1-2*BORDER;
-    clip.h = y2-y1-2*BORDER;
-    SDL_SetClipRect(screen, &clip);
-}
-
-
 
 int main(int argc, char *argv[])
 {
@@ -99,7 +88,7 @@ int main(int argc, char *argv[])
     } else {
 	Uint8 video_bpp;
 	Uint32 videoflags;
-	videoflags = SDL_HWSURFACE | SDL_SRCALPHA ;
+	videoflags = SDL_HWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN;
 	int h_screen=SCREEN_H;
 	int v_screen=SCREEN_W;
 	const SDL_VideoInfo *info;
@@ -114,16 +103,13 @@ int main(int argc, char *argv[])
 	SDL_FillRect(surfacePrincipal, 0, 0x000000);
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
 	pantalla=new Pantalla(surfacePrincipal);
-	SDL_Color Blanco = {255,255,255,0}; 
-
-	//SetClip(surfacePrincipal,0,0,500,500);
 
 	//Cargar el frame donde se sitúa el plano
 	framemapa=new Frame(surfacePrincipal);
 	framemapa->cargarFrame(MARGEN,
 		MARGEN,
 		(int)((float)SCREEN_W/10.0*6.0), 
-		(int)((float)SCREEN_H/10.0*8.0),
+		(int)((float)SCREEN_H/10.0*7.5),
 		"Plano",0xffffff);
 	plano.centrarMapa();
 	plano.pintarMapa(surfacePrincipal,framemapa,100);
@@ -134,7 +120,7 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
 		SCREEN_H-(int)((float)SCREEN_H/10.0*4.0),
 		(int)((float)SCREEN_W/10.0*2.5)+MARGEN, 
-		(int)((float)SCREEN_H/10.0*4.0),
+		(int)((float)SCREEN_H/10.0*3.5),
 		"Radar",
 		0xffffff);
 	//Mutex para sinc el radar
@@ -149,7 +135,7 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
 		MARGEN,
 		(int)((float)SCREEN_W/10.0*2.5)+MARGEN, 
-		(int)((float)SCREEN_H/10.0*5.5),
+		(int)((float)SCREEN_H/10.0*5.0),
 		"Estado",
 		0xffffff);
 
