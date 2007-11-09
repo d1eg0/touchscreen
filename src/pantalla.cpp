@@ -5,6 +5,7 @@
 #include "etiqueta.h"
 #include "objetivo.h"
 #include "radar.h"
+#include <SDL/SDL_thread.h>
 #include <sstream>
 #include "clientecapa_alta.h"
 extern Boton *botonMasZoom, 
@@ -22,6 +23,9 @@ extern Etiqueta *e_zoom,*e_vzoom;
 extern Objetivo objetivo;
 extern ClienteCapaAlta clienteCapaAlta;
 extern Radar *radar;
+extern SDL_mutex *mutexSincRadar;
+extern SDL_cond *condSincRadar;
+extern bool pauseRadar;
 Pantalla::Pantalla(SDL_Surface *screen) 
 {
     this->screen=screen;
@@ -282,7 +286,8 @@ void Pantalla::entrada()
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
-		    SDL_UpdateRect(screen,0,0,0,0);
+		    //SDL_UpdateRect(screen,0,0,0,0);
+		    framemapa->refrescarFrame();
 		}
 	    }
 	    else if(botonMenosZoom->presionado(event.motion.x,event.motion.y)){
@@ -295,7 +300,8 @@ void Pantalla::entrada()
 			objetivo.dibujar();
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
-		    SDL_UpdateRect(screen,0,0,0,0);
+		    //SDL_UpdateRect(screen,0,0,0,0);
+		    framemapa->refrescarFrame();
 		}
 	    }
 	    else if(botonDerecha->presionado(event.motion.x,event.motion.y)){
@@ -306,7 +312,8 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		SDL_UpdateRect(screen,0,0,0,0);
+		//SDL_UpdateRect(screen,0,0,0,0);
+		framemapa->refrescarFrame();
 	    }
 	    else if(botonIzquierda->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
@@ -316,7 +323,8 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		SDL_UpdateRect(screen,0,0,0,0);
+		//SDL_UpdateRect(screen,0,0,0,0);
+		framemapa->refrescarFrame();
 	    }
 	    else if(botonArriba->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
@@ -326,7 +334,8 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		SDL_UpdateRect(screen,0,0,0,0);
+		//SDL_UpdateRect(screen,0,0,0,0);
+		framemapa->refrescarFrame();
 	    }
 	    else if(botonAbajo->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
@@ -336,7 +345,8 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		SDL_UpdateRect(screen,0,0,0,0);
+		//SDL_UpdateRect(screen,0,0,0,0);
+		framemapa->refrescarFrame();
 	    }
 	    else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
@@ -347,7 +357,8 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		SDL_UpdateRect(screen,0,0,0,0);
+		//SDL_UpdateRect(screen,0,0,0,0);
+		framemapa->refrescarFrame();
 	    }
 	    else if(framemapa->getBcerrar()->presionado(event.motion.x,event.motion.y)){
 		framemapa->cerrarFrame();
@@ -356,6 +367,11 @@ void Pantalla::entrada()
 	    else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
 		this->borrar();
 		if(framemapa->getEstado()==MINIMO){
+		    
+		    SDL_mutexP(mutexSincRadar);
+		    pauseRadar=true;
+		    SDL_mutexV(mutexSincRadar);
+
 		    frameradar->desactivarFrame();
 		    framestado->desactivarFrame();
 		    framemapa->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,framemapa->getH());
@@ -407,6 +423,11 @@ void Pantalla::entrada()
 			    0x000000FF);
 		}else{ 
 		    this->minimizar();
+		    SDL_mutexP(mutexSincRadar);
+		    pauseRadar=false;
+		    SDL_mutexV(mutexSincRadar);
+		    SDL_CondSignal(condSincRadar);
+		    
 		}
 
 		SDL_UpdateRect(screen,0,0,0,0);
@@ -437,6 +458,11 @@ void Pantalla::entrada()
 	    else if(framestado->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
 		this->borrar();
 		if(framestado->getEstado()==MINIMO){
+		    
+		    SDL_mutexP(mutexSincRadar);
+		    pauseRadar=true;
+		    SDL_mutexV(mutexSincRadar);
+		    
 		    frameradar->desactivarFrame();
 		    framestado->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,SCREEN_H-2*MARGEN);
 		    framemapa->desactivarFrame();
@@ -451,6 +477,11 @@ void Pantalla::entrada()
 
 		}else if(framestado->getEstado()==MAXIMO){
 		    this->minimizar();
+		    SDL_mutexP(mutexSincRadar);
+		    pauseRadar=false;
+		    SDL_mutexV(mutexSincRadar);
+		    SDL_CondSignal(condSincRadar);
+		    
 		}
 		SDL_UpdateRect(screen,0,0,0,0);
 	    }
@@ -478,7 +509,9 @@ void Pantalla::borrar(){
     r.w=SCREEN_W;
     r.h=SCREEN_H;
     SDL_SetClipRect(screen,&r);
+    if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
     SDL_FillRect( screen, 0, 0x000000);
+    if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
     SDL_UpdateRect(screen,0,0,0,0);
 }
 
@@ -520,21 +553,37 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 
 	int i;
 	for(i=0;i<20;i++){
-	    if(zona&Z_ARRIBA) 
+	    if(zona&Z_ARRIBA){ 
+		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
 		boxColor(screen, r1.x,r1.y,r1.x+r1.w, r1.y+r1.h, 0x000013);
-	    if(zona&Z_IZQUIERDA)
+		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+	    }
+	    if(zona&Z_IZQUIERDA){
+		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
 		boxColor(screen, r2.x,r2.y,r2.x+r2.w, r2.y+r2.h, 0x000013);
-	    if(zona&Z_ABAJO) 
+		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+	    }
+	    if(zona&Z_ABAJO) {
+		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
 		boxColor(screen, r3.x,r3.y,r.x+r3.w, r3.y+r3.h, 0x000013);
-	    if(zona&Z_DERECHA) 
+		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+	    }
+	    if(zona&Z_DERECHA) {
+		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
 		boxColor(screen, r4.x,r4.y,r4.x+r4.w, r4.y+r4.h, 0x000013);
+		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+	    }
 	    
-	    if(zona&Z_CENTRO) 
+	    if(zona&Z_CENTRO) {
+		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
 		boxColor(screen, r5.x,r5.y,r5.x+r5.w, r5.y+r5.h, 0x000013);
-	    SDL_UpdateRect(screen,0,0,0,0);
+		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+		SDL_UpdateRect(screen, r5.x,r5.y,r5.w,r5.h);
+	    }
+	    //SDL_UpdateRect(screen,0,0,0,0);
 	    usleep(1000);
 	}
-	alpha=true;
+	//alpha=true;
     }
 }
 
