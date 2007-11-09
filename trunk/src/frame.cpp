@@ -25,6 +25,7 @@ Frame::~Frame()
 
 void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 {
+    extern SDL_mutex *semVideo;
     //Cordenadas de los campos
     xc=x+5;
     yc=y+5;
@@ -54,6 +55,7 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     this->contenedormax.w=SCREEN_W-MARGEN;
     this->contenedormax.h=SCREEN_H-MARGEN;
   */  
+    SDL_mutexP(semVideo);
     SDL_SetClipRect(ventana, &contenedor);
     if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
     //Fondo
@@ -63,13 +65,14 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     //Etiqueta
     stringColor(ventana, area.x, area.y-9, c, 0xFFA500FF);
     if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
+    SDL_mutexV(semVideo);
     //Boton maximizar
     bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(x+w-15,y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //bmaxmin=new Boton(ventana);
     bmaxmin->cargarBoton(x+w-2*T_BOTON,y-T_BOTON,T_BOTON*2,T_BOTON,"+", 0xFFA500FF);
-    SDL_SetClipRect(ventana, &area);
-    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    //SDL_SetClipRect(ventana, &area);
+    //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
 void Frame::cerrarFrame(){

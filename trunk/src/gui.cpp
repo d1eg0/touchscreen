@@ -54,6 +54,8 @@ SDL_cond *sensorNuevoCond;
 SDL_mutex *mutexSincRadar;
 SDL_cond *condSincRadar;
 bool pauseRadar;
+//Semaforo Video
+SDL_mutex *semVideo;
 Campo *c2;
 // Comunicacion
 ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
@@ -73,6 +75,7 @@ void SetClip (SDL_Surface *screen, int x1, int y1, int x2, int y2)
 int main(int argc, char *argv[])
 {
 
+    semVideo=SDL_CreateMutex();
 
     string mapadxf="maps/modelo.dxf";
 //    string mapadxf="maps/segonDxf.dxf";

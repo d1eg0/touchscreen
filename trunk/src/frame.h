@@ -38,6 +38,7 @@ private:
     char* titulo;
     SDL_Rect area,areamax;
     SDL_Surface *ventana;
+    SDL_Surface *frame;
     Uint32 color;
     SDL_Rect contenedor,contenedormax;
     Boton *bcerrar;
