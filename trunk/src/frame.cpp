@@ -122,6 +122,7 @@ void Frame::maxFrame(int x,int y,int w,int h){
     bmaxmin->cargarBoton(areamax.x+areamax.w-2*T_BOTON,areamax.y-T_BOTON,2*T_BOTON,T_BOTON,"-", 0xFFA500FF);
     //SDL_SetClipRect(ventana, &areamax);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    xc=x+5;
 }
 
 void Frame::minFrame(){
@@ -137,8 +138,7 @@ void Frame::minFrame(){
 	    titulo,
 	    0xFFA500FF,
 	    0,
-	    0);
-	
+	    0);	
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(area.x+area.w-15,area.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
@@ -153,6 +153,7 @@ void Frame::minFrame(){
 	    0xFFA500FF);
     //SDL_SetClipRect(ventana, &area);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+    xc=getX()+5;
 }
 
 void Frame::desactivarFrame(){
@@ -245,8 +246,11 @@ int Frame::getXc(){
     return txc;
 }
 
-int Frame::getYc(){
+int Frame::getYcDown(){
     int tyc=yc;
     yc+=T_BOTON;
     return tyc;
+}
+int Frame::getYc(){
+    return yc;
 }

@@ -18,6 +18,7 @@
 #include "gestorestado.h"
 #include "gestorcamino.h"
 #include "radar.h"
+#include "tabla.h"
 
 using namespace std;
 
@@ -56,7 +57,12 @@ SDL_cond *condSincRadar;
 bool pauseRadar;
 //Semaforo Video
 SDL_mutex *semVideo;
-Campo *c2;
+//Campos de estado
+Campo *cgrid,
+      *cdobstaculo,
+      *cvelocidad;
+//Tabla de campos
+Tabla tcampos;
 // Comunicacion
 ClienteCapaAlta clienteCapaAlta; //Plano y coordenadas
 ClienteCapaBaja	clienteCapaBaja; //Sensores
@@ -88,7 +94,7 @@ int main(int argc, char *argv[])
     } else {
 	Uint8 video_bpp;
 	Uint32 videoflags;
-	videoflags = SDL_HWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN;
+	videoflags = SDL_HWSURFACE | SDL_SRCALPHA;// | SDL_FULLSCREEN;
 	int h_screen=SCREEN_H;
 	int v_screen=SCREEN_W;
 	const SDL_VideoInfo *info;
@@ -209,16 +215,31 @@ int main(int argc, char *argv[])
 		0x00FF00FF);
     */
 	//c1->updateValor(4);
-	c2=new Campo(
+	cgrid=new Campo(
 		surfacePrincipal,
-		"campo:",
-		true);
-	c2->valorStr("bad");
-	c2->cargarCampo(
+		"grid:",
+		false);
+	cgrid->valorNum(4,10,2,1);
+	cgrid->cargarCampo(
 		framestado->getXc(),
-		framestado->getYc(),
+		framestado->getYcDown(),
 		0x000000FF,
 		0x00FF00FF);
+	tcampos.add("GRID",cgrid);
+	delete cgrid;
+	cout << "valor:" << tcampos.get("GRID").getVstr() << endl;
+	cdobstaculo=new Campo(
+		surfacePrincipal,
+		"d_obst:",
+		false);
+	cdobstaculo->valorNum(2,8,2,1);
+	cdobstaculo->cargarCampo(
+		framestado->getXc(),
+		framestado->getYcDown(),
+		0x000000FF,
+		0x00FF00FF);
+	tcampos.add("DOBSTACULO",cdobstaculo);
+	delete cdobstaculo;
 
 
 	//Actualizar cambios en la pantalla
@@ -247,4 +268,7 @@ int main(int argc, char *argv[])
  
     }
     SDL_Quit();
+    SDL_DestroyMutex(mutexCapaBaja);
+    SDL_DestroyMutex(mutexCapaAlta);
+    SDL_DestroyMutex(mutexSincRadar);
 }

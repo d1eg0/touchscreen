@@ -123,7 +123,7 @@ int escan(void *r){
 	escaner->getFrame()->refrescarFrame();
 	ang++;
 	ang%=360;
-	SDL_Delay(50);
+	SDL_Delay(20);
     }
     return 0;
 }

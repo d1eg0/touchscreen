@@ -32,6 +32,7 @@ public:
     Boton* getBmaxmin();
     Uint8 getEstado();
     int getXc();
+    int getYcDown();
     int getYc();
 
 private:

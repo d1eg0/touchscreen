@@ -3,6 +3,7 @@
 #include <SDL/SDL.h>
 #include <string>
 #include "boton.h"
+#include <iostream>
 
 using namespace std;
 
@@ -15,6 +16,8 @@ public:
     virtual ~Campo();
 
     void cargarCampo(int x, int y,  Uint32 colorNombre, Uint32 colorValor);
+    void recargar();
+    void recargar(int x, int y);
     void valorStr(string valor);	
     void valorNum(
 	    float valor, 
@@ -26,7 +29,10 @@ public:
     void updateValor(string valor);
     void aumentar();
     void disminuir();
+    string getVstr();
+    //2 mas, 1 menos, 0 ninguno
     int presionado(int x, int y);
+    void handle(int x, int y);
 
 
 private:
