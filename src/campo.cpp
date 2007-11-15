@@ -1,10 +1,10 @@
 #include "campo.h"
 #include "constantes.h"
-#include <string>
+#include <sstream>
+#include <iostream>
 #include <SDL/SDL_gfxPrimitives.h>
 
 using namespace std;
-
 Campo::Campo(SDL_Surface *surface, 
 	string nombre, 
 	bool estatico)
@@ -77,14 +77,14 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
     SDL_mutexV(semVideo);
     if(!this->estatico){
 	bmas->cargarBoton(	    
-		areav.x+areav.w+20, 
+		arean.x+120, 
 		y, 
 		20,
 		20,
 		"+",
 		0x01F33EFF);
 	bmenos->cargarBoton(	    
-		areav.x+areav.w+40, 
+		arean.x+140, 
 		y, 
 		20,
 		20,
@@ -92,6 +92,18 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 		0xFF4848FF);
     }
 	//SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+}
+
+void Campo::recargar(){
+    cargarCampo(arean.x,arean.y,colorNombre,colorValor);
+    SDL_UpdateRect(surface, areav.x, areav.y, areav.w, areav.h);
+    SDL_UpdateRect(surface, arean.x, arean.y, arean.w, arean.h);
+}
+
+void Campo::recargar(int x, int y){
+    cargarCampo(x,y,colorNombre,colorValor);
+    SDL_UpdateRect(surface, areav.x, areav.y, areav.w, areav.h);
+    SDL_UpdateRect(surface, arean.x, arean.y, arean.w, arean.h);
 }
 void Campo::valorStr(string valor){
     this->valorstr=valor;
@@ -122,7 +134,7 @@ void Campo::updateValor(float valor){
 	    areav.y,
 	    areav.x+areav.w,
 	    areav.y+areav.h,
-	    0x000000ff);
+	    0xffffffff);
     stringColor(
 	surface,
 	areav.x, 
@@ -130,8 +142,8 @@ void Campo::updateValor(float valor){
 	valorc, 
 	colorValor);
     if(SDL_MUSTLOCK(surface))SDL_UnlockSurface(surface);
-    SDL_UpdateRect(surface, 0, 0, SCREEN_W, SCREEN_H);
-    SDL_mutexP(semVideo);
+    SDL_UpdateRect(surface, areav.x, areav.y, areav.w, areav.h);
+    SDL_mutexV(semVideo);
     
 }
 
@@ -156,20 +168,52 @@ void Campo::updateValor(string valor){
 	valorstr.c_str(), 
 	colorValor);
     if(SDL_MUSTLOCK(surface))SDL_UnlockSurface(surface);
-    SDL_UpdateRect(surface, 0, 0, SCREEN_W, SCREEN_H);
-    SDL_mutexP(semVideo);
+    SDL_UpdateRect(surface, areav.x, areav.y, areav.w, areav.h);
+    SDL_mutexV(semVideo);
 }
 
 void Campo::aumentar(){
-    valor+=incremento;
+    if(valor<maxvalor){
+	valor+=incremento;
+	updateValor(valor);
+    }
 }
 
 void Campo::disminuir(){
-    valor-=incremento;
+    if(valor>minvalor){
+	valor-=incremento;
+	updateValor(valor);
+    }
+}
+
+
+string Campo::getVstr(){
+    if (!numerico)
+	return valorstr;
+    else{
+	string v;
+	stringstream buffer;
+	buffer << valor;
+	buffer >> v;
+	return v;
+    }
 }
 
 int Campo::presionado(int x, int y){
     if(bmas->presionado(x,y))return 2;
     if(bmenos->presionado(x,y))return 1;
     return 0;
+}
+
+void Campo::handle(int x, int y){
+    switch ( this->presionado( x, y)){
+    case 1:
+        disminuir();
+        break;
+    case 2:
+        aumentar();
+        break; 
+    case 0:
+        break;
+    }
 }

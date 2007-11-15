@@ -4,7 +4,6 @@
 #include "punto.h"
 #include "clientecapa_alta.h"
 #include "constantes.h"
-#include "campo.h"
 #include "frame.h"
 #include "polilinea.h"
 #include "mapa.h"
@@ -15,7 +14,6 @@
 extern ClienteCapaAlta clienteCapaAlta;
 extern SDL_mutex *mutexCapaAlta;
 extern SDL_cond *caminoNuevoCond;
-extern Campo *c2;
 extern Mapa plano;
 extern Pantalla *pantalla;
 int initCamino(void *p);
@@ -70,7 +68,6 @@ int initCamino(void *p){
 	    cout << "hay algo" << endl;
 	    cout << "x:" << listaPuntos.front().getX() << 
 		"y:" << listaPuntos.front().getY() << endl;
-	    c2->updateValor("ok");   
 	    vector<Punto>::iterator i_punto;
 	    for(i_punto=listaPuntos.begin();i_punto!=listaPuntos.end();i_punto++)
 		camino.addVertice((*i_punto));

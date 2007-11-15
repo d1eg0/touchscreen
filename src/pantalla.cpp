@@ -3,6 +3,7 @@
 #include "boton.h"
 #include "mapa.h"
 #include "etiqueta.h"
+#include "tabla.h"
 #include "objetivo.h"
 #include "radar.h"
 #include <SDL/SDL_thread.h>
@@ -26,6 +27,7 @@ extern Radar *radar;
 extern SDL_mutex *mutexSincRadar;
 extern SDL_cond *condSincRadar;
 extern bool pauseRadar;
+extern Tabla tcampos;
 Pantalla::Pantalla(SDL_Surface *screen) 
 {
     this->screen=screen;
@@ -65,7 +67,7 @@ SDL_Surface* Pantalla::getPantalla()
 void Pantalla::entrada() 
 {
     SDL_Event event;
-    //SDL_WaitEvent(&event);
+    SDL_Delay(100);//eliminar espera activa, reducir el consumo de CPU
     while ( SDL_PollEvent( &event ) ) 
     
     switch ( event.type ) 
@@ -471,6 +473,7 @@ void Pantalla::entrada()
 		    botonMasZoom->desactivar();
 		    botonMenosZoom->desactivar();
 
+		    tcampos.recargar(framestado);
 		}else if(framestado->getEstado()==MAXIMO){
 		    this->minimizar();
 		    SDL_mutexP(mutexSincRadar);
@@ -480,6 +483,7 @@ void Pantalla::entrada()
 		    
 		}
 	    }
+	    tcampos.handle( event.motion.x, event.motion.y);
 		
 
 
@@ -637,5 +641,6 @@ void Pantalla::minimizar(){
 	    0xFFA500FF,
 	    0xFFA500FF,
 	    0x000000FF);
+    tcampos.recargar(framestado);
 }
 
