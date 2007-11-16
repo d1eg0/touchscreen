@@ -31,9 +31,6 @@ public:
     Boton* getBcerrar();
     Boton* getBmaxmin();
     Uint8 getEstado();
-    int getXc();
-    int getYcDown();
-    int getYc();
 
 private:
     char* titulo;

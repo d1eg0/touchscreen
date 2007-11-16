@@ -12,7 +12,9 @@ class Campo
 public:
     Campo(SDL_Surface *surface, 
 	    string nombre, 
-	    bool estatico);
+	    bool estatico,
+	    Uint32 colorNombre, 
+	    Uint32 colorValor);
     virtual ~Campo();
 
     void cargarCampo(int x, int y,  Uint32 colorNombre, Uint32 colorValor);

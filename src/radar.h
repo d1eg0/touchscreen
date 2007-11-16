@@ -15,6 +15,8 @@ public:
     int getR2();
     int getR3();
     Frame *getFrame();
+    vector<Punto> getObstaculos();
+    void addObstaculo(Punto o);
 private:
     SDL_Thread *s;
     vector<Punto> lobstaculos;

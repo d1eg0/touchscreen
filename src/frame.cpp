@@ -240,17 +240,4 @@ Uint8 Frame::getEstado(){
     return estado;
 }
 
-int Frame::getXc(){
-    int txc=xc;
-    //xc+=SIZE_C;
-    return txc;
-}
 
-int Frame::getYcDown(){
-    int tyc=yc;
-    yc+=T_BOTON;
-    return tyc;
-}
-int Frame::getYc(){
-    return yc;
-}
