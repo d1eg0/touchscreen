@@ -17,7 +17,7 @@ Campo Tabla::get(string n){
 void Tabla::update(string n, string v){
     tabla.find(n)->second.updateValor(v);
     extern ClienteCapaBaja clienteCapaBaja;
-    clienteCapaBaja.Send(n+" "+v);
+    clienteCapaBaja.Send(n+" "+v+"\n\r");
 }
 
 void Tabla::update(string n, float v){
@@ -26,7 +26,7 @@ void Tabla::update(string n, float v){
 
     extern ClienteCapaBaja clienteCapaBaja;
     tabla.find(n)->second.updateValor(v);
-    clienteCapaBaja.Send(n+" "+buffer.str());
+    clienteCapaBaja.Send(n+" "+buffer.str()+"\n\r");
 }
 
 void Tabla::handle(int x,int y){

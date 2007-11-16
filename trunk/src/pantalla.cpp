@@ -507,11 +507,15 @@ void Pantalla::borrar(){
     r.y=0;
     r.w=SCREEN_W;
     r.h=SCREEN_H;
-    SDL_SetClipRect(screen,&r);
+    extern SDL_mutex *semVideo;
+    SDL_mutexP(semVideo);
     if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+    SDL_FreeSurface(screen);
+    SDL_SetClipRect(screen,&r);
     SDL_FillRect( screen, 0, 0x000000);
     if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
     SDL_UpdateRect(screen,0,0,0,0);
+    SDL_mutexV(semVideo);
 }
 
 void Pantalla::setAlpha(Frame *frame, Uint8 zona){
@@ -549,42 +553,52 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 	r.w=SCREEN_W;
 	r.h=SCREEN_H;
 	extern SDL_mutex *semVideo;
-	SDL_mutexP(semVideo);
-	SDL_SetClipRect(screen,&r);
 
 	int i;
 	for(i=0;i<20;i++){
 	    if(zona&Z_ARRIBA){ 
+		SDL_mutexP(semVideo);
 		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+		SDL_SetClipRect(screen,&r1);
 		boxColor(screen, r1.x,r1.y,r1.x+r1.w, r1.y+r1.h, 0x000013);
 		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+		SDL_mutexV(semVideo);
 	    }
 	    if(zona&Z_IZQUIERDA){
+		SDL_mutexP(semVideo);
 		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+		SDL_SetClipRect(screen,&r2);
 		boxColor(screen, r2.x,r2.y,r2.x+r2.w, r2.y+r2.h, 0x000013);
 		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+		SDL_mutexV(semVideo);
 	    }
 	    if(zona&Z_ABAJO) {
+		SDL_mutexP(semVideo);
 		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
 		boxColor(screen, r3.x,r3.y,r.x+r3.w, r3.y+r3.h, 0x000013);
 		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+		SDL_mutexV(semVideo);
 	    }
 	    if(zona&Z_DERECHA) {
+		SDL_mutexP(semVideo);
 		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+		SDL_SetClipRect(screen,&r4);
 		boxColor(screen, r4.x,r4.y,r4.x+r4.w, r4.y+r4.h, 0x000013);
 		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+		SDL_mutexV(semVideo);
 	    }
 	    
 	    if(zona&Z_CENTRO) {
+		SDL_mutexP(semVideo);
 		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+		SDL_SetClipRect(screen,&r5);
 		boxColor(screen, r5.x,r5.y,r5.x+r5.w, r5.y+r5.h, 0x000013);
 		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
 		SDL_UpdateRect(screen, r5.x,r5.y,r5.w,r5.h);
+		SDL_mutexV(semVideo);
 	    }
-	    //SDL_UpdateRect(screen,0,0,0,0);
-	    usleep(1000);
+	    SDL_Delay(10);
 	}
-	SDL_mutexV(semVideo);
 	//alpha=true;
     }
 }

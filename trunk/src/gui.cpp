@@ -55,8 +55,11 @@ SDL_cond *sensorNuevoCond;
 SDL_mutex *mutexSincRadar;
 SDL_cond *condSincRadar;
 bool pauseRadar;
-//Semaforo Video
+//  Video
 SDL_mutex *semVideo;
+//  Obstaculos
+SDL_mutex *mutexObstaculo;
+
 //Campos de estado
 Campo *cgrid,
       *cdobstaculo,
@@ -94,7 +97,7 @@ int main(int argc, char *argv[])
     } else {
 	Uint8 video_bpp;
 	Uint32 videoflags;
-	videoflags = SDL_HWSURFACE | SDL_SRCALPHA;// | SDL_FULLSCREEN;
+	videoflags = SDL_HWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN;
 	int h_screen=SCREEN_H;
 	int v_screen=SCREEN_W;
 	const SDL_VideoInfo *info;
@@ -135,6 +138,10 @@ int main(int argc, char *argv[])
 	condSincRadar=SDL_CreateCond();
 	//Cargar el radar en el frame
 	radar=new Radar(frameradar);
+	mutexObstaculo=SDL_CreateMutex();	
+	radar->addObstaculo(Punto(2,50));
+	radar->addObstaculo(Punto(20,10));
+	radar->addObstaculo(Punto(-10,-10));
 	//Cargar el frame donde se sitúa el estado
 	framestado=new Frame(surfacePrincipal);
 	framestado->cargarFrame(
@@ -218,29 +225,33 @@ int main(int argc, char *argv[])
 	cgrid=new Campo(
 		surfacePrincipal,
 		"grid:",
-		false);
+		false,
+		0x000000FF,
+		0x00FF00FF);
 	cgrid->valorNum(4,10,2,1);
-	cgrid->cargarCampo(
+	/*cgrid->cargarCampo(
 		framestado->getXc(),
 		framestado->getYcDown(),
 		0x000000FF,
-		0x00FF00FF);
+		0x00FF00FF);*/
 	tcampos.add("GRID",cgrid);
 	delete cgrid;
 	cout << "valor:" << tcampos.get("GRID").getVstr() << endl;
 	cdobstaculo=new Campo(
 		surfacePrincipal,
 		"d_obst:",
-		false);
+		false,
+		0x000000FF,
+		0x00FF00FF);
 	cdobstaculo->valorNum(2,8,2,1);
-	cdobstaculo->cargarCampo(
+	/*cdobstaculo->cargarCampo(
 		framestado->getXc(),
 		framestado->getYcDown(),
 		0x000000FF,
-		0x00FF00FF);
+		0x00FF00FF);*/
 	tcampos.add("DOBSTACULO",cdobstaculo);
 	delete cdobstaculo;
-
+	tcampos.recargar(framestado);
 
 	//Actualizar cambios en la pantalla
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
@@ -271,4 +282,5 @@ int main(int argc, char *argv[])
     SDL_DestroyMutex(mutexCapaBaja);
     SDL_DestroyMutex(mutexCapaAlta);
     SDL_DestroyMutex(mutexSincRadar);
+    SDL_DestroyMutex(mutexObstaculo);
 }

@@ -6,6 +6,7 @@ int escan(void *r);
 
 Radar::Radar(Frame *frame){
     this->frame=frame;
+
     color=0x00FF7FFF;
     xm=(int)(frame->getX()+(frame->getW()*0.5));
     ym=(int)(frame->getY()+(frame->getH()*0.5));
@@ -96,6 +97,23 @@ int Radar::getR3(){
 Frame *Radar::getFrame(){
     return frame;
 }
+
+vector<Punto> Radar::getObstaculos(){
+    vector<Punto> lo;
+    extern SDL_mutex *mutexObstaculo;
+    SDL_mutexP(mutexObstaculo);
+    lo = lobstaculos;
+    SDL_mutexV(mutexObstaculo);
+    return lo;
+}
+
+void Radar::addObstaculo(Punto o){
+    extern SDL_mutex *mutexObstaculo;
+    SDL_mutexP(mutexObstaculo);
+    lobstaculos.push_back(o);
+    SDL_mutexV(mutexObstaculo);
+}
+
 int escan(void *r){
     extern SDL_mutex *mutexSincRadar;
     extern SDL_cond *condSincRadar;
@@ -103,7 +121,7 @@ int escan(void *r){
     extern SDL_mutex *semVideo;
     Radar *escaner=(Radar*)r;
     Uint16 ang=90;
-    SDL_Delay(1000);
+//    SDL_Delay(1000);
     while(1){
 	SDL_mutexP(mutexSincRadar);
 	    if(pauseRadar)SDL_CondWait(condSincRadar,mutexSincRadar);
@@ -112,11 +130,26 @@ int escan(void *r){
 	escaner->recargar(false);
 	escaner->getFrame()->activarFrame();
 	SDL_mutexP(semVideo);
+
 	if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_LockSurface(escaner->getFrame()->getVentana());
+	vector<Punto> lobstaculos=escaner->getObstaculos();
+	vector<Punto>::iterator i;
+	for(i=lobstaculos.begin();i!=lobstaculos.end();i++){
+	    //cout << "x:" << (*i).getX() << " y:" << (*i).getY() << endl;
+	    filledCircleColor(
+		    escaner->getFrame()->getVentana(),
+		    (int)(*i).getX()+escaner->getX(),
+		    (int)(*i).getY()+escaner->getY(),
+		    3,
+		    0xffa500ff);
+	    
+	    //SDL_Delay(20000);
+	}
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang, 0xff000090);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-75, 0xff000020);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-80, 0xff000020);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-85, 0xff000020);
+	
 	if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_UnlockSurface(escaner->getFrame()->getVentana());
 	SDL_mutexV(semVideo);
 //	SDL_UpdateRect(escaner->getFrame()->getVentana(), 0, 0, SCREEN_W, SCREEN_H);

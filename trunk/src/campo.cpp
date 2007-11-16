@@ -7,7 +7,9 @@
 using namespace std;
 Campo::Campo(SDL_Surface *surface, 
 	string nombre, 
-	bool estatico)
+	bool estatico,
+	Uint32 colorNombre, 
+	Uint32 colorValor)
 {
     this->surface=surface;
     this->nombre=nombre;
@@ -16,13 +18,14 @@ Campo::Campo(SDL_Surface *surface,
 	bmas=new Boton(surface);
 	bmenos=new Boton(surface);
     }
+    this->colorNombre=colorNombre;
+    this->colorValor=colorValor;
 }
 
 Campo::~Campo()
 {
 
 }
-
 
 void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 {
