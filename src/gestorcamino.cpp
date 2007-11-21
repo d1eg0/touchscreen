@@ -48,7 +48,7 @@ int initCamino(void *p){
 
 	if(listaPuntos.empty()){
 	    cout << "Error: camino no posible" << endl;
-
+	    pantalla->setHandle(false);
 	    pantalla->setAlpha(framemapa,Z_CENTRO);
 	    Etiqueta error(pantalla->getPantalla());
 	    string msgerror="No hay camino a ese punto";
@@ -63,6 +63,7 @@ int initCamino(void *p){
 		   0x00000030 );
 	    SDL_Delay(2000);
 	    plano.pintarMapa(pantalla->getPantalla(),framemapa,plano.getEscala());
+	    pantalla->setHandle(true);
 
 	}else{ 
 	    cout << "hay algo" << endl;

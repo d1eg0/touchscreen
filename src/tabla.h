@@ -16,8 +16,8 @@ public:
 
     void add(string n,Campo *c);
     Campo get(string n);
-    void update(string n, string v);
-    void update(string n, float v);
+    void update(string n, string v, bool enviar);
+    void update(string n, float v, bool enviar);
     void handle(int x, int y);
     void recargar(Frame *frame);
 

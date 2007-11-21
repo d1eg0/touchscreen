@@ -17,6 +17,7 @@ private:
     stringstream buffer;
     vector<Punto> listaPuntos;
     void onConnect();
+    void onClose();
     //void onDataArrival(string Data);
     //void onDataArrival(const char* Cadena, unsigned int Length);
     void onLineArrival(string Cadena);

@@ -34,7 +34,7 @@ public:
     string getVstr();
     //2 mas, 1 menos, 0 ninguno
     int presionado(int x, int y);
-    void handle(int x, int y);
+    bool handle(int x, int y);
 
 
 private:

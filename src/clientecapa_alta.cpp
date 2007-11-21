@@ -2,6 +2,7 @@
 #include <SDL/SDL_thread.h>
 #include <sstream>
 #include <iostream>
+#include "tabla.h"
 
 extern SDL_mutex *mutexCapaAlta;
 extern SDL_cond *caminoNuevoCond;
@@ -11,6 +12,8 @@ void ClienteCapaAlta::onConnect()
     //cout << this->getStatus() << endl;
     cout << "ClienteCapaAlta: conectando..." << endl;
     while(this->getStatus()==1001){}//Esperar la conexion
+    extern Tabla tcampos;
+    tcampos.update("CONEX","bien",false);
     cout << "ClienteCapaAlta: conectado!" << endl;
     ifstream::pos_type size;
     char * memblock;
@@ -22,11 +25,14 @@ void ClienteCapaAlta::onConnect()
 	myFile.read (memblock, size);
 	myFile.close();
 //	Send(memblock,size);
-	cout << "Tx-Bytes:" << getNumBytesSent() << " Bloques:" << getNumBlocksSent() <<endl;
 	//Send("hola");
     }else cerr << "Error: No se puede abrir el fichero" << endl;
 }
-
+void ClienteCapaAlta::onClose(){
+    cout << "conexcion cerrada" << endl;
+    extern Tabla tcampos;
+    tcampos.update("CONEX","mal ",false);
+}
 void ClienteCapaAlta::onLineArrival(string Cadena)
 {
     cout << "\t****ClienteCapaAlta recibe:\"" << Cadena <<"\"" << endl;   
@@ -54,7 +60,19 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
 }
 
 void ClienteCapaAlta::onError(int ssError){
-    cerr << ssError <<":Error de conexion" << endl;
+    switch(ssError){
+	case 2004:
+	    cerr << "[E]:" << ssError << " - Error de conexion" << endl;
+	    break;
+	case 2008:
+	    cerr << "[E]:" << ssError << " - Intentas enviar sin conexión" << endl;
+	    break;
+	default:
+	    cerr << "[E]:" << ssError << " - Error conexión indefinido" << endl;
+	    break;
+    }
+    extern Tabla tcampos;
+    tcampos.update("CONEX","mal ",false);
 }
 
 vector<Punto> ClienteCapaAlta::getCamino(){

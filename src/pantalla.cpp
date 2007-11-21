@@ -37,7 +37,8 @@ Pantalla::Pantalla(SDL_Surface *screen)
     h_screen=SCREEN_H;
     v_screen=SCREEN_W;
     sdl_quit=false;
-    alpha=false;
+    //alpha=false;
+    handle=true;
     info = SDL_GetVideoInfo();
 /*    if ( info->vfmt->BitsPerPixel > 8 ) {
 	video_bpp = info->vfmt->BitsPerPixel;
@@ -89,6 +90,7 @@ void Pantalla::entrada()
 	    break;
  
 	case SDL_MOUSEBUTTONDOWN:
+	    if(!handle)return;
 	    cout << "click" << endl;
 	    cout << "x:" << event.motion.x << " y:" << event.motion.y <<  endl;
 	    Punto p;
@@ -161,7 +163,7 @@ void Pantalla::entrada()
 			   color_valor=0x00FF00FF;
 			    
 		    if(!objetivo.getValido()){
-			cout << "error: obstaculo" << endl;
+			cerr << "[E]: click sobre obstaculo" << endl;
 			titulo = " Obstaculo! ";//msg
 			ostringstream buffer;//msg
 			buffer << (int)p.getX()<< "," << (int)p.getY();//msg
@@ -169,7 +171,7 @@ void Pantalla::entrada()
 			//this->setAlpha(framemapa,Z_CENTRO);//efecto alpha
 			color_etiq=0xFF0000FF;//color
 		    }else{
-			titulo=" Objetivo ";
+			titulo="  Objetivo  ";
 			ostringstream buffer;//msg
 			buffer << (int)p.getX()<< "," << (int)p.getY();//msg
 			pos=buffer.str();//msg
@@ -520,7 +522,7 @@ void Pantalla::borrar(){
 
 void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 
-    if(!alpha){
+  //  if(!alpha){
 	SDL_Rect r,r1,r2,r3,r4,r5;
 	r1.x=0;
 	r1.y=0;
@@ -553,7 +555,6 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 	r.w=SCREEN_W;
 	r.h=SCREEN_H;
 	extern SDL_mutex *semVideo;
-
 	int i;
 	for(i=0;i<20;i++){
 	    if(zona&Z_ARRIBA){ 
@@ -599,8 +600,7 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 	    }
 	    SDL_Delay(10);
 	}
-	//alpha=true;
-    }
+    //}
 }
 
 bool Pantalla::salir()
@@ -656,5 +656,9 @@ void Pantalla::minimizar(){
 	    0xFFA500FF,
 	    0x000000FF);
     tcampos.recargar(framestado);
+}
+
+void Pantalla::setHandle(bool handle){
+    this->handle=handle;
 }
 

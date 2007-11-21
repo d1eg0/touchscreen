@@ -1,15 +1,22 @@
 #include "radar.h"
 #include <SDL/SDL_gfxPrimitives.h>
 #include "constantes.h"
+#include <SDL/SDL_rotozoom.h>
 extern SDL_mutex *bloqpantalla;
 int escan(void *r);
 
 Radar::Radar(Frame *frame){
     this->frame=frame;
-
+    //Flecha
+    SDL_Surface *flechatemp=SDL_LoadBMP( "img/flecha.bmp" ); 
+    flecha=SDL_DisplayFormat(flechatemp);
+    SDL_FreeSurface( flechatemp );
+    rot=0;
     color=0x00FF7FFF;
     xm=(int)(frame->getX()+(frame->getW()*0.5));
     ym=(int)(frame->getY()+(frame->getH()*0.5));
+    desp.x=(Uint16)(xm-(float)(flecha->w)*0.5);
+    desp.y=(Uint16)(ym-(float)(flecha->h)*0.5);
     frame->activarFrame();
     float dif=frame->getH()/7.0;
     r1=(int)dif;
@@ -114,6 +121,48 @@ void Radar::addObstaculo(Punto o){
     SDL_mutexV(mutexObstaculo);
 }
 
+void Radar::dibujarFlecha(int rot){
+    extern SDL_mutex *semVideo;
+    SDL_Surface *flecha=NULL;
+    SDL_Surface *flechaopt=NULL;
+    SDL_Rect offset; 
+    offset.x=100;
+    offset.y=100;
+    //flecha
+    
+    //if(SDL_MUSTLOCK(flecha))SDL_LockSurface(flecha);
+    //boxColor(flecha,0,0,100,100,0x00ffffff);
+    //if(SDL_MUSTLOCK(flecha))SDL_UnlockSurface(flecha);
+    //añadirla
+    SDL_mutexP(semVideo);
+     flecha=SDL_LoadBMP( "img/flecha.bmp" ); 
+   // flecha=IMG_Load("flecha.bmp");
+    flechaopt=SDL_DisplayFormat(flecha);
+    Uint32 colorkey = SDL_MapRGB( flechaopt->format, 0xff, 0xff, 0xff );
+    SDL_SetColorKey( flechaopt, SDL_SRCCOLORKEY, colorkey );
+    SDL_Rect r;
+    r.x=0;
+    r.y=0;
+    r.w=SCREEN_W;
+    r.h=SCREEN_H;
+    SDL_SetClipRect(this->getFrame()->getVentana(),&r);
+    if(SDL_MUSTLOCK(this->getFrame()->getVentana()))SDL_LockSurface(this->getFrame()->getVentana());
+    SDL_BlitSurface( flechaopt, NULL, this->getFrame()->getVentana(), &offset );
+    if(SDL_MUSTLOCK(this->getFrame()->getVentana()))SDL_UnlockSurface(this->getFrame()->getVentana());
+    SDL_mutexV(semVideo);
+
+}
+
+SDL_Surface *Radar::getFlecha(){
+    return flecha;
+}
+SDL_Rect Radar::getDesp(){
+    return desp;
+}
+int Radar::getRot(){
+    return rot++;
+}
+
 int escan(void *r){
     extern SDL_mutex *mutexSincRadar;
     extern SDL_cond *condSincRadar;
@@ -125,7 +174,6 @@ int escan(void *r){
     while(1){
 	SDL_mutexP(mutexSincRadar);
 	    if(pauseRadar)SDL_CondWait(condSincRadar,mutexSincRadar);
-	SDL_mutexV(mutexSincRadar);
 	escaner->getFrame()->limpiarFrame(false);
 	escaner->recargar(false);
 	escaner->getFrame()->activarFrame();
@@ -151,11 +199,22 @@ int escan(void *r){
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-85, 0xff000020);
 	
 	if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_UnlockSurface(escaner->getFrame()->getVentana());
+	SDL_Rect desp=escaner->getDesp();
+	SDL_Surface *flecha=rotozoomSurface (escaner->getFlecha(), escaner->getRot(), 0.1, 1);
+	desp.x=(Uint16)(escaner->getX()-(float)(flecha->w)*0.5);
+	desp.y=(Uint16)(escaner->getY()-(float)(flecha->h)*0.5);
+	//SDL_Surface *flecha=escaner->getFlecha();
+	Uint32 colorkey = SDL_MapRGB( flecha->format, 0x00, 0x00, 0x00 );
+	SDL_SetColorKey( flecha, SDL_SRCCOLORKEY|SDL_RLEACCEL, colorkey );
+	SDL_SetAlpha(flecha, SDL_SRCALPHA|SDL_RLEACCEL, 150);
+
+	SDL_BlitSurface( flecha, NULL, escaner->getFrame()->getVentana(), &desp );
+	SDL_FreeSurface( flecha );
 	SDL_mutexV(semVideo);
-//	SDL_UpdateRect(escaner->getFrame()->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
 	escaner->getFrame()->refrescarFrame();
 	ang++;
 	ang%=360;
+	SDL_mutexV(mutexSincRadar);
 	SDL_Delay(20);
     }
     return 0;
