@@ -17,6 +17,10 @@ public:
     Frame *getFrame();
     vector<Punto> getObstaculos();
     void addObstaculo(Punto o);
+    void dibujarFlecha(int rot);
+    SDL_Surface *getFlecha();
+    SDL_Rect getDesp();
+    int getRot();
 private:
     SDL_Thread *s;
     vector<Punto> lobstaculos;
@@ -27,4 +31,7 @@ private:
     int r1,
 	r2,
 	r3;
+    SDL_Rect desp;
+    int rot;
+    SDL_Surface *flecha;
 };

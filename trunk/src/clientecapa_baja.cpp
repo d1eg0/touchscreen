@@ -45,7 +45,17 @@ void ClienteCapaBaja::onDataArrival(string Data)
  
 }
 void ClienteCapaBaja::onError(int ssError){
-    cerr << ssError <<":Error de conexion" << endl;
+    switch(ssError){
+	case 2004:
+	    cerr << "[E]:" << ssError << " - Error de conexion" << endl;
+	    break;
+	case 2008:
+	    cerr << "[E]:" << ssError << " - Intentas enviar sin conexión" << endl;
+	    break;
+	default:
+	    cerr << "[E]:" << ssError << " - Error conexión indefinido" << endl;
+	    break;
+    }
 }
 
 vector<double> ClienteCapaBaja::getValores(){

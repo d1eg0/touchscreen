@@ -19,7 +19,7 @@
 #include "gestorcamino.h"
 #include "radar.h"
 #include "tabla.h"
-
+#include "silla.h"
 using namespace std;
 
 SDL_Surface *surfacePrincipal;
@@ -41,9 +41,11 @@ Frame *framemapa,
 // Etiquetas
 Etiqueta *e_zoom,
 	 *e_vzoom;
+
 Mapa  plano;
 Objetivo objetivo;
 Radar *radar;
+Silla *silla;
 // Mutex
 //  Sincroniza el hilo gestor camino con la recepcion de datos
 SDL_mutex *mutexCapaAlta;
@@ -61,7 +63,8 @@ SDL_mutex *semVideo;
 SDL_mutex *mutexObstaculo;
 
 //Campos de estado
-Campo *cgrid,
+Campo *cconex,
+      *cgrid,
       *cdobstaculo,
       *cvelocidad;
 //Tabla de campos
@@ -97,17 +100,19 @@ int main(int argc, char *argv[])
     } else {
 	Uint8 video_bpp;
 	Uint32 videoflags;
-	videoflags = SDL_HWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN;
-	int h_screen=SCREEN_H;
-	int v_screen=SCREEN_W;
+	videoflags = SDL_HWSURFACE | SDL_SRCALPHA ;//| SDL_FULLSCREEN;
+	//int h_screen=SCREEN_H;
+	//int v_screen=SCREEN_W;
 	const SDL_VideoInfo *info;
 	info=SDL_GetVideoInfo();
-	if ( info->vfmt->BitsPerPixel > 8 ) {
+/*	if ( info->vfmt->BitsPerPixel > 8 ) {
 	    video_bpp = info->vfmt->BitsPerPixel;
 	} else {
 	    video_bpp = 16;
-	}
-	surfacePrincipal=SDL_SetVideoMode(v_screen, h_screen, video_bpp, videoflags);
+	}*/
+	video_bpp=32;
+	surfacePrincipal=SDL_SetVideoMode(SCREEN_W, SCREEN_H, video_bpp, videoflags);
+	//SDL_Surface *surface2=SDL_SetVideoMode(v_screen, h_screen, video_bpp, videoflags);
 	SDL_SetAlpha(surfacePrincipal, SDL_SRCALPHA, 0);
 	SDL_FillRect(surfacePrincipal, 0, 0x000000);
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
@@ -222,6 +227,16 @@ int main(int argc, char *argv[])
 		0x00FF00FF);
     */
 	//c1->updateValor(4);
+	cconex=new Campo(
+		surfacePrincipal,
+		"cx camino:",
+		true,
+		0x000000FF,
+		0x00FF00FF);
+	cconex->valorStr("mal ");
+	tcampos.add("CONEX",cconex);
+	delete cconex;
+
 	cgrid=new Campo(
 		surfacePrincipal,
 		"grid:",
@@ -269,7 +284,10 @@ int main(int argc, char *argv[])
 	sensorNuevoCond=SDL_CreateCond();
 	//clienteCapaBaja.Connect("192.168.1.5", 9998);
 	//GestorEstado gestorEstado;  //Gestiona el estado
-
+	silla=new Silla(framemapa,&plano);
+	silla->setPos(Punto(100,100));
+	silla->dibujar();
+	//radar->dibujarFlecha(0);
 	//Gestion del input
 	while(!pantalla->salir()){
 	    pantalla->entrada();

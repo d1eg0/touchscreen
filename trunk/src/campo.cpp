@@ -163,30 +163,30 @@ void Campo::updateValor(string valor){
 	    areav.y,
 	    areav.x+areav.w,
 	    areav.y+areav.h,
-	    0x000000ff);
+	    0xffffffff);
+    Uint32 cv;
+    if(valor.find("mal")==string::npos){
+	cv=colorValor;
+    }else cv=0xff0000ff;
     stringColor(
 	surface,
 	areav.x, 
 	(int)(areav.y+(areav.h*0.5)-(SIZE_C*0.5)), 
 	valorstr.c_str(), 
-	colorValor);
+	cv);
     if(SDL_MUSTLOCK(surface))SDL_UnlockSurface(surface);
     SDL_UpdateRect(surface, areav.x, areav.y, areav.w, areav.h);
     SDL_mutexV(semVideo);
 }
 
 void Campo::aumentar(){
-    if(valor<maxvalor){
-	valor+=incremento;
-	updateValor(valor);
-    }
+    valor+=incremento;
+    updateValor(valor);
 }
 
 void Campo::disminuir(){
-    if(valor>minvalor){
-	valor-=incremento;
-	updateValor(valor);
-    }
+    valor-=incremento;
+    updateValor(valor);
 }
 
 
@@ -208,15 +208,25 @@ int Campo::presionado(int x, int y){
     return 0;
 }
 
-void Campo::handle(int x, int y){
-    switch ( this->presionado( x, y)){
-    case 1:
-        disminuir();
-        break;
-    case 2:
-        aumentar();
-        break; 
-    case 0:
-        break;
+bool Campo::handle(int x, int y){
+    if(!estatico){
+	switch ( this->presionado( x, y)){
+	case 1:
+	    if((valor-incremento)>minvalor){
+		disminuir();
+		return true;
+	    }else return false;
+	    break;
+	case 2:
+	    if((valor+incremento)<maxvalor){
+		aumentar();
+		return true;
+	    }else return false;
+	    break; 
+	case 0:
+	    return false;
+	    break;
+	}
     }
+    return false;
 }

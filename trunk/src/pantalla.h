@@ -13,7 +13,8 @@ private:
     int h_screen;
     int v_screen;
     bool sdl_quit,
-	 alpha,
+	 //alpha,
+	 handle,
 	 pcontestada;
     const SDL_VideoInfo *info;
 
@@ -27,7 +28,7 @@ public:
     void setAlpha(Frame *frame, Uint8 zona);
     bool salir();
     void minimizar();
-
+    void setHandle(bool handle);
 };
 #endif
 
