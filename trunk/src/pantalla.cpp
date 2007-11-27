@@ -48,6 +48,14 @@ Pantalla::~Pantalla()
     SDL_Quit();
 }
 
+void Pantalla::hideCursor(){
+    SDL_Cursor *cursor;
+    Uint8 data[2]={0x00, 0x00};
+    Uint8 mask[2]={0x00, 0x00};
+    cursor=SDL_CreateCursor(data,mask,2,1,0,0);
+    SDL_SetCursor(cursor);
+}
+
 
 SDL_Surface* Pantalla::getPantalla()
 {
