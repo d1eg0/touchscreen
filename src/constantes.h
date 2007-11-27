@@ -1,14 +1,15 @@
 //Constantes
 
 //Resolución de la pantalla
-#define	    SCREEN_W    800 //anchura
-#define	    SCREEN_H    600 //altura
+#define	    SCREEN_W    640 //anchura
+#define	    SCREEN_H    480 //altura
 //#define	    SCREEN_W    1280 //anchura
 //#define	    SCREEN_H    800 //altura
 
 
 #define	    BORDER	2
-#define	    MARGEN	20
+#define	    MARGENH	20
+#define	    MARGENV	30
 
 //Estado Frame
 #define	    CERRADO	0 //frame cerrado

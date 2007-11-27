@@ -95,11 +95,11 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 		"-",
 		0xFF4848FF);
 	bok->cargarBoton(	    
-		arean.x+165, 
+		arean.x+160, 
 		y, 
 		30,
 		20,
-		"ok!",
+		"ok",
 		0x20B2AAFF);
 
 	if(modificado==false){

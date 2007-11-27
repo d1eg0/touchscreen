@@ -47,7 +47,7 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     this->estado=MINIMO;
 
     this->contenedor.x=x;
-    this->contenedor.y=y-MARGEN;
+    this->contenedor.y=y-MARGENV;
     this->contenedor.w=w+4;
     this->contenedor.h=h;
 
@@ -99,9 +99,9 @@ void Frame::maxFrame(int x,int y,int w,int h){
     this->areamax.y=y;
     
     this->contenedormax.x=areamax.x;
-    this->contenedormax.y=areamax.y-MARGEN;
+    this->contenedormax.y=areamax.y-MARGENV;
     this->contenedormax.w=w;
-    this->contenedormax.h=h+MARGEN;
+    this->contenedormax.h=h+MARGENH;
 
     this->limpiarFrame(true);
     //Etiqueta

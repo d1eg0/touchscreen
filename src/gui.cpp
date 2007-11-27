@@ -122,8 +122,9 @@ int main(int argc, char *argv[])
 
 	//Cargar el frame donde se sitúa el plano
 	framemapa=new Frame(surfacePrincipal);
-	framemapa->cargarFrame(MARGEN,
-		MARGEN,
+	framemapa->cargarFrame(
+		MARGENH,
+		MARGENV,
 		(int)((float)SCREEN_W/10.0*6.0), 
 		(int)((float)SCREEN_H/10.0*7.5),
 		"Plano",0xffffff);
@@ -137,9 +138,9 @@ int main(int argc, char *argv[])
 	//Cargar el frame donde se sitúa el radar
 	frameradar=new Frame(surfacePrincipal);
 	frameradar->cargarFrame(
-		(int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
+		(int)((float)SCREEN_W/10.0*6.0)+2*MARGENH, 
 		SCREEN_H-(int)((float)SCREEN_H/10.0*4.0),
-		(int)((float)SCREEN_W/10.0*2.5)+MARGEN, 
+		(int)((float)SCREEN_W/10.0*2.8)+MARGENH, 
 		(int)((float)SCREEN_H/10.0*3.5),
 		"Radar",
 		0xffffff);
@@ -156,9 +157,9 @@ int main(int argc, char *argv[])
 	//Cargar el frame donde se sitúa el estado
 	framestado=new Frame(surfacePrincipal);
 	framestado->cargarFrame(
-		(int)((float)SCREEN_W/10.0*6.0)+2*MARGEN, 
-		MARGEN,
-		(int)((float)SCREEN_W/10.0*2.5)+MARGEN, 
+		(int)((float)SCREEN_W/10.0*6.0)+2*MARGENH, 
+		MARGENV,
+		(int)((float)SCREEN_W/10.0*2.8)+MARGENH, 
 		(int)((float)SCREEN_H/10.0*5.0),
 		"Estado",
 		0xffffff);
