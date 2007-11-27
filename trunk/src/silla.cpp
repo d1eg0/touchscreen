@@ -18,6 +18,23 @@ void Silla::setPos(Punto pos){
     this->pos=pos;
 }
 
+int Silla::getRot(){
+    extern SDL_mutex *mutexRot;
+    SDL_mutexP(mutexRot);
+    rot++;
+    rot%=360;
+    int rotacion=rot;
+    SDL_mutexV(mutexRot);
+    return rotacion;
+}
+
+void Silla::setRot(int r){
+    extern SDL_mutex *mutexRot;
+    SDL_mutexP(mutexRot);
+    rot+=r;
+    SDL_mutexV(mutexRot);
+}
+
 void Silla::dibujar(){
     int tradio;
     SDL_Rect r=frame->getArea();

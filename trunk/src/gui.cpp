@@ -61,6 +61,8 @@ bool pauseRadar;
 SDL_mutex *semVideo;
 //  Obstaculos
 SDL_mutex *mutexObstaculo;
+//  Silla
+SDL_mutex *mutexRot;
 
 //Campos de estado
 Campo *cconex,
@@ -127,6 +129,10 @@ int main(int argc, char *argv[])
 		"Plano",0xffffff);
 	plano.centrarMapa();
 	plano.pintarMapa(surfacePrincipal,framemapa,100);
+	
+	silla=new Silla(framemapa,&plano);
+	silla->setPos(Punto(100,100));
+	silla->dibujar();
 
 	//Cargar el frame donde se sitúa el radar
 	frameradar=new Frame(surfacePrincipal);
@@ -275,8 +281,8 @@ int main(int argc, char *argv[])
 	    //CapaAlta: mapa, camino y objetivo
 	mutexCapaAlta=SDL_CreateMutex();
 	caminoNuevoCond=SDL_CreateCond();
-	//clienteCapaAlta.Connect("192.168.1.5", 9999);
-	clienteCapaAlta.Connect("localhost", 9999);
+	clienteCapaAlta.Connect("192.168.1.5", 9999);
+	//clienteCapaAlta.Connect("localhost", 9999);
 	GestorCamino gestorCamino(surfacePrincipal);  //Gestiona el estado
 
 	    //CapaBaja: sensores y estado
@@ -284,9 +290,6 @@ int main(int argc, char *argv[])
 	sensorNuevoCond=SDL_CreateCond();
 	//clienteCapaBaja.Connect("192.168.1.5", 9998);
 	//GestorEstado gestorEstado;  //Gestiona el estado
-	silla=new Silla(framemapa,&plano);
-	silla->setPos(Punto(100,100));
-	silla->dibujar();
 	//radar->dibujarFlecha(0);
 	//Gestion del input
 	while(!pantalla->salir()){

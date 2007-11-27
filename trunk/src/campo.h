@@ -40,24 +40,26 @@ public:
 private:
     SDL_Surface *surface;
 
-    string nombre;
+    string nombre; //etiqueta del campo
     SDL_Rect arean;
-    float valor;
-    string valorstr;
-    bool estatico,
-	 numerico;
+    float valor; //valor si es numérico
+    string valorstr; //valor si es estático
+    bool estatico, //si el campo es estático
+	 numerico, //si el campo es numérico
+	 modificado; //si ha sido modificado
     SDL_Rect areav;
 
-    float minvalor;
-    float maxvalor;
-    float incremento;
+    float minvalor; //valor mínimo
+    float maxvalor; //valor máximo
+    float incremento; //valor del incremento
 
-    Uint32 colorNombre;
-    Uint32 colorValor;
+    Uint32 colorNombre; //color de la etiqueta
+    Uint32 colorValor; //color del valor
 
 
-    Boton *bmas;
-    Boton *bmenos;
+    Boton *bmas; //boton para aumentar
+    Boton *bmenos; //boton para disminuir
+    Boton *bok; //boton de ok
 };
 
 #endif

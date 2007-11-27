@@ -15,6 +15,8 @@ public:
     ~Silla();
     Punto getPos();
     void setPos(Punto pos);
+    int getRot();
+    void setRot(int r);
     void dibujar();
 
 };

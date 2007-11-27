@@ -24,12 +24,12 @@ void ClienteCapaAlta::onConnect()
 	myFile.seekg (0, ios::beg);
 	myFile.read (memblock, size);
 	myFile.close();
-//	Send(memblock,size);
+	Send(memblock,size);
 	//Send("hola");
-    }else cerr << "Error: No se puede abrir el fichero" << endl;
+    }else cerr << "[E]: No se puede abrir el fichero" << endl;
 }
 void ClienteCapaAlta::onClose(){
-    cout << "conexcion cerrada" << endl;
+    cerr << "[E]: conexion cerrada" << endl;
     extern Tabla tcampos;
     tcampos.update("CONEX","mal ",false);
 }
