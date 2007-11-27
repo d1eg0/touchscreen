@@ -23,6 +23,7 @@ public:
     ~Pantalla();
 
     SDL_Surface* getPantalla();
+    void hideCursor();
     void entrada();
     void borrar();
     void setAlpha(Frame *frame, Uint8 zona);

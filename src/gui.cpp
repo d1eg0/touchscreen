@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 	SDL_FillRect(surfacePrincipal, 0, 0x000000);
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
 	pantalla=new Pantalla(surfacePrincipal);
-
+	pantalla->hideCursor();
 	//Cargar el frame donde se sitúa el plano
 	framemapa=new Frame(surfacePrincipal);
 	framemapa->cargarFrame(
