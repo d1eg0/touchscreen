@@ -40,17 +40,6 @@ Pantalla::Pantalla(SDL_Surface *screen)
     //alpha=false;
     handle=true;
     info = SDL_GetVideoInfo();
-/*    if ( info->vfmt->BitsPerPixel > 8 ) {
-	video_bpp = info->vfmt->BitsPerPixel;
-    } else {
-	video_bpp = 16;
-    }
-    screen=SDL_SetVideoMode(v_screen, h_screen, video_bpp, videoflags);
-//SDL_DOUBLEBUF|SDL_SWSURFACE);	
-    SDL_SetAlpha(screen, SDL_SRCALPHA, 0);
-    SDL_FillRect( screen, 0, 0x000000);
-    SDL_UpdateRect(screen,0,0,0,0);
-*/
 //    SDL_ShowCursor(SDL_DISABLE);	//ocultar cursor
 }
 
@@ -365,13 +354,14 @@ void Pantalla::entrada()
 		this->borrar();
 	    }	
 	    else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
-		this->borrar();
 		if(framemapa->getEstado()==MINIMO){
-		    
 		    SDL_mutexP(mutexSincRadar);
 		    pauseRadar=true;
 		    SDL_mutexV(mutexSincRadar);
-
+		    //SDL_Delay(100);
+		    cout << "v: he puesto a true pauseRadar" << endl;
+		    this->borrar();
+		    
 		    frameradar->desactivarFrame();
 		    framestado->desactivarFrame();
 		    framemapa->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,framemapa->getH());
@@ -422,6 +412,7 @@ void Pantalla::entrada()
 			    0xFFA500FF,
 			    0x000000FF);
 		}else{ 
+		    this->borrar();
 		    this->minimizar();
 		    SDL_mutexP(mutexSincRadar);
 		    pauseRadar=false;
@@ -456,12 +447,12 @@ void Pantalla::entrada()
 		//SDL_UpdateRect(screen,0,0,0,0);
 	    }
 	    else if(framestado->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
-		this->borrar();
 		if(framestado->getEstado()==MINIMO){
 		    
 		    SDL_mutexP(mutexSincRadar);
 		    pauseRadar=true;
 		    SDL_mutexV(mutexSincRadar);
+		    this->borrar();
 		    
 		    frameradar->desactivarFrame();
 		    framestado->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,SCREEN_H-2*MARGEN);
@@ -477,6 +468,7 @@ void Pantalla::entrada()
 
 		    tcampos.recargar(framestado);
 		}else if(framestado->getEstado()==MAXIMO){
+		    this->borrar();
 		    this->minimizar();
 		    SDL_mutexP(mutexSincRadar);
 		    pauseRadar=false;

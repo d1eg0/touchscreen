@@ -171,7 +171,10 @@ int escan(void *r){
     Uint16 ang=90;
     while(1){
 	SDL_mutexP(mutexSincRadar);
-	    if(pauseRadar)SDL_CondWait(condSincRadar,mutexSincRadar);
+	    if(pauseRadar==true){
+		SDL_CondWait(condSincRadar,mutexSincRadar);
+	    }
+
 	escaner->getFrame()->limpiarFrame(false);
 	escaner->recargar(false);
 	escaner->getFrame()->activarFrame();
