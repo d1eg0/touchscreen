@@ -1,7 +1,6 @@
 #ifndef BOTON_H
 #define BOTON_H
 #include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
 
 
 enum EstadoBoton {activo=1, inactivo=0, z=3};
@@ -35,7 +34,6 @@ private:
 	Uint32 color;
 
 	SDL_Surface *surfacef;
-	TTF_Font *fuente;
 	SDL_Color colorFuente;
 	int Sizef;
 //	int Stylef;

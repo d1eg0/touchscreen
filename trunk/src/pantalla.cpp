@@ -358,13 +358,11 @@ void Pantalla::entrada()
 		    SDL_mutexP(mutexSincRadar);
 		    pauseRadar=true;
 		    SDL_mutexV(mutexSincRadar);
-		    //SDL_Delay(100);
-		    cout << "v: he puesto a true pauseRadar" << endl;
 		    this->borrar();
 		    
 		    frameradar->desactivarFrame();
 		    framestado->desactivarFrame();
-		    framemapa->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,framemapa->getH());
+		    framemapa->maxFrame(MARGENH,MARGENV,SCREEN_W-2*MARGENH,framemapa->getH());
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
 		    if(objetivo.getFijado()){
 			objetivo.load();
@@ -428,7 +426,7 @@ void Pantalla::entrada()
 		if(frameradar->getEstado()==MINIMO){
 		    framemapa->desactivarFrame();
 		    framestado->desactivarFrame();
-		    frameradar->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,SCREEN_H-2*MARGEN);
+		    frameradar->maxFrame(MARGENH, MARGENV, SCREEN_W-2*MARGENH, SCREEN_H-2*MARGENV);
 
 		    //desactivar botones de zoom y desplazamiento
 		    botonDerecha->desactivar();
@@ -455,7 +453,7 @@ void Pantalla::entrada()
 		    this->borrar();
 		    
 		    frameradar->desactivarFrame();
-		    framestado->maxFrame(MARGEN,MARGEN,SCREEN_W-2*MARGEN,SCREEN_H-2*MARGEN);
+		    framestado->maxFrame(MARGENH,MARGENV,SCREEN_W-2*MARGENH,SCREEN_H-2*MARGENV);
 		    framemapa->desactivarFrame();
 		    //desactivar botones de zoom y desplazamiento
 		    botonDerecha->desactivar();
