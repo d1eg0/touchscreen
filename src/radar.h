@@ -8,7 +8,6 @@ public:
     Radar(Frame *frame);
     ~Radar();
     void recargar(bool refresh);
-    //void escan();
     int getX();
     int getY();
     int getR1();
@@ -20,7 +19,6 @@ public:
     void dibujarFlecha(int rot);
     SDL_Surface *getFlecha();
     SDL_Rect getDesp();
-    int getRot();
 private:
     SDL_Thread *s;
     vector<Punto> lobstaculos;

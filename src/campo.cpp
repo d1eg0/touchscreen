@@ -17,9 +17,11 @@ Campo::Campo(SDL_Surface *surface,
     if(!estatico){
 	bmas=new Boton(surface);
 	bmenos=new Boton(surface);
+	bok=new Boton(surface);
     }
     this->colorNombre=colorNombre;
     this->colorValor=colorValor;
+    this->modificado=false;
 }
 
 Campo::~Campo()
@@ -35,7 +37,6 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
     this->arean.y=y;
     this->arean.w=SIZE_C*nombre.size();
     this->arean.h=SIZE_C*2;
-    
 		
     extern SDL_mutex *semVideo;
     SDL_mutexP(semVideo);
@@ -93,6 +94,19 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 		20,
 		"-",
 		0xFF4848FF);
+	bok->cargarBoton(	    
+		arean.x+165, 
+		y, 
+		30,
+		20,
+		"ok!",
+		0x20B2AAFF);
+
+	if(modificado==false){
+	    bok->desactivar();
+	    bok->borrar();
+	}
+
     }
 	//SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
@@ -205,26 +219,41 @@ string Campo::getVstr(){
 int Campo::presionado(int x, int y){
     if(bmas->presionado(x,y))return 2;
     if(bmenos->presionado(x,y))return 1;
+    if(bok->presionado(x,y))return 3;
     return 0;
 }
 
+/** Se encarga del input mouse 
+ *  Retorna true si se ha presionado Ok
+ *  retorna false en cualquier otro caso
+ * */
 bool Campo::handle(int x, int y){
     if(!estatico){
 	switch ( this->presionado( x, y)){
+	case 0:
+	    return false;
+	    break;
 	case 1:
 	    if((valor-incremento)>minvalor){
+		modificado=true;
+		bok->recargarBoton();
 		disminuir();
-		return true;
-	    }else return false;
+	    }
+	    return false;
 	    break;
 	case 2:
 	    if((valor+incremento)<maxvalor){
+		modificado=true;
+		bok->recargarBoton();
 		aumentar();
-		return true;
-	    }else return false;
-	    break; 
-	case 0:
+	    }
 	    return false;
+	    break; 
+	case 3:
+	    modificado=false;
+	    bok->desactivar();
+	    bok->borrar();
+	    return true;
 	    break;
 	}
     }

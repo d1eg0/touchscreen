@@ -2,6 +2,7 @@
 #include <SDL/SDL_gfxPrimitives.h>
 #include "constantes.h"
 #include <SDL/SDL_rotozoom.h>
+#include "silla.h"
 extern SDL_mutex *bloqpantalla;
 int escan(void *r);
 
@@ -38,7 +39,6 @@ Radar::Radar(Frame *frame){
 	    xm,
 	    frame->getY()+frame->getH(),
 	    color);
-    //filledPieColor(frame->getVentana(), xm, ym, r3, 0, 45, 0xff0000ff);
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_UnlockSurface(frame->getVentana());
     SDL_UpdateRect(frame->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
     s= SDL_CreateThread(escan, (void*)this);
@@ -159,18 +159,16 @@ SDL_Surface *Radar::getFlecha(){
 SDL_Rect Radar::getDesp(){
     return desp;
 }
-int Radar::getRot(){
-    return rot++;
-}
 
+//Hilo de escaner
 int escan(void *r){
     extern SDL_mutex *mutexSincRadar;
     extern SDL_cond *condSincRadar;
     extern bool pauseRadar;
     extern SDL_mutex *semVideo;
+    extern Silla *silla;
     Radar *escaner=(Radar*)r;
     Uint16 ang=90;
-//    SDL_Delay(1000);
     while(1){
 	SDL_mutexP(mutexSincRadar);
 	    if(pauseRadar)SDL_CondWait(condSincRadar,mutexSincRadar);
@@ -191,19 +189,22 @@ int escan(void *r){
 		    3,
 		    0xffa500ff);
 	    
-	    //SDL_Delay(20000);
 	}
+	//Dibujar radar con degradado
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang, 0xff000090);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-75, 0xff000020);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-80, 0xff000020);
 	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-85, 0xff000020);
 	
 	if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_UnlockSurface(escaner->getFrame()->getVentana());
+	
+	//Rotar la imagen
+	SDL_Surface *flecha=rotozoomSurface (escaner->getFlecha(), silla->getRot(), 0.1, 1);
+	//central la imagen	
 	SDL_Rect desp=escaner->getDesp();
-	SDL_Surface *flecha=rotozoomSurface (escaner->getFlecha(), escaner->getRot(), 0.1, 1);
 	desp.x=(Uint16)(escaner->getX()-(float)(flecha->w)*0.5);
 	desp.y=(Uint16)(escaner->getY()-(float)(flecha->h)*0.5);
-	//SDL_Surface *flecha=escaner->getFlecha();
+	//añadir transparencias
 	Uint32 colorkey = SDL_MapRGB( flecha->format, 0x00, 0x00, 0x00 );
 	SDL_SetColorKey( flecha, SDL_SRCCOLORKEY|SDL_RLEACCEL, colorkey );
 	SDL_SetAlpha(flecha, SDL_SRCALPHA|SDL_RLEACCEL, 150);
@@ -215,7 +216,8 @@ int escan(void *r){
 	ang++;
 	ang%=360;
 	SDL_mutexV(mutexSincRadar);
-	SDL_Delay(20);
+	SDL_Delay(20);//refresco
+
     }
     return 0;
 }

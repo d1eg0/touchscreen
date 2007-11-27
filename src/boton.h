@@ -26,6 +26,7 @@ public:
 	//int GetW();
 	//int GetH();
 	void desactivar();     
+	void borrar();
 
 private:
 	SDL_Rect area;
