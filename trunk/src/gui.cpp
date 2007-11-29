@@ -21,7 +21,7 @@
 #include "tabla.h"
 #include "silla.h"
 using namespace std;
-
+int SCREEN_H, SCREEN_W;
 SDL_Surface *surfacePrincipal;
 Pantalla *pantalla;
 //Botones
@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
     DL_Dxf* dxf = new DL_Dxf();
     if (!dxf->in(mapadxf, parser_dxf)) {
 	std::cerr << "No se ha podido abrir el DXF.\n";
+	exit(-1);
     }
     delete dxf;
     delete parser_dxf;
@@ -113,7 +114,17 @@ int main(int argc, char *argv[])
 	    video_bpp = 16;
 	}*/
 	video_bpp=32;
-	surfacePrincipal=SDL_SetVideoMode(SCREEN_W, SCREEN_H, video_bpp, videoflags);
+	Uint32 modo=SDL_VideoModeOK(1024, 768, video_bpp, SDL_HWSURFACE);
+	if(modo){
+	    SCREEN_W=1024;
+	    SCREEN_H=768;
+	    surfacePrincipal=SDL_SetVideoMode(SCREEN_W, SCREEN_H, video_bpp, videoflags);
+	}else {
+	    cerr << "El HW no soporta el modo actual" << endl;
+	    exit(-1);
+	}
+
+
 	//SDL_Surface *surface2=SDL_SetVideoMode(v_screen, h_screen, video_bpp, videoflags);
 	SDL_SetAlpha(surfacePrincipal, SDL_SRCALPHA, 0);
 	SDL_FillRect(surfacePrincipal, 0, 0x000000);

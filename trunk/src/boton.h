@@ -1,45 +1,65 @@
 #ifndef BOTON_H
 #define BOTON_H
 #include <SDL/SDL.h>
+/**
+ *    \file  boton.h
+ *   \brief  
+ *
+ *  Crear botones
+ *
+ *  \author  Diego García Valverde , kobydiego@gmail.com
+ *
+ *  \internal
+ *    Created:  29/11/07
+ *   Compiler:  gcc/g++
+ *    Company:  UIB
+ *
+ *  This source code is released for free distribution under the terms of the
+ *  GNU General Public License as published by the Free Software Foundation.
+ * =====================================================================================
+ */
 
 
+
+/**
+ *  \class Boton
+ *  \brief Crea botones
+ *   
+ *  \par 
+ */
 enum EstadoBoton {activo=1, inactivo=0, z=3};
 
 class Boton  
 {
 public:
-	Boton(SDL_Surface *Ventana);
-	virtual ~Boton();
-
-	void cargarBoton(int x, int y, int w, int h, char *c, Uint32 color);
-	void recargarBoton();
-	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
-	
-	//void InsertarTexto(char *_text);
-//	void dibujarBoton();
-
-	bool presionado(int xm, int ym);
-	bool getEstado();
-	//int GetX();
-	//int GetY();
-	//int GetW();
-	//int GetH();
-	void desactivar();     
-	void borrar();
+    /** Constructor, se ha de indicar donde sera pintado -> Ventana */
+    Boton(SDL_Surface *Ventana);
+    virtual ~Boton();
+    /** visualizar el boton en la posicion (x,y) y con una dimension de (w x h) = ancho x alto */
+    void cargarBoton(int x, int y, int w, int h, char *c, Uint32 color);
+    /** para visualizar el boton en caso de haber sido borrado */
+    void recargarBoton();
+    /** devuelve true si el boton esta presionado, false en caso contrario */ 
+    bool presionado(int xm, int ym);
+    /** devuelve el estado del boton, true=activo false=inactivo */
+    bool getEstado();
+    /** desactiva el boton, pero se sigue visualizando */
+    void desactivar();     
+    /** borra el boton */
+    void borrar();
 
 private:
-	SDL_Rect area;
-	SDL_Surface *ventana;
-	char *texto;
-	Uint32 color;
+    SDL_Rect area;
+    SDL_Surface *ventana;
+    char *texto;
+    Uint32 color;
 
-	SDL_Surface *surfacef;
-	SDL_Color colorFuente;
-	int Sizef;
-//	int Stylef;
-	SDL_Rect contenedor;
-	
-	EstadoBoton estado;
+    SDL_Surface *surfacef;
+    SDL_Color colorFuente;
+    int Sizef;
+    SDL_Rect contenedor;
+    
+    EstadoBoton estado;
 
 };
 

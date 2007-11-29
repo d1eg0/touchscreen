@@ -9,6 +9,7 @@
 #include <SDL/SDL_thread.h>
 #include <sstream>
 #include "clientecapa_alta.h"
+extern int SCREEN_W,SCREEN_H;
 extern Boton *botonMasZoom, 
        *botonMenosZoom;
 extern Boton *botonDerecha,
