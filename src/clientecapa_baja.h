@@ -8,9 +8,16 @@
 #include <sstream>
 #include <iostream>
 
+/**
+ *  \class ClienteCapaBaja
+ *  \brief gestiona la conexion con el embedded IA
+ *   
+ *  \par 
+ */
 class ClienteCapaBaja : public ssPPClient
 {
 public:
+    /** devuelve los valores obtenidos */
     vector<double> getValores();
 private:
     vector<double> listaValores;

@@ -1,5 +1,5 @@
 ## Macros
-
+DOC = ../dox
 CC = g++
 RM = rm -f
 CFLAGS = -g -Wall -O2
@@ -21,3 +21,8 @@ $(PROGRAMA):	$(OBJ)
 
 clean:
 	$(RM) $(OBJ) $(PROGRAMA)
+	$(RM) -r $(DOC)/html $(DOC)/latex $(DOC)/dox-warnings.log
+
+doc:
+	@doxygen ../dox/dox.conf >/dev/null;
+	@echo "documentacion creada!"

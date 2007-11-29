@@ -1,5 +1,5 @@
 /**
- *    \file  Polilinea.h
+ *   \file  polilinea.h
  *   \brief  
  *
  *  Detailed description starts here.
