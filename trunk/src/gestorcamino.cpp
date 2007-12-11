@@ -16,16 +16,16 @@ extern SDL_mutex *mutexCapaAlta;
 extern SDL_cond *caminoNuevoCond;
 extern Mapa plano;
 extern Pantalla *pantalla;
-int initCamino(void *p);
+int threadCamino(void *p);
 
 GestorCamino::GestorCamino(SDL_Surface *surface){
-    gestor = SDL_CreateThread(initCamino, (void*)surface);
+    gestor = SDL_CreateThread(threadCamino, (void*)surface);
 }
 GestorCamino::~GestorCamino(){
     SDL_KillThread(gestor);
 }
 
-int initCamino(void *p){
+int threadCamino(void *p){
     SDL_Surface *screen=(SDL_Surface*)p;
     extern Frame *framemapa;
     double v=0;

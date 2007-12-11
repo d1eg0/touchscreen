@@ -4,14 +4,14 @@ extern SDL_cond *sensorNuevoCond;
 extern SDL_mutex *mutexCapaBaja;
 extern ClienteCapaBaja clienteCapaBaja;
 
-int initEstado(void *p);
+int threadEstado(void *p);
 GestorEstado::GestorEstado(){
-    gestor = SDL_CreateThread(initEstado, NULL);
+    gestor = SDL_CreateThread(threadEstado, NULL);
 }
 GestorEstado::~GestorEstado(){
     SDL_KillThread(gestor);
 }
-int initEstado(void *p){
+int threadEstado(void *p){
     while(1){
 	SDL_mutexP(mutexCapaBaja);
 	cout<< "gestor estado: Espero" << endl;
