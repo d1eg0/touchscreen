@@ -6,6 +6,14 @@
 #include <iostream>
 #include <vector>
 #include "clientecapa_baja.h"
+
+/**
+ *  \class GestorEstado
+ *  \brief Hilo que realiza la lectura de los valores de los sensores cuando se reciben
+ *   
+ *  \par 
+ */
+
 using namespace std;
 class GestorEstado{
 public:

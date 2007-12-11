@@ -13,7 +13,7 @@ void ClienteCapaAlta::onConnect()
     cout << "ClienteCapaAlta: conectando..." << endl;
     while(this->getStatus()==1001){}//Esperar la conexion
     extern Tabla tcampos;
-    tcampos.update("CONEX","bien",false);
+    tcampos.update("CONEX","bien");
     cout << "ClienteCapaAlta: conectado!" << endl;
     ifstream::pos_type size;
     char * memblock;
@@ -31,7 +31,7 @@ void ClienteCapaAlta::onConnect()
 void ClienteCapaAlta::onClose(){
     cerr << "[E]: conexion cerrada" << endl;
     extern Tabla tcampos;
-    tcampos.update("CONEX","mal ",false);
+    tcampos.update("CONEX","mal ");
 }
 void ClienteCapaAlta::onLineArrival(string Cadena)
 {
@@ -72,7 +72,7 @@ void ClienteCapaAlta::onError(int ssError){
 	    break;
     }
     extern Tabla tcampos;
-    tcampos.update("CONEX","mal ",false);
+    tcampos.update("CONEX","mal ");
 }
 
 vector<Punto> ClienteCapaAlta::getCamino(){
