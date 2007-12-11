@@ -114,10 +114,10 @@ int main(int argc, char *argv[])
 	    video_bpp = 16;
 	}*/
 	video_bpp=32;
-	Uint32 modo=SDL_VideoModeOK(1024, 768, video_bpp, SDL_HWSURFACE);
+	SCREEN_W=640;
+	SCREEN_H=480;
+	Uint32 modo=SDL_VideoModeOK(SCREEN_W, SCREEN_H, video_bpp, SDL_HWSURFACE);
 	if(modo){
-	    SCREEN_W=640;
-	    SCREEN_H=480;
 	    surfacePrincipal=SDL_SetVideoMode(SCREEN_W, SCREEN_H, video_bpp, videoflags);
 	}else {
 	    cerr << "El HW no soporta el modo actual" << endl;
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
 		true,
 		0x000000FF,
 		0x00FF00FF);
-	cconex->valorStr("mal ");
+	cconex->valorStr("");
 	tcampos.add("CONEX",cconex);
 	delete cconex;
 
