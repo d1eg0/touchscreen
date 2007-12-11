@@ -24,5 +24,5 @@ clean:
 	$(RM) -r $(DOC)/html $(DOC)/latex $(DOC)/dox-warnings.log
 
 doc:
-	@doxygen ../dox/dox.conf >/dev/null;
+	@cd $(DOC)&& doxygen dox.conf >/dev/null;
 	@echo "documentacion creada!"

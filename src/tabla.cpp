@@ -14,23 +14,15 @@ Campo Tabla::get(string n){
     return tabla.find(n)->second;
 }
 
-void Tabla::update(string n, string v, bool enviar){
+void Tabla::update(string n, string v){
     tabla.find(n)->second.updateValor(v);
-/*    if(enviar){
-	extern ClienteCapaBaja clienteCapaBaja;
-	clienteCapaBaja.Send(n+" "+v+"\n\r");
-    }*/
 }
 
-void Tabla::update(string n, float v, bool enviar){
+void Tabla::update(string n, float v){
     stringstream buffer;
     buffer << v;
 
     tabla.find(n)->second.updateValor(v);
-/*    if(enviar){
-	extern ClienteCapaBaja clienteCapaBaja;
-	clienteCapaBaja.Send(n+" "+buffer.str()+"\n\r");
-    }*/
 }
 
 void Tabla::handle(int x,int y){

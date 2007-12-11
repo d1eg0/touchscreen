@@ -9,16 +9,33 @@
 #include "clientecapa_baja.h"
 using namespace std;
 
+/**
+ *  \class Tabla
+ *  \brief tabla compuesta por elementos de clase Campo
+ *   
+ *  \par 
+ */
 class Tabla{
 public:
     Tabla();
     ~Tabla();
 
+    /** Añadir un campo a la tabla con la etiqueta unica 'n' */
     void add(string n,Campo *c);
+
+    /** Devuelve el campo con la etiqueta 'n' */
     Campo get(string n);
-    void update(string n, string v, bool enviar);
-    void update(string n, float v, bool enviar);
+
+    /** Cambia el valor del campo con la etiqueta 'n' por el valor string 'v'*/
+    void update(string n, string v);
+
+    /** Cambia el valor del campo con la etiqueta 'n' por el valor float 'v'*/
+    void update(string n, float v);
+
+    /** Gestiona el input de la pantalla tactil */
     void handle(int x, int y);
+
+    /** Recarga la tabla en el Frame 'frame' */
     void recargar(Frame *frame);
 
 private:

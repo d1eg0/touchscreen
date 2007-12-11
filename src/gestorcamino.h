@@ -4,6 +4,14 @@
 #include <SDL/SDL.h>
 #include <stdlib.h>
 #include "frame.h"
+
+/**
+ *  \class GestorCamino
+ *  \brief Hilo que se encarga de la lectura del camino cuando se
+ *  recibe
+ *   
+ *  \par 
+ */
 using namespace std;
 class GestorCamino{
 public:
