@@ -43,7 +43,7 @@
 #define	    Z_ABAJO	0x4
 #define	    Z_DERECHA	0x8
 #define	    Z_CENTRO	0x10
-
+#define	    Z_TOTAL	0x1F	
 
 //Identificadores de los clientes
 #define	    TRAMAPLANO    0

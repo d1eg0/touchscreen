@@ -16,7 +16,7 @@ int threadEstado(void *p){
 	SDL_mutexP(mutexCapaBaja);
 	cout<< "gestor estado: Espero" << endl;
 	SDL_CondWait(sensorNuevoCond, mutexCapaBaja);
-	cout<< "gestor estado: Sigo" << endl;
+	cout<< "gestor estado: Nueva INFO" << endl;
 	vector<double> valores=clienteCapaBaja.getValores();
 	SDL_mutexV(mutexCapaBaja);
     }

@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 	video_bpp=32;
 	SCREEN_W=640;
 	SCREEN_H=480;
-	Uint32 modo=SDL_VideoModeOK(SCREEN_W, SCREEN_H, video_bpp, SDL_HWSURFACE);
+	Uint32 modo=SDL_VideoModeOK(SCREEN_W, SCREEN_H, video_bpp, videoflags);
 	if(modo){
 	    surfacePrincipal=SDL_SetVideoMode(SCREEN_W, SCREEN_H, video_bpp, videoflags);
 	}else {
@@ -129,7 +129,8 @@ int main(int argc, char *argv[])
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
 	pantalla=new Pantalla(surfacePrincipal);
 	//Ocultar el cursor
-	pantalla->hideCursor();
+	//pantalla->hideCursor();
+
 	//Cargar el frame donde se sitúa el plano
 	framemapa=new Frame(surfacePrincipal);
 	framemapa->cargarFrame(

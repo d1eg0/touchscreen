@@ -1,4 +1,6 @@
 #include "clientecapa_baja.h"
+#include <SDL/SDL.h>
+#include "tabla.h"
 
 extern SDL_cond* sensorNuevoCond;
 extern SDL_mutex* mutexCapaBaja;
@@ -6,10 +8,14 @@ extern SDL_mutex* mutexCapaBaja;
 void ClienteCapaBaja::onConnect()
 {
     //cout << this->getStatus() << endl;
-    while(this->getStatus()==1001){}//Esperar la conexion
+    while(this->getStatus()==1001){SDL_Delay(1);}//Esperar la conexion
+    extern Tabla tcampos;
+    tcampos.update("CONEX","bien");
+    cout << "ClienteCapaBaja: conectado!" << endl;
     //Send("hola");
 
 }
+/*
 void ClienteCapaBaja::onDataArrival(string Data)
 {
     cout << "ClienteCapaBaja recibe:" << Data << endl;   
@@ -44,16 +50,48 @@ void ClienteCapaBaja::onDataArrival(string Data)
     SDL_CondSignal(sensorNuevoCond);
  
 }
+*/
+void ClienteCapaBaja::onLineArrival(string Cadena)
+{
+    cout << "\t****ClienteCapaBaja recibe:\"" << Cadena <<"\"" << endl;   
+    cout << "Rx-Bytes:" << getNumBytesReceived() << " Bloques:" << getNumBlocksReceived() <<endl;
+    string Data(Cadena);
+
+    if(Data.find("ERROR")==string::npos){
+	double x,y;
+	char *pblanco;
+	x=strtod(Data.c_str(),&pblanco);
+	y=strtod(pblanco,&pblanco);
+	//Punto p(x,y);
+	cout << "x:"<< x << " y:" << y << endl;
+	SDL_mutexP(mutexCapaBaja);
+	//listaValores.push_back(p);
+	SDL_mutexV(mutexCapaBaja);
+	//si hay un dolar es final de datos
+	if(Data.find("$")!=string::npos){
+	    SDL_CondSignal(sensorNuevoCond);
+	}
+    }else SDL_CondSignal(sensorNuevoCond);
+    
+    //Activar la condicion del thread gestor_capaalta
+}
+
+void ClienteCapaBaja::onClose(){
+    cerr << "[E]: conexion cerrada" << endl;
+    extern Tabla tcampos;
+    tcampos.update("CONEX","mal ");
+}
+
 void ClienteCapaBaja::onError(int ssError){
     switch(ssError){
 	case 2004:
-	    cerr << "[E]:" << ssError << " - Error de conexion" << endl;
+	    cerr << "[E]:" << ssError << " Baja - Error de conexion" << endl;
 	    break;
 	case 2008:
-	    cerr << "[E]:" << ssError << " - Intentas enviar sin conexión" << endl;
+	    cerr << "[E]:" << ssError << " Baja - Intentas enviar sin conexión" << endl;
 	    break;
 	default:
-	    cerr << "[E]:" << ssError << " - Error conexión indefinido" << endl;
+	    cerr << "[E]:" << ssError << " Baja - Error conexión indefinido" << endl;
 	    break;
     }
 }

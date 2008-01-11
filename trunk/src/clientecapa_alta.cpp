@@ -11,7 +11,7 @@ void ClienteCapaAlta::onConnect()
 {
     //cout << this->getStatus() << endl;
     cout << "ClienteCapaAlta: conectando..." << endl;
-    while(this->getStatus()==1001){}//Esperar la conexion
+    while(this->getStatus()==1001){SDL_Delay(1);}//Esperar la conexion
     extern Tabla tcampos;
     tcampos.update("CONEX","bien");
     cout << "ClienteCapaAlta: conectado!" << endl;
@@ -24,8 +24,9 @@ void ClienteCapaAlta::onConnect()
 	myFile.seekg (0, ios::beg);
 	myFile.read (memblock, size);
 	myFile.close();
+	Send("[MAPA]\r\n");
+//	Send("datos_binarios");
 	Send(memblock,size);
-	//Send("hola");
     }else cerr << "[E]: No se puede abrir el fichero" << endl;
 }
 void ClienteCapaAlta::onClose(){
@@ -38,20 +39,24 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
     cout << "\t****ClienteCapaAlta recibe:\"" << Cadena <<"\"" << endl;   
     cout << "Rx-Bytes:" << getNumBytesReceived() << " Bloques:" << getNumBlocksReceived() <<endl;
     string Data(Cadena);
-    //buffer << Data <<" ";
-    if(Data.find("ERROR")==string::npos){
+
+    if(Data.find("[ERROR]")==string::npos){
 	double x,y;
 	char *pblanco;
-	//Data=buffer.str();
-	x=strtod(Data.c_str(),&pblanco);
-	y=strtod(pblanco,&pblanco);
+	if(Data.find("[RUTA]")!=string::npos){
+	    cout << "Inicio Ruta" << endl;
+	    Data.erase(0,6);
+	    x=strtod(Data.c_str(),&pblanco);
+	    y=strtod(pblanco,&pblanco);
+	}
 	Punto p(x,y);
 	cout << "x:"<< x << " y:" << y << endl;
 	SDL_mutexP(mutexCapaAlta);
 	listaPuntos.push_back(p);
 	SDL_mutexV(mutexCapaAlta);
-	//si hay un dolar es final de datos
-	if(Data.find("$")!=string::npos){
+
+	if(Data.find("[FIN_RUTA]")!=string::npos){
+	    cout << "Final Ruta" << endl;
 	    SDL_CondSignal(caminoNuevoCond);
 	}
     }else SDL_CondSignal(caminoNuevoCond);
@@ -62,13 +67,13 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
 void ClienteCapaAlta::onError(int ssError){
     switch(ssError){
 	case 2004:
-	    cerr << "[E]:" << ssError << " - Error de conexion" << endl;
+	    cerr << "[E]:" << ssError << " Alta - Error de conexion" << endl;
 	    break;
 	case 2008:
-	    cerr << "[E]:" << ssError << " - Intentas enviar sin conexión" << endl;
+	    cerr << "[E]:" << ssError << " Alta - Intentas enviar sin conexión" << endl;
 	    break;
 	default:
-	    cerr << "[E]:" << ssError << " - Error conexión indefinido" << endl;
+	    cerr << "[E]:" << ssError << " Alta - Error conexión indefinido" << endl;
 	    break;
     }
     extern Tabla tcampos;

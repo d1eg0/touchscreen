@@ -21,13 +21,14 @@ Radar::Radar(Frame *frame){
     desp.y=(Uint16)(ym-(float)(flecha->h)*0.5);
     frame->activarFrame();
     float dif=frame->getH()/7.0;
-    r1=(int)dif;
-    r2=(int)(dif*2.0);
-    r3=(int)(dif*3.0);
+    r[0]=(int)dif;
+    r[1]=(int)(dif*2.0);
+    r[2]=(int)(dif*3.0);
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_LockSurface(frame->getVentana());
-    circleColor(frame->getVentana(),xm,ym,r1,color);
-    circleColor(frame->getVentana(),xm,ym,r2,color);
-    circleColor(frame->getVentana(),xm,ym,r3,color);
+    circleColor(frame->getVentana(),xm,ym,r[0],color);
+    circleColor(frame->getVentana(),xm,ym,r[1],color);
+    circleColor(frame->getVentana(),xm,ym,r[2],color);
+
     lineColor(frame->getVentana(),
 	    frame->getX(),
 	    ym,
@@ -57,17 +58,61 @@ Radar::~Radar(){
 
 
 void Radar::recargar(bool refresh){
+    extern SDL_mutex *semVideo;
     frame->activarFrame();
     xm=(int)(frame->getX()+(frame->getW()*0.5));
     ym=(int)(frame->getY()+(frame->getH()*0.5));
     float dif=frame->getH()/7.0;
-    r1=(int)dif;
-    r2=(int)(dif*2.0);
-    r3=(int)(dif*3.0);
+    r[0]=(int)dif;
+    r[1]=(int)(dif*2.0);
+    r[2]=(int)(dif*3.0);
+    SDL_mutexP(semVideo);
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_LockSurface(frame->getVentana());
-    circleColor(frame->getVentana(),xm,ym,r1,color);
-    circleColor(frame->getVentana(),xm,ym,r2,color);
-    circleColor(frame->getVentana(),xm,ym,r3,color);
+    circleColor(frame->getVentana(),xm,ym,r[0],color);
+    circleColor(frame->getVentana(),xm,ym,r[1],color);
+    circleColor(frame->getVentana(),xm,ym,r[2],color);
+    //Etiquetas de escala
+    Uint32 colorE=color&0xffffff80;
+    char* escalapos[3]={"5","10","15"};
+    char* escalaneg[3]={"-5","-10","-15"};
+    int i;
+    //+X
+    for(i=0;i<3;i++){
+	stringColor(
+		frame->getVentana(),
+		xm+r[i]+4, 
+		ym-10, 
+		escalapos[i], 
+		colorE);
+    }
+    //-X
+    for(i=0;i<3;i++){
+	stringColor(
+		frame->getVentana(),
+		xm-r[i]-15-i*5, 
+		ym-10, 
+		escalaneg[i], 
+		colorE);
+    }
+    //+Y
+    for(i=0;i<3;i++){
+	stringColor(
+		frame->getVentana(),
+		xm+4, 
+		ym-r[i]-10, 
+		escalapos[i], 
+		colorE);
+    }
+    //-Y
+    for(i=0;i<3;i++){
+	stringColor(
+		frame->getVentana(),
+		xm+4, 
+		ym+r[i]+3, 
+		escalaneg[i], 
+		colorE);
+    }
+    //Cruz del radar
     lineColor(frame->getVentana(),
 	    frame->getX(),
 	    ym,
@@ -83,6 +128,7 @@ void Radar::recargar(bool refresh){
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_UnlockSurface(frame->getVentana());
     if(refresh)
 	SDL_UpdateRect(frame->getVentana(), 0, 0, SCREEN_W, SCREEN_H);
+    SDL_mutexV(semVideo);
 
 }
 
@@ -94,13 +140,13 @@ int Radar::getY(){
     return ym;
 }
 int Radar::getR1(){
-    return r1;
+    return r[0];
 }
 int Radar::getR2(){
-    return r2;
+    return r[1];
 }
 int Radar::getR3(){
-    return r3;
+    return r[2];
 }
 Frame *Radar::getFrame(){
     return frame;
@@ -195,10 +241,10 @@ int escan(void *r){
 	    
 	}
 	//Dibujar radar con degradado
-	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang, 0xff000090);
-	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-75, 0xff000020);
-	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-80, 0xff000020);
-	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-85, 0xff000020);
+	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang, 0xff000050);
+	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-75, 0xff000015);
+	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-80, 0xff000015);
+	filledPieColor(escaner->getFrame()->getVentana(), escaner->getX(), escaner->getY(), escaner->getR3(), ang-90, ang-85, 0xff000015);
 	
 	if(SDL_MUSTLOCK(escaner->getFrame()->getVentana()))SDL_UnlockSurface(escaner->getFrame()->getVentana());
 	

@@ -6,7 +6,7 @@
 #include "campo.h"
 #include "frame.h"
 #include <iostream>
-#include "clientecapa_baja.h"
+#include "clientecapa_alta.h"
 using namespace std;
 
 /**

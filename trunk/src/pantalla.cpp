@@ -9,6 +9,7 @@
 #include <SDL/SDL_thread.h>
 #include <sstream>
 #include "clientecapa_alta.h"
+#include "silla.h"
 extern int SCREEN_W,SCREEN_H;
 extern Boton *botonMasZoom, 
        *botonMenosZoom;
@@ -29,6 +30,7 @@ extern SDL_mutex *mutexSincRadar;
 extern SDL_cond *condSincRadar;
 extern bool pauseRadar;
 extern Tabla tcampos;
+extern Silla *silla;
 Pantalla::Pantalla(SDL_Surface *screen) 
 {
     this->screen=screen;
@@ -41,7 +43,6 @@ Pantalla::Pantalla(SDL_Surface *screen)
     //alpha=false;
     handle=true;
     info = SDL_GetVideoInfo();
-//    SDL_ShowCursor(SDL_DISABLE);	//ocultar cursor
 }
 
 Pantalla::~Pantalla() 
@@ -95,6 +96,7 @@ void Pantalla::entrada()
 	    p.cplano(event.motion.x, event.motion.y,plano.getEscala(),plano.getOX(),plano.getOY());
 	    if(objetivo.preguntado()){
 		int respuesta=objetivo.respuesta(event.motion.x,event.motion.y);
+		string dataObjetivo;
 		switch(respuesta){
 		    case SIN_RESPUESTA:
 			break;
@@ -105,8 +107,9 @@ void Pantalla::entrada()
 			plano.pintarMapa(screen,framemapa,plano.getEscala());
 			objetivo.dibujar();
 			objetivo.store();//guardarlo
-			clienteCapaAlta.Send("@ "+objetivo.toString());
-			cout << "objetivo:" <<objetivo.toString() << endl;
+			dataObjetivo="[OBJETIVO] "+objetivo.toString()+"\r\n";
+			clienteCapaAlta.Send(dataObjetivo);
+			cout << "objetivo:" <<objetivo.toString() << endl << "paquete: "<< dataObjetivo << endl;
 			break;
 		    case RESPUESTA_NO:
 			objetivo.nopreguntar();
@@ -119,7 +122,7 @@ void Pantalla::entrada()
 	    }
 	    else if(!objetivo.preguntado()&&framemapa->Presionado(event.motion.x,event.motion.y)){
 		
-		if(!objetivo.preguntado())objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());		
+		objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());		
 		Polilinea contorno=
 		    plano.getCapa("CapaContorn")->getPolilinea()->front();
 		if(objetivo.interior(contorno)){
@@ -278,6 +281,7 @@ void Pantalla::entrada()
 	        if(plano.getEscala()<ZOOM_MAX){
 		    framemapa->limpiarFrame(false);
 		    plano.escalarMapa(FACTOR_ZOOM);
+		    silla->dibujar();
 		    if(objetivo.getFijado()){
 			objetivo.load();
 			objetivo.dibujar();
@@ -292,6 +296,7 @@ void Pantalla::entrada()
 		if(plano.getEscala()>ZOOM_MIN){
 		    framemapa->limpiarFrame(false);
 		    plano.escalarMapa(-FACTOR_ZOOM);
+		    silla->dibujar();
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
 		    if(objetivo.getFijado()){
 			objetivo.load();
@@ -305,6 +310,7 @@ void Pantalla::entrada()
 	    else if(botonDerecha->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
 		plano.despDerecha();
+		silla->dibujar();
 		if(objetivo.getFijado()){
 		    objetivo.load();
 		    objetivo.dibujar();
@@ -316,6 +322,7 @@ void Pantalla::entrada()
 	    else if(botonIzquierda->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
 		plano.despIzquierda();
+		silla->dibujar();
 		if(objetivo.getFijado()){
 		    objetivo.load();
 		    objetivo.dibujar();
@@ -327,6 +334,7 @@ void Pantalla::entrada()
 	    else if(botonArriba->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
 		plano.despArriba();
+		silla->dibujar();
 		if(objetivo.getFijado()){
 		    objetivo.load();
 		    objetivo.dibujar();
@@ -338,6 +346,7 @@ void Pantalla::entrada()
 	    else if(botonAbajo->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
 		plano.despAbajo();
+		silla->dibujar();
 		if(objetivo.getFijado()){
 		    objetivo.load();
 		    objetivo.dibujar();
@@ -350,6 +359,7 @@ void Pantalla::entrada()
 		framemapa->limpiarFrame(false);
 		plano.centrarMapa();
 		plano.pintarMapa(screen,framemapa,plano.getEscala());
+		silla->dibujar();
 		if(objetivo.getFijado()){
 		    objetivo.load();
 		    objetivo.dibujar();
@@ -373,6 +383,7 @@ void Pantalla::entrada()
 		    framestado->desactivarFrame();
 		    framemapa->maxFrame(MARGENH,MARGENV,SCREEN_W-2*MARGENH,framemapa->getH());
 		    plano.pintarMapa(screen,framemapa,plano.getEscala());
+		    silla->dibujar();
 		    if(objetivo.getFijado()){
 			objetivo.load();
 			objetivo.dibujar();
@@ -484,6 +495,7 @@ void Pantalla::entrada()
 		    
 		}
 	    }
+
 	    tcampos.handle( event.motion.x, event.motion.y);
 		
 
@@ -521,7 +533,7 @@ void Pantalla::borrar(){
 
 void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 
-  //  if(!alpha){
+    if(!(zona&Z_TOTAL)){
 	SDL_Rect r,r1,r2,r3,r4,r5;
 	r1.x=0;
 	r1.y=0;
@@ -599,7 +611,28 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 	    }
 	    SDL_Delay(10);
 	}
-    //}
+    }else{
+	cout << "alpha" << endl;
+	SDL_Rect r;
+	r.x=0;
+	r.y=0;
+	r.w=SCREEN_W;
+	r.h=SCREEN_H;
+	int i;
+	extern SDL_mutex *semVideo;
+	for(i=0;i<20;i++){
+	    SDL_mutexP(semVideo);
+	    if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+	    SDL_SetClipRect(screen,&r);
+	    boxColor(screen, r.x,r.y,r.x+r.w, r.y+r.h, 0x000013);
+	    if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+	    SDL_UpdateRect(screen, r.x,r.y,r.w,r.h);
+	    SDL_mutexV(semVideo);
+	    SDL_Delay(10);
+
+	}
+
+    }
 }
 
 bool Pantalla::salir()
@@ -612,6 +645,7 @@ void Pantalla::minimizar(){
     framestado->minFrame(); 
     framemapa->minFrame(); 
     plano.pintarMapa(screen,framemapa,plano.getEscala());
+    silla->dibujar();
     if(objetivo.getFijado()){
 	objetivo.load();
 	objetivo.dibujar();

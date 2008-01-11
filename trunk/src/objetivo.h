@@ -4,6 +4,13 @@
 #include "frame.h"
 #include "mapa.h"
 #include "boton.h"
+
+/**
+ *  \class Objetivo
+ *  \brief Clase que gestiona el objetivo establecido
+ *   
+ *  \par 
+ */
 class Objetivo {
 public:
     Objetivo();
