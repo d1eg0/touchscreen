@@ -21,8 +21,11 @@ $(PROGRAMA):	$(OBJ)
 
 clean:
 	$(RM) $(OBJ) $(PROGRAMA)
-	$(RM) -r $(DOC)/html $(DOC)/latex $(DOC)/dox-warnings.log
+	$(RM) -r $(DOC)/html $(DOC)/latex $(DOC)/dox-warnings.log $(DOC)/*.dvi $(DOC)/*.pdf $(DOC)/*.log $(DOC)/*.aux $(DOC)/*.d $(DOC)/*.toc
 
 doc:
 	@cd $(DOC)&& doxygen dox.conf >/dev/null;
 	@echo "documentacion creada!"
+latex:
+	@cd $(DOC)&& pdflatex proyecto.tex && pdflatex proyecto.tex;
+	@echo "pdf creado!"

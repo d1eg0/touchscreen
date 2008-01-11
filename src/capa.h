@@ -28,7 +28,7 @@ using namespace std;
 
 /**
  *  \class Capa
- *  \brief La clase Mapa está divida en capas
+ *  \brief La clase Mapa est&aacute; divida en capas
  *   
  *  \par 
  */

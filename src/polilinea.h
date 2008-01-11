@@ -26,7 +26,7 @@ using namespace std;
 
 /**
  *  \class Polilinea
- *  \brief La clase Capa está divida en Polilineas de vertices
+ *  \brief La clase Capa est&aacute; divida en Polilineas de vertices
  *   
  *  \par 
  */

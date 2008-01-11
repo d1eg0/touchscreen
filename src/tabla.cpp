@@ -29,8 +29,8 @@ void Tabla::handle(int x,int y){
     map<string, Campo>::iterator it;
     for (it=tabla.begin();it!=tabla.end();it++){
 	if((*it).second.handle(x,y)){
-	    extern ClienteCapaBaja clienteCapaBaja;
-	    clienteCapaBaja.Send((*it).first+" "+(*it).second.getVstr()+"\n\r");
+	    extern ClienteCapaAlta clienteCapaAlta;
+	    clienteCapaAlta.Send("["+(*it).first+"] "+(*it).second.getVstr()+"\r\n");
 	    cout << "envio" << endl;
 	    break;
 	}

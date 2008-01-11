@@ -26,9 +26,7 @@ private:
     int xm,
 	ym;
     Uint32 color;
-    int r1,
-	r2,
-	r3;
+    int r[3];
     SDL_Rect desp;
     int rot;
     SDL_Surface *flecha;

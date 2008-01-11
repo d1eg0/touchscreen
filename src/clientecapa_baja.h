@@ -22,7 +22,9 @@ public:
 private:
     vector<double> listaValores;
     void onConnect();
-    void onDataArrival(string Data);
+    //void onDataArrival(string Data);
+    void onLineArrival(string Cadena);
+    void onClose();
     void onError(int ssError);
 };
 #endif
