@@ -56,7 +56,7 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
 	SDL_mutexV(mutexCapaAlta);
 
 	if(Data.find("[FIN_RUTA]")!=string::npos){
-	    cout << "Final Ruta" << endl;
+	    cout << "\tFinal Ruta********" << endl;
 	    SDL_CondSignal(caminoNuevoCond);
 	}
     }else SDL_CondSignal(caminoNuevoCond);
