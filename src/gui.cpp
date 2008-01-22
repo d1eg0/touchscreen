@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     } else {
 	Uint8 video_bpp;
 	Uint32 videoflags;
-	videoflags = SDL_HWSURFACE | SDL_SRCALPHA ;//| SDL_FULLSCREEN;
+	videoflags = SDL_HWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN;
 	//int h_screen=SCREEN_H;
 	//int v_screen=SCREEN_W;
 	const SDL_VideoInfo *info;
@@ -116,6 +116,8 @@ int main(int argc, char *argv[])
 	video_bpp=32;
 	SCREEN_W=640;
 	SCREEN_H=480;
+	//SCREEN_W=800;
+	//SCREEN_H=600;
 	Uint32 modo=SDL_VideoModeOK(SCREEN_W, SCREEN_H, video_bpp, videoflags);
 	if(modo){
 	    surfacePrincipal=SDL_SetVideoMode(SCREEN_W, SCREEN_H, video_bpp, videoflags);
