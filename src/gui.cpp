@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     } else {
 	Uint8 video_bpp;
 	Uint32 videoflags;
-	videoflags = SDL_HWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN;
+	videoflags = SDL_HWSURFACE | SDL_SRCALPHA ;
 	//int h_screen=SCREEN_H;
 	//int v_screen=SCREEN_W;
 	const SDL_VideoInfo *info;

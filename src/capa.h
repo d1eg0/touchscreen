@@ -35,22 +35,27 @@ using namespace std;
 
 class Capa {
 public:
-    Capa(string nombre, int color);
+    /** Instanciar una nueva capa con nombre 'nombre' */ 
+    Capa(string nombre);
     ~Capa();
-
+    /** Obtener las l&iacute;neas de la capa */
     vector<Linea>* getCapa();
+    /** Obtener las polil&iacute;neas de la capa */
     vector<Polilinea>* getPolilinea();
+    /** Añadir una l&iacute; a la capa */
     void addLinea(Linea linea);
+    /** Añadir una polil&iacute; a la capa */
     void addPolilinea(Polilinea polilinea);
+    /** Añadir un v&eacute;rtice a la capa */
     void addVertice(Punto vertice);
-    int getColor();
+    /** Obtener el nombre de la capa */
     string getNombre();
+    /** Limpiar el vector de polil&iacute;neas */
     void clear();
 private:
     vector<Linea> listaLineas;
     vector<Polilinea> listaPolilineas;
     string nombre;
-    int color;
 };
 #endif
 

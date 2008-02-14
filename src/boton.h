@@ -23,12 +23,12 @@
 
 /**
  *  \class Boton
- *  \brief Crea botones
+ *  \brief Gesti&oacute;n de botones
  *   
  *  \par 
  */
-enum EstadoBoton {activo=1, inactivo=0, z=3};
-
+/** El bot&oacute; puede estar el estado: activo o inactivo */
+enum EstadoBoton {activo=1,inactivo=0,z=3};
 class Boton  
 {
 public:

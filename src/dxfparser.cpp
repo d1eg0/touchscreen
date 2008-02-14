@@ -17,7 +17,7 @@ void DxfParser::addLine(const DL_LineData& data) {
 }
 
 void DxfParser::addLayer(const DL_LayerData& data) {
-    Capa nuevacapa(data.name,attributes.getColor());
+    Capa nuevacapa(data.name);
     plano.addCapa(nuevacapa);
 }
 

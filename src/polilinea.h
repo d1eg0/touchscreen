@@ -33,16 +33,25 @@ using namespace std;
 
 class Polilinea {
 public:
+    /** Instancia de una polil&iacute;nea en la capa 'capa', con 'num' v&eacute;rtices, 'cerrado' si es cerrado o abierto */
     Polilinea(int num, bool cerrado, string capa);
     ~Polilinea();
 
+    /** Devuelve la lista de puntos de la polil&iacute;nea */
     vector<Punto>* getPolilinea();
+    /** A&ntilde;adir un v&eacute; a la polil&iacute;nea */
     void addVertice(Punto vertice);
+    /** Devuelve si la polil&iacute;nea es cerrada */
     bool getCerrado();
+    /** Devuelve el n&uacute;mero total de v&eacute;rtices de la polil&iacute;nea */
     int getNumTotal();
+    /** Devuelve el n&uacute;mero de v&eacute;rtices de la polil&iacute;nea */
     int getNum();
+    /** Transforma la lista de puntos de la polil&iacute;nea en l&iacute;neas */
     vector<Linea> toLineas();
+    /** Poner nombre a la polil&iacute;nea como habitaci&oacute;n */
     void setHabitacion(string nombre);
+    /** Devuelve el nombre de la habitaci&oacute;n */
     string getHabitacion();
 private:
     string capa;

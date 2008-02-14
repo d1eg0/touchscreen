@@ -31,32 +31,53 @@ using namespace std;
  */
 class Mapa {
 public:
+    /** Instancia del mapa */
     Mapa();
     ~Mapa();
 
+    /** Set del origen en (x,y) */
     void setOrigen(int x, int y);
+    /** Duelve la componente X del origen */
     double getOX();
+    /** Duelve la componente Y del origen */
     double getOY();
+    /** Duelve el desplazamiento horizontal del origen */
     double getDH();
+    /** Duelve el desplazamiento vertical del origen */
     double getDV();
+    /** Duelve la escala del mapa en formato num&eacute;rico */
     double getEscala();
+    /** Duelve la escala del mapa en formato cadena */
     char* getEscalaStr();
+    /** Devuelve las capas que contiene el mapa */
     vector<Capa>* getMapa();   
+    /** Devuelve la capa de nombre 'c' */
     Capa* getCapa(string c);
+    /** A&ntilde; la capa 'capa' al mapa */
     void addCapa(Capa capa);
+    /** El camino al objetivo pasa a ser 'c' */
     void setCamino(vector<Linea> c);
+    /** Borra las capas del mapa */
     void clearMapa();
+    /** Escala el mapa a 'escala' */
     void escalarMapa(double escala);
+    /** Pinta el mapa en la superficie 'screen', en el frame 'frame', a escala 'escala' */
     void pintarMapa(SDL_Surface *screen,Frame *frame, double escala);
+    /** Pinta el camino en la superficie 'screen', en el frame 'frame', a escala 'escala' */
     void pintarCamino(SDL_Surface *screen,Frame *frame, double escala);
-    //Calculo de los desplazamientos para el centrado
+    /** Calculo de los desplazamientos para el centrado */
     void calcularDHV(Frame *frame);
+    /** Centra el mapa */
     void centrarMapa();
 
     //Desplazamientos
+    /** Desplaza el mapa arriba */
     void despArriba();
+    /** Desplaza el mapa abajo */
     void despAbajo();
+    /** Desplaza el mapa a la izquierda */
     void despIzquierda();
+    /** Desplaza el mapa a la derecha */
     void despDerecha();
 
 private:

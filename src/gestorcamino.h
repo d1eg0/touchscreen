@@ -15,6 +15,7 @@
 using namespace std;
 class GestorCamino{
 public:
+    /** Instancia del gestor de caminos */
     GestorCamino(SDL_Surface* surface);
     ~GestorCamino();
 private:

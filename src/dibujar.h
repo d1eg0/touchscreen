@@ -22,10 +22,11 @@
 #include <SDL/SDL_gfxPrimitives.h>
 #include "linea.h"
 #include "frame.h"
+using namespace std;
 
 /**
  *  \class Dibujar
- *  \brief Generar un plano
+ *  \brief Generar el plano
  *   
  *  \par 
  */
@@ -33,8 +34,10 @@
 class Dibujar {
 
 public:
+    /** Instancia para dibujar en 'screen' */
     Dibujar(SDL_Surface *screen);
     ~Dibujar();
+    /** Dibujar una linea 'linea' de color 'color en el frame 'frame' */
     void dibujarLinea(Frame *frame, Linea *linea, Uint32 color);
 private:
     SDL_Surface *screen;

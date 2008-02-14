@@ -368,10 +368,6 @@ void Pantalla::entrada()
 		//SDL_UpdateRect(screen,0,0,0,0);
 		framemapa->refrescarFrame();
 	    }
-	    else if(framemapa->getBcerrar()->presionado(event.motion.x,event.motion.y)){
-		framemapa->cerrarFrame();
-		this->borrar();
-	    }	
 	    else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
 		if(framemapa->getEstado()==MINIMO){
 		    SDL_mutexP(mutexSincRadar);
