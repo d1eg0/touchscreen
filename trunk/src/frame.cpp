@@ -70,7 +70,7 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 	    0);
 
     //Boton maximizar
-    bcerrar=new Boton(ventana);
+    //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(x+w-15,y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //bmaxmin=new Boton(ventana);
     bmaxmin->cargarBoton(x+w-2*T_BOTON,y-T_BOTON,T_BOTON*2,T_BOTON,"+", 0xFFA500FF);
@@ -78,18 +78,18 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
-void Frame::cerrarFrame(){
+/*void Frame::cerrarFrame(){
     //no importa borrarlo porque hay q borrar la pantalla entera
-    /*if(estado==MAXIMO){
+    if(estado==MAXIMO){
 	SDL_SetClipRect(ventana, &contenedormax);
 	SDL_FillRect(ventana, &contenedormax, 0x000000);
     }else if (estado==MINIMO){
 	SDL_SetClipRect(ventana, &contenedor);
 	SDL_FillRect(ventana, &contenedor, 0x000000);
     }
-    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);*/
+    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
     estado=CERRADO;
-}
+}*/
 
 void Frame::maxFrame(int x,int y,int w,int h){
     estado=MAXIMO;
@@ -228,9 +228,9 @@ SDL_Rect Frame::getArea(){
     else if(estado==MAXIMO)return areamax;
 }
 
-Boton* Frame::getBcerrar(){
+/*Boton* Frame::getBcerrar(){
     return bcerrar;
-}
+}*/
 
 Boton* Frame::getBmaxmin(){
     return bmaxmin;

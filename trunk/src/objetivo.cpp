@@ -71,7 +71,8 @@ void Objetivo::dibujar(){
     filledCircleColor(frame->getVentana(), (int)o.getX(), (int)o.getY(), tradio-4, color);
     filledCircleColor(frame->getVentana(), (int)o.getX(), (int)o.getY(), tradio-6, 0xffffffff);
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_UnlockSurface(frame->getVentana());
-    SDL_UpdateRect(frame->getVentana(),(int)o.getX()-tradio,(int)o.getY()-tradio,tradio*3,tradio*2);
+    frame->refrescarFrame();
+    //SDL_UpdateRect(frame->getVentana(),(int)o.getX()-tradio,(int)o.getY()-tradio,tradio*3,tradio*2);
     SDL_mutexV(semVideo);
 }
 

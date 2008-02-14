@@ -18,9 +18,8 @@
 
 #include "capa.h"
 
-Capa::Capa(string nombre,int color){
+Capa::Capa(string nombre){
     this->nombre=nombre;
-    this->color=color;
 }
 
 Capa::~Capa(){
@@ -47,9 +46,6 @@ void Capa::addVertice(Punto punto){
     listaPolilineas.back().addVertice(punto);
 }
 
-int Capa::getColor(){
-    return color;
-}
 
 string Capa::getNombre(){
     return nombre;

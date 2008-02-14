@@ -8,10 +8,19 @@
 #include <vector>
 #include "punto.h"
 
+
+/**
+ *  \class ClienteCapaAlta
+ *  \brief Socket que escucha el camino cuando se pida un objetivo
+ *   
+ *  \par 
+ */
 class ClienteCapaAlta : public ssPPClient
 {
 public:
+    /** Obtiene el camino guardado */
     vector<Punto> getCamino();
+    /** Borra el camino guardado */
     void clearCamino();
 private:
     stringstream buffer;
