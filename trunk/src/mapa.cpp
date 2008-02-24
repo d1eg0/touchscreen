@@ -17,6 +17,8 @@
  */
 #include "mapa.h"
 #include "constantes.h"
+#include <dxflib/dl_dxf.h>
+#include "dxfparser.h"
 Mapa::Mapa(){
     this->escala=100;
     this->ox=0;
@@ -27,6 +29,19 @@ Mapa::Mapa(){
 
 Mapa::~Mapa(){
     listaCapas.clear();
+}
+
+void Mapa::lectura(char *ruta){
+    //Lectura Fichero DXF, introduce la estructura en plano
+    listaCapas.clear();
+    DxfParser *parser_dxf=new DxfParser();
+    DL_Dxf* dxf = new DL_Dxf();
+    if (!dxf->in(ruta, parser_dxf)) {
+	std::cerr << "No se ha podido abrir el DXF.\n";
+	exit(-1);
+    }
+    delete dxf;
+    delete parser_dxf;
 }
 
 void Mapa::setOrigen(int x, int y){

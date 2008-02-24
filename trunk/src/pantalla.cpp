@@ -10,18 +10,20 @@
 #include <sstream>
 #include "clientecapa_alta.h"
 #include "silla.h"
-extern int SCREEN_W,SCREEN_H;
+#include "selector.h"
 extern Boton *botonMasZoom, 
        *botonMenosZoom;
 extern Boton *botonDerecha,
        *botonIzquierda,
        *botonArriba,
        *botonAbajo,
-       *botonCentrar;
+       *botonCentrar,
+       *botonSelector;
 extern Mapa plano;
 extern Frame *framemapa,
        *frameradar,
-       *framestado;
+       *framestado,
+       *frameselector;
 extern Etiqueta *e_zoom,*e_vzoom;
 extern Objetivo objetivo;
 extern ClienteCapaAlta clienteCapaAlta;
@@ -31,6 +33,8 @@ extern SDL_cond *condSincRadar;
 extern bool pauseRadar;
 extern Tabla tcampos;
 extern Silla *silla;
+extern Selector *selector;
+
 Pantalla::Pantalla(SDL_Surface *screen) 
 {
     this->screen=screen;
@@ -120,7 +124,7 @@ void Pantalla::entrada()
 			break;	    
 		}
 	    }
-	    else if(!objetivo.preguntado()&&framemapa->Presionado(event.motion.x,event.motion.y)){
+	    else if(!objetivo.preguntado()&&framemapa->presionado(event.motion.x,event.motion.y)){
 		
 		objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());		
 		Polilinea contorno=
@@ -368,6 +372,15 @@ void Pantalla::entrada()
 		//SDL_UpdateRect(screen,0,0,0,0);
 		framemapa->refrescarFrame();
 	    }
+	    else if(botonSelector->presionado(event.motion.x,event.motion.y)){
+		if(frameselector->getEstado()==CERRADO){
+		    this->mapaOff();
+		    selector=new Selector(screen);
+		    selector->buscar("/mnt/usb/USB1/","dxf");
+		    selector->cargar();
+		    //selector->setActivar(true);
+		}
+	    }
 	    else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
 		if(framemapa->getEstado()==MINIMO){
 		    SDL_mutexP(mutexSincRadar);
@@ -490,9 +503,13 @@ void Pantalla::entrada()
 		    SDL_CondSignal(condSincRadar);
 		    
 		}
-	    }
+	    }else if(frameselector->getEstado()!=CERRADO
+		    &&frameselector->presionado(event.motion.x,event.motion.y)){
+		    selector->handle(event.motion.x,event.motion.y);
 
-	    tcampos.handle( event.motion.x, event.motion.y);
+	    }else if(framestado->presionado(event.motion.x,event.motion.y)){
+		tcampos.handle( event.motion.x, event.motion.y);
+	    }
 		
 
 
@@ -608,7 +625,6 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 	    SDL_Delay(10);
 	}
     }else{
-	cout << "alpha" << endl;
 	SDL_Rect r;
 	r.x=0;
 	r.y=0;
@@ -633,13 +649,14 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 
 bool Pantalla::salir()
 {
-	return sdl_quit;
+    return sdl_quit;
 }
 
 void Pantalla::minimizar(){
     frameradar->minFrame(); 
     framestado->minFrame(); 
     framemapa->minFrame(); 
+    frameselector->desactivarFrame(); 
     plano.pintarMapa(screen,framemapa,plano.getEscala());
     silla->dibujar();
     if(objetivo.getFijado()){
@@ -653,6 +670,7 @@ void Pantalla::minimizar(){
     botonAbajo->recargarBoton();
     botonArriba->recargarBoton();
     botonCentrar->recargarBoton();
+    botonSelector->recargarBoton();
 
     //Botones Zoom
     botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, 
@@ -685,6 +703,16 @@ void Pantalla::minimizar(){
 	    0xFFA500FF,
 	    0x000000FF);
     tcampos.recargar(framestado);
+}
+void Pantalla::mapaOff(){
+    framemapa->desactivarFrame();
+    botonMenosZoom->deshabilitar();
+    botonMasZoom->deshabilitar();
+    botonDerecha->deshabilitar();
+    botonIzquierda->deshabilitar();
+    botonArriba->deshabilitar();
+    botonAbajo->deshabilitar();
+    botonCentrar->deshabilitar();
 }
 
 void Pantalla::setHandle(bool handle){

@@ -20,8 +20,8 @@
 #include "radar.h"
 #include "tabla.h"
 #include "silla.h"
+#include "selector.h"
 using namespace std;
-int SCREEN_H, SCREEN_W;
 SDL_Surface *surfacePrincipal;
 Pantalla *pantalla;
 //Botones
@@ -33,11 +33,14 @@ Boton *botonArriba,
       *botonAbajo,
       *botonDerecha,
       *botonIzquierda,
-      *botonCentrar;
+      *botonCentrar,
+      *botonSelector;
 // Frames
 Frame *framemapa,
       *frameradar,
-      *framestado;
+      *framestado,
+      *frameselector;
+
 // Etiquetas
 Etiqueta *e_zoom,
 	 *e_vzoom;
@@ -46,6 +49,7 @@ Mapa  plano;
 Objetivo objetivo;
 Radar *radar;
 Silla *silla;
+Selector *selector;
 // Mutex
 //  Sincroniza el hilo gestor camino con la recepcion de datos
 SDL_mutex *mutexCapaAlta;
@@ -80,22 +84,6 @@ int main(int argc, char *argv[])
 
     semVideo=SDL_CreateMutex();
 
-    string mapadxf="maps/modelo.dxf";
-//    string mapadxf="maps/segonDxf.dxf";
-    cout <<"Inicializando SDL." << endl;
-   
-    //Lectura Fichero DXF, introduce la estructura en plano
-    DxfParser *parser_dxf=new DxfParser();
-    DL_Dxf* dxf = new DL_Dxf();
-    if (!dxf->in(mapadxf, parser_dxf)) {
-	std::cerr << "No se ha podido abrir el DXF.\n";
-	exit(-1);
-    }
-    delete dxf;
-    delete parser_dxf;
-    //Fin lectura Fichero DXF
-
-
     //Inicio libreria para controlar video
     if(SDL_Init(SDL_INIT_VIDEO)< 0) {
     	cerr <<"No se puede iniciar SDL:" << SDL_GetError() << endl;
@@ -114,10 +102,6 @@ int main(int argc, char *argv[])
 	    video_bpp = 16;
 	}*/
 	video_bpp=32;
-	SCREEN_W=640;
-	SCREEN_H=480;
-	//SCREEN_W=800;
-	//SCREEN_H=600;
 	Uint32 modo=SDL_VideoModeOK(SCREEN_W, SCREEN_H, video_bpp, videoflags);
 	if(modo){
 	    surfacePrincipal=SDL_SetVideoMode(SCREEN_W, SCREEN_H, video_bpp, videoflags);
@@ -141,6 +125,7 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_W/10.0*6.0), 
 		(int)((float)SCREEN_H/10.0*7.5),
 		"Plano",0xffffff);
+	plano.lectura("maps/modelo.dxf");
 	plano.centrarMapa();
 	plano.pintarMapa(surfacePrincipal,framemapa,100);
 	
@@ -177,6 +162,8 @@ int main(int argc, char *argv[])
 		"Estado",
 		0xffffff);
 
+	//Instanciar el frame selector de mapas
+	frameselector=new Frame(surfacePrincipal);
 	//Botones Zoom
 	botonMasZoom=new Boton(surfacePrincipal);
 	botonMasZoom->cargarBoton(
@@ -233,7 +220,10 @@ int main(int argc, char *argv[])
 	//	Centrar
 	botonCentrar=new Boton(surfacePrincipal);
 	botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
-
+	//	Selector
+	botonSelector=new Boton(surfacePrincipal);
+	botonSelector->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+30, 30,30,"o",0x00000000);
+	botonSelector->setIcono("img/mundo.bmp");
     /*    c1=new Campo(
 		framestado,
 		"conexion:",

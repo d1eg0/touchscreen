@@ -4,7 +4,7 @@
 #include <SDL/SDL_rotozoom.h>
 #include "silla.h"
 extern SDL_mutex *bloqpantalla;
-extern int SCREEN_W,SCREEN_H;
+//extern int SCREEN_W,SCREEN_H;
 int escan(void *r);
 
 Radar::Radar(Frame *frame){

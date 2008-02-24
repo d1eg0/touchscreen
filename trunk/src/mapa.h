@@ -35,6 +35,8 @@ public:
     Mapa();
     ~Mapa();
 
+    /** Lectura de un mapa situado en 'ruta' */
+    void lectura(char *ruta);
     /** Set del origen en (x,y) */
     void setOrigen(int x, int y);
     /** Duelve la componente X del origen */

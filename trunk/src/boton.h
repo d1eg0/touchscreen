@@ -1,6 +1,7 @@
 #ifndef BOTON_H
 #define BOTON_H
 #include <SDL/SDL.h>
+#include <string>
 /**
  *    \file  boton.h
  *   \brief  
@@ -43,11 +44,16 @@ public:
     bool presionado(int xm, int ym);
     /** devuelve el estado del boton, true=activo false=inactivo */
     bool getEstado();
+    /** devuelve el texto del boton */
+    char* getTexto();
     /** desactiva el boton, pero se sigue visualizando */
     void desactivar();     
+    /** deshabilita el boton, oscurenciendolo */
+    void deshabilitar();     
     /** borra el boton */
     void borrar();
-
+    /** poner icono */
+    void setIcono(char* iconoruta);
 private:
     SDL_Rect area;
     SDL_Surface *ventana;
@@ -59,8 +65,10 @@ private:
     int Sizef;
     SDL_Rect contenedor;
     
+    SDL_Surface *icono;
+    char *iconopath;
+    bool conicono; 
     EstadoBoton estado;
-
 };
 
 #endif
