@@ -7,8 +7,6 @@
 #include "punto.h"
 using namespace std;
 
-
-
 /**
  *  \class Pantalla
  *  \brief Gestiona todos los aspectos relacionados con el monitor (como la resoluci&oacute;n).
@@ -46,6 +44,8 @@ public:
     bool salir();
     /** Minimiza las 3 ventanas */
     void minimizar();
+    /** Desactiva el mapa */
+    void mapaOff();
     /** Modifica el valor de gestionar o no la entrada */ 
     void setHandle(bool handle);
 };

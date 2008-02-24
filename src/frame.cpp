@@ -67,7 +67,7 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 	    titulo,
 	    0xFFA500FF,
 	    0,
-	    0);
+	    0x000000FF);
 
     //Boton maximizar
     //bcerrar=new Boton(ventana);
@@ -114,7 +114,7 @@ void Frame::maxFrame(int x,int y,int w,int h){
 	    titulo,
 	    0xFFA500FF,
 	    0,
-	    0);
+	    0x000000FF);
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(areamax.x+areamax.w-15,areamax.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
@@ -138,7 +138,7 @@ void Frame::minFrame(){
 	    titulo,
 	    0xFFA500FF,
 	    0,
-	    0);	
+	    0x000000FF);	
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(area.x+area.w-15,area.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
@@ -158,6 +158,7 @@ void Frame::minFrame(){
 
 void Frame::desactivarFrame(){
     bmaxmin->desactivar();
+    estado=CERRADO;
 }
 
 void Frame::limpiarFrame(bool refresh){
@@ -196,7 +197,7 @@ SDL_Surface* Frame::getVentana(){
     return ventana;
 }
 
-bool Frame::Presionado(int x,int y)
+bool Frame::presionado(int x,int y)
 {
 	return (x>this->getX())&&(x<this->getX()+this->getW())&&
 		(y>this->getY())&&(y<this->getY()+this->getH());

@@ -34,7 +34,7 @@ public:
     /** Refresca la zona del frame */
     void refrescarFrame();
     /** Devuelve true si se ha presionado el mouse dentro del frame */
-    bool Presionado(int xm, int ym);
+    bool presionado(int xm, int ym);
     /** Devuelve la Surface que contiene al frame */
     SDL_Surface* getVentana();
     /** Devuelve la posici&oacute; X del frame */

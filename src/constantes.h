@@ -1,4 +1,7 @@
 //Constantes
+#define	    SCREEN_W	640
+#define	    SCREEN_H	480
+
 #define	    BORDER	2
 #define	    MARGENH	20
 #define	    MARGENV	30
