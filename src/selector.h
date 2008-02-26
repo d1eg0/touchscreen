@@ -11,8 +11,10 @@ class Selector{
 public:
     Selector(SDL_Surface* pantalla);
     ~Selector();
-    void buscar(string ruta,string ext);
+    void buscarW(string ruta,string ext);
+    void buscarR();
     void cargar();
+    bool vacio();
     bool handle(int x,int y);
 private:
     vector<Boton> lista;
@@ -20,5 +22,6 @@ private:
     string ruta;
     string ext;
     vector<string> mapas;
+    int descf[2];
 };
 #endif

@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 #include <iostream>
 #include "frame.h"
@@ -11,7 +12,6 @@
 #include "mapa.h"
 #include "pantalla.h"
 Selector::Selector(SDL_Surface* pantalla){
-//Cargar el frame donde se sitúa el plano
     this->ventana=pantalla;
 }
 
@@ -19,37 +19,54 @@ Selector::~Selector(){
     mapas.clear();
 }
 
-void Selector::buscar(string ruta,string ext){
+//Gestiona la muerte del hijo
+void reaper(int iSignal)
+{
+    int estado;
+    pid_t pid;
+    pid=wait3((int *)&estado,WNOHANG,0);
+
+    extern Selector *selector;
+    if(estado==0){
+	selector->buscarR();
+	selector->cargar();
+    }
+    signal(SIGCHLD,reaper); //reset handler to catch SIGCHLD for next time;
+}
+
+
+void Selector::buscarR(){
+    char *buffer=(char*)malloc(1024);
+    read(descf[0],buffer,1024);
+    string bufstr(buffer);
+    size_t pos=bufstr.find('\n');
+    while(pos!=string::npos){
+	mapas.push_back(bufstr.substr(0,pos));
+	bufstr.erase(0,pos+1);					
+	pos=bufstr.find('\n');
+    }
+    vector<string>::iterator it;
+    for(it=mapas.begin();it!=mapas.end();it++){
+	cout << (*it) <<  endl;
+    }
+    free(buffer);
+}
+
+void Selector::buscarW(string ruta,string ext){
     this->ruta=ruta;
     this->ext=ext;
     string exp="*."+ext;
-    int descf[2],
-    estado=0;
+    signal(SIGCHLD,reaper);
     if(pipe(descf)<0) printf("pipe");
     switch (fork()) {
 	case -1:
             cerr << "Error: fork";
         case 0:
+	    close(2);
 	    close(1);
 	    if(dup(descf[1])<0) printf("Error: dup");
 	    execlp("find","find",ruta.c_str(),"-name",exp.c_str(),(char*)0);
-	    printf("Error");
-	default:
-	    wait(estado);
-	    char *buffer=(char*)malloc(1024);
-	    read(descf[0],buffer,1024);
-	    string bufstr(buffer);
-	    size_t pos=bufstr.find('\n');
-	    while(pos!=string::npos){
-		mapas.push_back(bufstr.substr(0,pos));
-		bufstr.erase(0,pos+1);					
-		pos=bufstr.find('\n');
-	    }
-	    vector<string>::iterator it;
-	    for(it=mapas.begin();it!=mapas.end();it++){
-		cout << (*it) <<  endl;
-	    }
-	    free(buffer);
+            cerr << "Error: exec";
     }
 }
 
@@ -67,7 +84,7 @@ void Selector::cargar(){
     int dx=frameselector->getX()+5;
     int y=frameselector->getY();
     int dy=y+5;
-    int dv=15;
+    int dv=30;
     int dh=frameselector->getW()-10;
     vector<string>::iterator it;
     for(it=mapas.begin();it!=mapas.end();it++){
@@ -76,6 +93,9 @@ void Selector::cargar(){
 	lista.push_back(b);
 	dy+=dv;
     }
+    //se bloquea el mando de control del mapa
+    extern Pantalla *pantalla;
+    pantalla->mapaOff();
 }
 
 bool Selector::handle(int x,int y){
@@ -92,12 +112,8 @@ bool Selector::handle(int x,int y){
     }
     return false;
 }
-
-/*void Selector::setActivar(bool activar){
-    activo=activar;
+bool Selector::vacio(){
+    cout << mapas.size() << endl;
+    return mapas.empty();
 }
-
-bool Selector::isActivo(){
-    return activo;
-}*/
 

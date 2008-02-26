@@ -356,7 +356,6 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		//SDL_UpdateRect(screen,0,0,0,0);
 		framemapa->refrescarFrame();
 	    }
 	    else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
@@ -369,16 +368,12 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		//SDL_UpdateRect(screen,0,0,0,0);
 		framemapa->refrescarFrame();
 	    }
 	    else if(botonSelector->presionado(event.motion.x,event.motion.y)){
 		if(frameselector->getEstado()==CERRADO){
-		    this->mapaOff();
 		    selector=new Selector(screen);
-		    selector->buscar("/mnt/usb/USB1/","dxf");
-		    selector->cargar();
-		    //selector->setActivar(true);
+		    selector->buscarW("/mnt/usb/USB1/","dxf");
 		}
 	    }
 	    else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
