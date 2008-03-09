@@ -94,7 +94,6 @@ void Pantalla::entrada()
  
 	case SDL_MOUSEBUTTONDOWN:
 	    if(!handle)return;
-	    cout << "click" << endl;
 	    cout << "x:" << event.motion.x << " y:" << event.motion.y <<  endl;
 	    Punto p;
 	    p.cplano(event.motion.x, event.motion.y,plano.getEscala(),plano.getOX(),plano.getOY());
@@ -216,6 +215,7 @@ void Pantalla::entrada()
 		    if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
 		    SDL_SetClipRect(screen,&r);
 		    boxColor(screen,r.x,r.y,r.x+r.w,r.y+r.h,0x000000FF);
+		    SDL_UpdateRect(screen,r.x,r.y,r.w,r.h);
 		    if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
 		    SDL_mutexV(semVideo);
 
@@ -277,7 +277,50 @@ void Pantalla::entrada()
 			    0x00000043);
 
 
-		    cout << "\tpx:" << p.getX() << ", py:" << p.getY() << endl;
+		    //cout << "\tpx:" << p.getX() << ", py:" << p.getY() << endl;
+		}else{
+		    cout << " Fuera " << endl;
+		    int x1,y1;
+		    string titulo=" Pto. Fuera ",
+			   pos;
+		    bool pos_correcta;
+		    Uint32 color_etiq,
+			   sincolor=0x00000000,
+			   color_valor=0x00FF00FF;
+		    
+		    color_etiq=0xFF0000FF;//color
+		    //Etiquetas
+		    x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(10*SIZE_C)*0.5)-10;		    
+		    y1=(int)(framemapa->getY()+framemapa->getH()+5);
+
+		    //Limpiar Zona Etiquetas
+		    SDL_Rect r;
+		    r.x=x1;
+		    r.y=y1;
+		    r.w=SIZE_C*15;
+		    r.h=SIZE_C*5*2;
+		    extern SDL_mutex *semVideo;
+		    SDL_mutexP(semVideo);
+		    if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+		    SDL_SetClipRect(screen,&r);
+		    boxColor(screen,r.x,r.y,r.x+r.w,r.y+r.h,0x000000FF);
+		    SDL_UpdateRect(screen,r.x,r.y,r.w,r.h);
+		    if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+		    SDL_mutexV(semVideo);
+
+		    Etiqueta *info;
+		    info=new Etiqueta(screen);
+		    //titulo
+		    info->cargarEtiqueta(
+			    x1,
+			    y1,
+			    titulo.size()*SIZE_C,
+			    SIZE_C*2,
+			    (char*)titulo.c_str(),
+			    color_etiq,
+			    color_etiq,
+			    0x00000043);
+
 		}
 	    }
 	    
@@ -500,7 +543,10 @@ void Pantalla::entrada()
 		}
 	    }else if(frameselector->getEstado()!=CERRADO
 		    &&frameselector->presionado(event.motion.x,event.motion.y)){
-		    selector->handle(event.motion.x,event.motion.y);
+		    if(selector->handle(event.motion.x,event.motion.y)){
+			cout << "voy a enviar" << endl;
+			clienteCapaAlta.enviar(plano.getPath());
+		    }
 
 	    }else if(framestado->presionado(event.motion.x,event.motion.y)){
 		tcampos.handle( event.motion.x, event.motion.y);

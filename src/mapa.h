@@ -35,8 +35,10 @@ public:
     Mapa();
     ~Mapa();
 
+    /** Devuelve la ruta del mapa actual */
+    string getPath();
     /** Lectura de un mapa situado en 'ruta' */
-    void lectura(char *ruta);
+    void lectura(string ruta);
     /** Set del origen en (x,y) */
     void setOrigen(int x, int y);
     /** Duelve la componente X del origen */
@@ -59,6 +61,8 @@ public:
     void addCapa(Capa capa);
     /** El camino al objetivo pasa a ser 'c' */
     void setCamino(vector<Linea> c);
+    /** Borrar camino */
+    void clearCamino();
     /** Borra las capas del mapa */
     void clearMapa();
     /** Escala el mapa a 'escala' */
@@ -83,6 +87,7 @@ public:
     void despDerecha();
 
 private:
+    string path;
     vector<Capa> listaCapas;
     vector<Linea> camino;
     Dibujar *pincel;

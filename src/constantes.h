@@ -1,4 +1,4 @@
-//Constantes
+//Constantes dimensiones
 #define	    SCREEN_W	640
 #define	    SCREEN_H	480
 
@@ -49,14 +49,21 @@
 #define	    Z_TOTAL	0x1F	
 
 //Identificadores de los clientes
-#define	    TRAMAPLANO    0
-#define	    TRAMAOBJETIVO	    1
+#define	    TRAMAPLANO	    0
+#define	    TRAMAOBJETIVO   1
 #define	    CLIENTESENS	    2
 
-//Respuesta
+//Respuesta al pulsar objetivo
 #define	    SIN_RESPUESTA   0
 #define	    RESPUESTA_SI    1
 #define	    RESPUESTA_NO    2
 
 //Colores
 #define	    COLORCAMINO	    0xff0000ff
+
+//Cabeceras protocolo
+#define	    CABECERA_MAPA	"[MAPA]"
+#define	    CABECERA_ERROR	"[ERROR]"
+#define	    CABECERA_INIRUTA    "[RUTA]"
+#define	    CABECERA_FINRUTA    "[FIN_RUTA]"
+

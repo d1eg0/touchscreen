@@ -31,17 +31,22 @@ Mapa::~Mapa(){
     listaCapas.clear();
 }
 
-void Mapa::lectura(char *ruta){
+void Mapa::lectura(string ruta){
     //Lectura Fichero DXF, introduce la estructura en plano
+    path=ruta;
     listaCapas.clear();
     DxfParser *parser_dxf=new DxfParser();
     DL_Dxf* dxf = new DL_Dxf();
-    if (!dxf->in(ruta, parser_dxf)) {
+    if (!dxf->in(ruta.c_str(), parser_dxf)) {
 	std::cerr << "No se ha podido abrir el DXF.\n";
 	exit(-1);
     }
     delete dxf;
     delete parser_dxf;
+}
+
+string Mapa::getPath(){
+    return path;
 }
 
 void Mapa::setOrigen(int x, int y){
@@ -98,6 +103,9 @@ void Mapa::addCapa(Capa capa){
 void Mapa::setCamino(vector<Linea> camino){
     this->camino.clear();
     this->camino=camino;
+}
+void Mapa::clearCamino(){
+    this->camino.clear();
 }
 void Mapa::clearMapa(){
     listaCapas.clear();

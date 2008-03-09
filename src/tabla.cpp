@@ -1,5 +1,5 @@
 #include "tabla.h"
-
+#include "constantes.h"
 Tabla::Tabla(){
 }
 Tabla::~Tabla(){
@@ -41,10 +41,20 @@ void Tabla::recargar(Frame *frame){
     int x=frame->getX();
     int y=frame->getY();
     map<string, Campo>::iterator it;
+    bool columna=false;;
     for (it=tabla.begin();it!=tabla.end();it++){
 	(*it).second.recargar(x+5,y+5);
 	y+=20;
+	if(y>(frame->getY()+frame->getH()-20)){
+	    if(frame->getEstado()==MAXIMO){
+		if(!columna){
+		    x+=300;
+		    y=frame->getY();
+		    columna=true;
+		}
+	    }else{
+		break;
+	    }
+	}
     }
-    
-
 }

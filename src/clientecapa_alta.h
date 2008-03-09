@@ -22,6 +22,7 @@ public:
     vector<Punto> getCamino();
     /** Borra el camino guardado */
     void clearCamino();
+    void enviar(string path);
 private:
     stringstream buffer;
     vector<Punto> listaPuntos;
