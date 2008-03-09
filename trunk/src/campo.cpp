@@ -82,21 +82,21 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
     if(!this->estatico){
 	bmas->cargarBoton(	    
 		arean.x+120, 
-		y, 
+		y-5, 
 		20,
 		20,
 		"+",
 		0x01F33EFF);
 	bmenos->cargarBoton(	    
 		arean.x+140, 
-		y, 
+		y-5, 
 		20,
 		20,
 		"-",
 		0xFF4848FF);
 	bok->cargarBoton(	    
 		arean.x+160, 
-		y, 
+		y-5, 
 		30,
 		20,
 		"ok",

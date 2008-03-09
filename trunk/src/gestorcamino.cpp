@@ -43,6 +43,7 @@ int threadCamino(void *p){
 
 	listaPuntos=clienteCapaAlta.getCamino();
 	clienteCapaAlta.clearCamino();	
+	plano.clearCamino();
 
 	Polilinea camino(0,false,"");	
 
@@ -63,9 +64,11 @@ int threadCamino(void *p){
 		   0x00000030 );
 	    SDL_Delay(2000);
 	    plano.pintarMapa(pantalla->getPantalla(),framemapa,plano.getEscala());
+	    pantalla->minimizar();
 	    pantalla->setHandle(true);
 
 	}else{ 
+	    plano.pintarMapa(pantalla->getPantalla(),framemapa,plano.getEscala());
 	    cout << "hay algo" << endl;
 	    cout << "x:" << listaPuntos.front().getX() << 
 		"y:" << listaPuntos.front().getY() << endl;

@@ -3,6 +3,8 @@
 #include <sstream>
 #include <iostream>
 #include "tabla.h"
+#include "constantes.h"
+
 
 extern SDL_mutex *mutexCapaAlta;
 extern SDL_cond *caminoNuevoCond;
@@ -12,22 +14,13 @@ void ClienteCapaAlta::onConnect()
     //cout << this->getStatus() << endl;
     cout << "ClienteCapaAlta: conectando..." << endl;
     while(this->getStatus()==1001){SDL_Delay(1);}//Esperar la conexion
-    extern Tabla tcampos;
-    tcampos.update("CONEX","bien");
+    extern Frame *framestado;
+    if(framestado->getEstado()!=CERRADO){
+	extern Tabla tcampos;
+	tcampos.update("CONEX","bien");
+    }
     cout << "ClienteCapaAlta: conectado!" << endl;
-    ifstream::pos_type size;
-    char * memblock;
-    ifstream myFile ("maps/modelo.dxf", ios::in|ios::binary|ios::ate );
-    if (myFile.is_open()){
-	size = myFile.tellg();
-	memblock=new char[size];
-	myFile.seekg (0, ios::beg);
-	myFile.read (memblock, size);
-	myFile.close();
-	Send("[MAPA]\r\n");
-//	Send("datos_binarios");
-	Send(memblock,size);
-    }else cerr << "[E]: No se puede abrir el fichero" << endl;
+    enviar("maps/modelo.dxf");
 }
 void ClienteCapaAlta::onClose(){
     cerr << "[E]: conexion cerrada" << endl;
@@ -40,23 +33,21 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
     cout << "Rx-Bytes:" << getNumBytesReceived() << " Bloques:" << getNumBlocksReceived() <<endl;
     string Data(Cadena);
 
-    if(Data.find("[ERROR]")==string::npos){
+    if(Data.find(CABECERA_ERROR)==string::npos){
 	double x,y;
 	char *pblanco;
-	if(Data.find("[RUTA]")!=string::npos){
-	    cout << "Inicio Ruta" << endl;
+	if(Data.find(CABECERA_INIRUTA)!=string::npos){
 	    Data.erase(0,6);
 	    x=strtod(Data.c_str(),&pblanco);
 	    y=strtod(pblanco,&pblanco);
 	}
 	Punto p(x,y);
-	cout << "x:"<< x << " y:" << y << endl;
+	//cout << "x:"<< x << " y:" << y << endl;
 	SDL_mutexP(mutexCapaAlta);
 	listaPuntos.push_back(p);
 	SDL_mutexV(mutexCapaAlta);
 
-	if(Data.find("[FIN_RUTA]")!=string::npos){
-	    cout << "\tFinal Ruta********" << endl;
+	if(Data.find(CABECERA_FINRUTA)!=string::npos){
 	    SDL_CondSignal(caminoNuevoCond);
 	}
     }else SDL_CondSignal(caminoNuevoCond);
@@ -87,4 +78,18 @@ vector<Punto> ClienteCapaAlta::getCamino(){
 void ClienteCapaAlta::clearCamino(){
     listaPuntos.clear();
 }
-
+void ClienteCapaAlta::enviar(string path){
+    ifstream::pos_type size;
+    char * memblock;
+    ifstream myFile (path.c_str(), ios::in|ios::binary|ios::ate );
+    if (myFile.is_open()){
+	size = myFile.tellg();
+	memblock=new char[size];
+	myFile.seekg (0, ios::beg);
+	myFile.read (memblock, size);
+	myFile.close();
+	Send(string(CABECERA_MAPA)+"\r\n");
+	Send(memblock,size);
+	cout << memblock << endl;
+    }else cerr << "[E]: No se puede abrir el fichero" << endl;
+}

@@ -72,6 +72,25 @@ SDL_mutex *mutexRot;
 Campo *cconex,
       *cgrid,
       *cdobstaculo,
+      *cprueba,
+      *cprueba1,
+      *cprueba2,
+      *cprueba3,
+      *cprueba4,
+      *cprueba5,
+      *cprueba6,
+      *cprueba7,
+      *cprueba8,
+      *cprueba9,
+      *cprueba10,
+      *cprueba11,
+      *cprueba12,
+      *cprueba13,
+      *cprueba14,
+      *cprueba15,
+      *cprueba16,
+      *cprueba17,
+      *cprueba18,
       *cvelocidad;
 //Tabla de campos
 Tabla tcampos;
@@ -81,7 +100,6 @@ ClienteCapaBaja	clienteCapaBaja; //Sensores
 
 int main(int argc, char *argv[])
 {
-
     semVideo=SDL_CreateMutex();
 
     //Inicio libreria para controlar video
@@ -224,19 +242,8 @@ int main(int argc, char *argv[])
 	botonSelector=new Boton(surfacePrincipal);
 	botonSelector->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+30, 30,30,"o",0x00000000);
 	botonSelector->setIcono("img/mundo.bmp");
-    /*    c1=new Campo(
-		framestado,
-		"conexion:",
-		true);
-	c1->valorStr("bad");
-	//c1->valorNum(clienteCapaAlta.valor,3,4,5);
-	c1->cargarCampo(
-		framestado->getXc(),
-		framestado->getYc(),
-		0x000000FF,
-		0x00FF00FF);
-    */
-	//c1->updateValor(4);
+	
+	//Tabla de estado	
 	cconex=new Campo(
 		surfacePrincipal,
 		"cx camino:",
@@ -254,14 +261,9 @@ int main(int argc, char *argv[])
 		0x000000FF,
 		0x00FF00FF);
 	cgrid->valorNum(4,10,2,1);
-	/*cgrid->cargarCampo(
-		framestado->getXc(),
-		framestado->getYcDown(),
-		0x000000FF,
-		0x00FF00FF);*/
 	tcampos.add("GRID",cgrid);
 	delete cgrid;
-	cout << "valor:" << tcampos.get("GRID").getVstr() << endl;
+	
 	cdobstaculo=new Campo(
 		surfacePrincipal,
 		"d_obst:",
@@ -269,13 +271,200 @@ int main(int argc, char *argv[])
 		0x000000FF,
 		0x00FF00FF);
 	cdobstaculo->valorNum(2,8,2,1);
-	/*cdobstaculo->cargarCampo(
-		framestado->getXc(),
-		framestado->getYcDown(),
-		0x000000FF,
-		0x00FF00FF);*/
 	tcampos.add("DOBSTACULO",cdobstaculo);
 	delete cdobstaculo;
+
+	cprueba=new Campo(
+		surfacePrincipal,
+		"prueba",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA",cprueba);
+	delete cprueba;
+	
+	cprueba1=new Campo(
+		surfacePrincipal,
+		"prueba1",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba1->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA1",cprueba1);
+	delete cprueba1;
+	
+	cprueba2=new Campo(
+		surfacePrincipal,
+		"prueba2",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba2->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA2",cprueba2);
+	delete cprueba2;
+
+	cprueba3=new Campo(
+		surfacePrincipal,
+		"prueba3",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba3->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA3",cprueba3);
+	delete cprueba3;
+
+	cprueba4=new Campo(
+		surfacePrincipal,
+		"prueba4",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba4->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA4",cprueba4);
+	delete cprueba4;
+
+	cprueba5=new Campo(
+		surfacePrincipal,
+		"prueba5",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba5->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA5",cprueba5);
+	delete cprueba5;
+
+	cprueba6=new Campo(
+		surfacePrincipal,
+		"prueba6",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba6->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA6",cprueba6);
+	delete cprueba6;
+
+	cprueba7=new Campo(
+		surfacePrincipal,
+		"prueba7",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba7->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA7",cprueba7);
+	delete cprueba7;
+
+	cprueba8=new Campo(
+		surfacePrincipal,
+		"prueba8",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba8->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA8",cprueba8);
+	delete cprueba8;
+
+	cprueba9=new Campo(
+		surfacePrincipal,
+		"prueba9",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba9->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA9",cprueba9);
+	delete cprueba9;
+
+	cprueba10=new Campo(
+		surfacePrincipal,
+		"prueba10",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba10->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA10",cprueba10);
+	delete cprueba10;
+
+	cprueba11=new Campo(
+		surfacePrincipal,
+		"prueba11",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba11->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA11",cprueba11);
+	delete cprueba11;
+
+	cprueba12=new Campo(
+		surfacePrincipal,
+		"prueba12",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba12->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA12",cprueba12);
+	delete cprueba12;
+
+	cprueba13=new Campo(
+		surfacePrincipal,
+		"prueba13",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba13->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA13",cprueba13);
+	delete cprueba13;
+
+	cprueba14=new Campo(
+		surfacePrincipal,
+		"prueba14",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba14->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA14",cprueba14);
+	delete cprueba14;
+
+	cprueba15=new Campo(
+		surfacePrincipal,
+		"prueba15",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba15->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA15",cprueba15);
+	delete cprueba15;
+	cprueba16=new Campo(
+		surfacePrincipal,
+		"prueba16",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba16->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA16",cprueba16);
+	delete cprueba16;
+
+	cprueba17=new Campo(
+		surfacePrincipal,
+		"prueba17",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba17->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA17",cprueba17);
+	delete cprueba17;
+
+	cprueba18=new Campo(
+		surfacePrincipal,
+		"prueba18",
+		false,
+		0x000000FF,
+		0x00FF00FF);
+	cprueba18->valorNum(2,8,2,1);
+	tcampos.add("PRUEBA18",cprueba18);
+	delete cprueba18;
+
+
+
 	tcampos.recargar(framestado);
 
 	//Actualizar cambios en la pantalla
