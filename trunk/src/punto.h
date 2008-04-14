@@ -24,7 +24,8 @@ public:
     /** Cambiar sistema cordenadas de plano a  pantalla */
     void cpantalla(Frame *frame, double dh, double dv,double escala);
     /** Cambiar sistema cordenadas de pantalla a plano */
-    void cplano(double x, double y, double escala, double ox, double oy);
+    void cplano(double x, double y, double escala, Frame *frame);
+void cplano(double x, double y, Frame *frame, double dh, double dv, double escala);
 
 private:
     double x,y; 

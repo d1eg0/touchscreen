@@ -40,11 +40,11 @@ public:
     /** Lectura de un mapa situado en 'ruta' */
     void lectura(string ruta);
     /** Set del origen en (x,y) */
-    void setOrigen(int x, int y);
+    //void setOrigen(int x, int y);
     /** Duelve la componente X del origen */
-    double getOX();
+   // double getOX();
     /** Duelve la componente Y del origen */
-    double getOY();
+   // double getOY();
     /** Duelve el desplazamiento horizontal del origen */
     double getDH();
     /** Duelve el desplazamiento vertical del origen */
@@ -68,13 +68,13 @@ public:
     /** Escala el mapa a 'escala' */
     void escalarMapa(double escala);
     /** Pinta el mapa en la superficie 'screen', en el frame 'frame', a escala 'escala' */
-    void pintarMapa(SDL_Surface *screen,Frame *frame, double escala);
+    void pintarMapa(SDL_Surface *screen, double escala);
     /** Pinta el camino en la superficie 'screen', en el frame 'frame', a escala 'escala' */
     void pintarCamino(SDL_Surface *screen,Frame *frame, double escala);
     /** Calculo de los desplazamientos para el centrado */
     void calcularDHV(Frame *frame);
     /** Centra el mapa */
-    void centrarMapa();
+    void centrarMapa(Frame *frame);
 
     //Desplazamientos
     /** Desplaza el mapa arriba */
@@ -95,8 +95,8 @@ private:
     double escala; //0%..100%
     
     //Origen 0,0
-    double ox;
-    double oy;
+    //double ox;
+    //double oy;
     //Desplazamientos para el centrado: horizontal y vertical
     double dh;
     double dv;

@@ -21,8 +21,8 @@
 #include "dxfparser.h"
 Mapa::Mapa(){
     this->escala=100;
-    this->ox=0;
-    this->oy=0;
+    //this->ox=0;
+    //this->oy=0;
     this->dh=0;
     this->dv=0;
 }
@@ -49,19 +49,19 @@ string Mapa::getPath(){
     return path;
 }
 
-void Mapa::setOrigen(int x, int y){
+/*void Mapa::setOrigen(int x, int y){
     ox=x;
     oy=y;
-}
+}*/
 
-double Mapa::getOX(){
+/*double Mapa::getOX(){
     return ox;
 }
 
 double Mapa::getOY(){
     return oy;
 }
-
+*/
 double Mapa::getDH(){
     return dh;
 }
@@ -112,13 +112,13 @@ void Mapa::clearMapa(){
 }
 
 
-void Mapa::pintarMapa(SDL_Surface *screen, Frame *frame, double escala){   
+void Mapa::pintarMapa(SDL_Surface *screen, double escala){   
     this->escala=escala;
-    this->frame=frame;
+    //this->frame=frame;
     this->pincel=new Dibujar(screen);
     this->calcularDHV(frame);
-    this->ox=frame->getX()+dh;
-    this->oy=frame->getY()+frame->getH()+dv;
+    //this->ox=frame->getX()+this->dh;
+    //this->oy=frame->getY()+frame->getH()+this->dv;
     vector<Capa>::iterator i_capa;
     vector<Linea>::iterator i_linea;
     frame->limpiarFrame(false);
@@ -153,12 +153,14 @@ void Mapa::pintarCamino(SDL_Surface *screen, Frame *frame, double escala){
 
 void Mapa::calcularDHV(Frame *frame){   
     dh=(frame->getW()*0.5-(xm*escala/100.0));
-    dv=-(frame->getH()*0.5-(ym*escala/100.0));	//negativo porque el eje Y+ apunta a Y-
+    dv=(frame->getH()*0.5-(ym*escala/100.0));	//negativo porque el eje Y+ apunta a Y-
+    //dh=frame->getW()*0.5;
+    //dv=frame->getH()*0.5;	
 }
 
-void Mapa::centrarMapa(){   
-
-    vector<Capa>::iterator i_capa;
+void Mapa::centrarMapa(Frame *frame){   
+this->frame=frame;
+    /*vector<Capa>::iterator i_capa;
     vector<Linea>::iterator i_linea;
     double x_max=0;
     double y_max=0;     
@@ -181,33 +183,36 @@ void Mapa::centrarMapa(){
 	}
     }
     xm=x_max*0.5;
-    ym=y_max*0.5;
+    ym=y_max*0.5;*/
+xm=0;
+ym=0;
+
 }
 
 void Mapa::escalarMapa(double escala){
     this->escala+=escala;
-    pintarMapa(frame->getVentana(),frame,this->escala);
+    pintarMapa(frame->getVentana(),this->escala);
 }
 
 
 void Mapa::despArriba(){
     this->ym+=FACTOR_DESP;
-    pintarMapa(frame->getVentana(),frame,this->escala);
+    pintarMapa(frame->getVentana(),this->escala);
 }
 
 void Mapa::despAbajo(){
     this->ym-=FACTOR_DESP;
-    pintarMapa(frame->getVentana(),frame,this->escala);
+    pintarMapa(frame->getVentana(),this->escala);
 }
 
 void Mapa::despIzquierda(){
     this->xm-=FACTOR_DESP;
-    pintarMapa(frame->getVentana(),frame,this->escala);
+    pintarMapa(frame->getVentana(),this->escala);
 }
 
 void Mapa::despDerecha(){
     this->xm+=FACTOR_DESP;
-    pintarMapa(frame->getVentana(),frame,this->escala);
+    pintarMapa(frame->getVentana(),this->escala);
 }
 
 

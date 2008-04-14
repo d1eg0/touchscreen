@@ -55,3 +55,4 @@ void DxfParser::addBlock(const DL_BlockData& data){
 	nombre=data.name.c_str();
 }
 
+	

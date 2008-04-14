@@ -143,9 +143,9 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_W/10.0*6.0), 
 		(int)((float)SCREEN_H/10.0*7.5),
 		"Plano",0xffffff);
-	plano.lectura("maps/modelo.dxf");
-	plano.centrarMapa();
-	plano.pintarMapa(surfacePrincipal,framemapa,100);
+	plano.lectura("maps/cientificot_P1.dxf");
+	plano.centrarMapa(framemapa);
+	plano.pintarMapa(surfacePrincipal,600);
 	
 	silla=new Silla(framemapa,&plano);
 	silla->setPos(Punto(100,100));
@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
 	cprueba->valorNum(2,8,2,1);
 	tcampos.add("PRUEBA",cprueba);
 	delete cprueba;
-	
+/*	
 	cprueba1=new Campo(
 		surfacePrincipal,
 		"prueba1",
@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 	cprueba18->valorNum(2,8,2,1);
 	tcampos.add("PRUEBA18",cprueba18);
 	delete cprueba18;
-
+*/
 
 
 	tcampos.recargar(framestado);
