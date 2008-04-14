@@ -96,7 +96,7 @@ void Pantalla::entrada()
 	    if(!handle)return;
 	    cout << "x:" << event.motion.x << " y:" << event.motion.y <<  endl;
 	    Punto p;
-	    p.cplano(event.motion.x, event.motion.y,plano.getEscala(),plano.getOX(),plano.getOY());
+	    p.cplano(event.motion.x, event.motion.y,framemapa,plano.getDH(),plano.getDV(),plano.getEscala());
 	    if(objetivo.preguntado()){
 		int respuesta=objetivo.respuesta(event.motion.x,event.motion.y);
 		string dataObjetivo;
@@ -107,7 +107,7 @@ void Pantalla::entrada()
 			objetivo.activar();
 			objetivo.nopreguntar();
 			framemapa->limpiarFrame(false);
-			plano.pintarMapa(screen,framemapa,plano.getEscala());
+			plano.pintarMapa(screen,plano.getEscala());
 			objetivo.dibujar();
 			objetivo.store();//guardarlo
 			dataObjetivo="[OBJETIVO] "+objetivo.toString()+"\r\n";
@@ -117,7 +117,7 @@ void Pantalla::entrada()
 		    case RESPUESTA_NO:
 			objetivo.nopreguntar();
 			framemapa->limpiarFrame(false);
-			plano.pintarMapa(screen,framemapa,plano.getEscala());
+			plano.pintarMapa(screen,plano.getEscala());
 			if(objetivo.getFijado())objetivo.load();//cargarlo
 			objetivo.dibujar();
 			break;	    
@@ -144,7 +144,6 @@ void Pantalla::entrada()
 			    break;
 			}
 		    }
-
 		    string zona="no id";
 		    vector<Polilinea> *habitaciones=
 			plano.getCapa("CapaHabitacions")->getPolilinea();
@@ -403,8 +402,8 @@ void Pantalla::entrada()
 	    }
 	    else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
-		plano.centrarMapa();
-		plano.pintarMapa(screen,framemapa,plano.getEscala());
+		plano.centrarMapa(framemapa);
+		plano.pintarMapa(screen,plano.getEscala());
 		silla->dibujar();
 		if(objetivo.getFijado()){
 		    objetivo.load();
@@ -429,7 +428,7 @@ void Pantalla::entrada()
 		    frameradar->desactivarFrame();
 		    framestado->desactivarFrame();
 		    framemapa->maxFrame(MARGENH,MARGENV,SCREEN_W-2*MARGENH,framemapa->getH());
-		    plano.pintarMapa(screen,framemapa,plano.getEscala());
+		    plano.pintarMapa(screen,plano.getEscala());
 		    silla->dibujar();
 		    if(objetivo.getFijado()){
 			objetivo.load();
@@ -698,7 +697,7 @@ void Pantalla::minimizar(){
     framestado->minFrame(); 
     framemapa->minFrame(); 
     frameselector->desactivarFrame(); 
-    plano.pintarMapa(screen,framemapa,plano.getEscala());
+    plano.pintarMapa(screen,plano.getEscala());
     silla->dibujar();
     if(objetivo.getFijado()){
 	objetivo.load();
