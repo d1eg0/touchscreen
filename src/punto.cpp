@@ -25,11 +25,6 @@ void Punto::cpantalla(Frame *frame, double dh, double dv,double escala){
     double factor=escala/100.0;
     this->y*=factor;
     this->x*=factor;
-	cout << "fh: " <<frame->getH() << endl <<
-		"fy: " <<frame->getY() << endl <<
-		"yplano: " <<this->y << endl <<
-		"dv: "<< dv << endl << 
-		"resultado: " << (frame->getH()+frame->getY())-this->y-dv << endl << endl;
     this->y= (frame->getH()+frame->getY())-this->y-dv;//negativo porque el eje Y+ apunta a Y-
     this->x= frame->getX()+this->x+dh;
 
