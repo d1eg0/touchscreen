@@ -94,6 +94,8 @@ Capa* Mapa::getCapa(string c){
 	 }
     }
     cerr << "No existe la capa: " << c << endl;
+    Capa *vacia=new Capa();
+    return vacia;
 }
 
 void Mapa::addCapa(Capa capa){

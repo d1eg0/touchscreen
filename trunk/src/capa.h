@@ -35,6 +35,7 @@ using namespace std;
 
 class Capa {
 public:
+    Capa();
     /** Instanciar una nueva capa con nombre 'nombre' */ 
     Capa(string nombre);
     ~Capa();

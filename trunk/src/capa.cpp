@@ -18,6 +18,8 @@
 
 #include "capa.h"
 
+Capa::Capa(){
+}
 Capa::Capa(string nombre){
     this->nombre=nombre;
 }
