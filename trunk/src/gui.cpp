@@ -144,8 +144,10 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_H/10.0*7.5),
 		"Plano",0xffffff);
 	plano.lectura("maps/cientificot_P1.dxf");
-	plano.centrarMapa(framemapa);
-	plano.pintarMapa(surfacePrincipal,600);
+	plano.setFrame(framemapa);
+	plano.centrarMapa();
+	plano.calcularZoom();
+	plano.pintarMapa(surfacePrincipal,plano.getEscala());
 	
 	silla=new Silla(framemapa,&plano);
 	silla->setPos(Punto(100,100));

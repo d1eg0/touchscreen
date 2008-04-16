@@ -53,13 +53,13 @@ bool Objetivo::interior(Polilinea polilinea){
 }
 
 void Objetivo::dibujar(){
-    int tradio;
+    int tradio=(int)radio;
     SDL_Rect r=frame->getArea();
     extern SDL_mutex *semVideo;
     SDL_mutexP(semVideo);
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_LockSurface(frame->getVentana());
     SDL_SetClipRect(frame->getVentana(),&r);
-    tradio=(int)(radio*(plano->getEscala()/100.0)); 
+    //tradio=(int)(radio*(plano->getEscala()/100.0)); 
     Uint32 color;
     if(valido)color=0x00ff00ff;
     else color=0xff0000ff;
