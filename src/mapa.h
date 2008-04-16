@@ -39,12 +39,6 @@ public:
     string getPath();
     /** Lectura de un mapa situado en 'ruta' */
     void lectura(string ruta);
-    /** Set del origen en (x,y) */
-    //void setOrigen(int x, int y);
-    /** Duelve la componente X del origen */
-   // double getOX();
-    /** Duelve la componente Y del origen */
-   // double getOY();
     /** Duelve el desplazamiento horizontal del origen */
     double getDH();
     /** Duelve el desplazamiento vertical del origen */
@@ -74,7 +68,11 @@ public:
     /** Calculo de los desplazamientos para el centrado */
     void calcularDHV(Frame *frame);
     /** Centra el mapa */
-    void centrarMapa(Frame *frame);
+    void centrarMapa();
+    /** Calcular el zoom para ajustar el mapa a la ventana */
+    void calcularZoom();
+    /** Frame donde se pintara */
+    void setFrame(Frame *frame);
 
     //Desplazamientos
     /** Desplaza el mapa arriba */
@@ -94,9 +92,6 @@ private:
     Frame *frame;
     double escala; //0%..100%
     
-    //Origen 0,0
-    //double ox;
-    //double oy;
     //Desplazamientos para el centrado: horizontal y vertical
     double dh;
     double dv;

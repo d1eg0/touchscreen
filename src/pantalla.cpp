@@ -155,6 +155,7 @@ void Pantalla::entrada()
 			if(objetivo.interior((*i_habitacion))){
 			    zona=(*i_habitacion).getHabitacion();
 			    break;
+				
 			}
 		    }
 		    
@@ -321,9 +322,8 @@ void Pantalla::entrada()
 			    0x00000043);
 
 		}
-	    }
-	    
-	    if(botonMasZoom->presionado(event.motion.x,event.motion.y)){
+	    }	    
+	    else if(botonMasZoom->presionado(event.motion.x,event.motion.y)){
 	        if(plano.getEscala()<ZOOM_MAX){
 		    framemapa->limpiarFrame(false);
 		    plano.escalarMapa(FACTOR_ZOOM);
@@ -402,7 +402,7 @@ void Pantalla::entrada()
 	    }
 	    else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
 		framemapa->limpiarFrame(false);
-		plano.centrarMapa(framemapa);
+		plano.centrarMapa();
 		plano.pintarMapa(screen,plano.getEscala());
 		silla->dibujar();
 		if(objetivo.getFijado()){

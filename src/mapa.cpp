@@ -19,6 +19,7 @@
 #include "constantes.h"
 #include <dxflib/dl_dxf.h>
 #include "dxfparser.h"
+#include <math.h>
 Mapa::Mapa(){
     this->escala=100;
     //this->ox=0;
@@ -49,19 +50,6 @@ string Mapa::getPath(){
     return path;
 }
 
-/*void Mapa::setOrigen(int x, int y){
-    ox=x;
-    oy=y;
-}*/
-
-/*double Mapa::getOX(){
-    return ox;
-}
-
-double Mapa::getOY(){
-    return oy;
-}
-*/
 double Mapa::getDH(){
     return dh;
 }
@@ -116,11 +104,8 @@ void Mapa::clearMapa(){
 
 void Mapa::pintarMapa(SDL_Surface *screen, double escala){   
     this->escala=escala;
-    //this->frame=frame;
     this->pincel=new Dibujar(screen);
     this->calcularDHV(frame);
-    //this->ox=frame->getX()+this->dh;
-    //this->oy=frame->getY()+frame->getH()+this->dv;
     vector<Capa>::iterator i_capa;
     vector<Linea>::iterator i_linea;
     frame->limpiarFrame(false);
@@ -156,39 +141,41 @@ void Mapa::pintarCamino(SDL_Surface *screen, Frame *frame, double escala){
 void Mapa::calcularDHV(Frame *frame){   
     dh=(frame->getW()*0.5-(xm*escala/100.0));
     dv=(frame->getH()*0.5-(ym*escala/100.0));	//negativo porque el eje Y+ apunta a Y-
-    //dh=frame->getW()*0.5;
-    //dv=frame->getH()*0.5;	
 }
+void Mapa::calcularZoom(){
 
-void Mapa::centrarMapa(Frame *frame){   
-this->frame=frame;
-    /*vector<Capa>::iterator i_capa;
+    this->calcularDHV(frame);
+    vector<Capa>::iterator i_capa;
     vector<Linea>::iterator i_linea;
+    int margen=4;
     double x_max=0;
     double y_max=0;     
+    double x_min=0;
+    double y_min=0;     
+    double fx,fy,f;
+    double x_mayor,y_mayor;
     for(i_capa=this->listaCapas.begin(); i_capa!=this->listaCapas.end(); i_capa++){
 	vector<Linea> llineas=(*(*i_capa).getCapa());
 	for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
 	    Linea lleida=(*i_linea);
-	    if (lleida.getX1()>x_max){
-		x_max=lleida.getX1();
-	    }
-	    if (lleida.getX2()>x_max){
-		x_max=lleida.getX2();
-	    }
-	    if (lleida.getY1()>y_max){
-		y_max=lleida.getY1();
-	    }
-	    if (lleida.getY2()>y_max){
-		y_max=lleida.getY2();
-	    }
+	    if (fabs(lleida.getX1())>x_max){x_max=lleida.getX1();}
+	    if (fabs(lleida.getX2())>x_max){x_max=lleida.getX2();}
+	    if (fabs(lleida.getY1())>y_max){y_max=lleida.getY1();}
+	    if (fabs(lleida.getY2())>y_max){y_max=lleida.getY2();}
 	}
     }
-    xm=x_max*0.5;
-    ym=y_max*0.5;*/
-xm=0;
-ym=0;
+    fx=dh/(x_max+margen);
+    fy=dv/(y_max+margen);
+    if(fx<fy)f=fx;
+    else f=fy;
+    int e=(int)floor(f*100.0);
+    escala=e-fmod(e,FACTOR_ZOOM);
 
+}
+
+void Mapa::centrarMapa(){   
+    xm=0;
+    ym=0;
 }
 
 void Mapa::escalarMapa(double escala){
@@ -217,6 +204,8 @@ void Mapa::despDerecha(){
     pintarMapa(frame->getVentana(),this->escala);
 }
 
-
+void Mapa::setFrame(Frame *frame){
+this->frame=frame;
+}
 
 
