@@ -93,12 +93,15 @@ void Pantalla::entrada()
 	    break;
  
 	case SDL_MOUSEBUTTONDOWN:
+
 	    if(!handle)return;
-	    cout << "x:" << event.motion.x << " y:" << event.motion.y <<  endl;
+	    int mouse_x=event.motion.x;
+	    int mouse_y=event.motion.y;
+	    cout << "x:" << mouse_x << " y:" << mouse_y <<  endl;
 	    Punto p;
-	    p.cplano(event.motion.x, event.motion.y,framemapa,plano.getDH(),plano.getDV(),plano.getEscala());
+	    p.cplano(mouse_x, mouse_y,framemapa,plano.getDH(),plano.getDV(),plano.getEscala());
 	    if(objetivo.preguntado()){
-		int respuesta=objetivo.respuesta(event.motion.x,event.motion.y);
+		int respuesta=objetivo.respuesta(mouse_x,mouse_y);
 		string dataObjetivo;
 		switch(respuesta){
 		    case SIN_RESPUESTA:
@@ -123,8 +126,7 @@ void Pantalla::entrada()
 			break;	    
 		}
 	    }
-	    else if(!objetivo.preguntado()&&framemapa->presionado(event.motion.x,event.motion.y)){
-		
+	    else if(!objetivo.preguntado()&&framemapa->presionado(mouse_x,mouse_y)){
 		objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());		
 		Polilinea contorno=
 		    plano.getCapa("CapaContorn")->getPolilinea()->front();
@@ -187,9 +189,9 @@ void Pantalla::entrada()
 		    }
 
 		    //Posicion de la etiqueta pregunta
-		    int x1=event.motion.x-50;
+		    int x1=mouse_x-50;
 		    int x2=x1+titulo.size()*SIZE_C+10;
-		    int y1=event.motion.y-50;
+		    int y1=mouse_y-50;
 		    //Corregir la posicion de la etiqueta
 		    if(x2>framemapa->getX()+framemapa->getW()){
 			x1-=x2-(framemapa->getX()+framemapa->getW());
@@ -275,9 +277,6 @@ void Pantalla::entrada()
 			    color_valor,
 			    sincolor,
 			    0x00000043);
-
-
-		    //cout << "\tpx:" << p.getX() << ", py:" << p.getY() << endl;
 		}else{
 		    cout << " Fuera " << endl;
 		    int x1,y1;
@@ -323,7 +322,7 @@ void Pantalla::entrada()
 
 		}
 	    }	    
-	    else if(botonMasZoom->presionado(event.motion.x,event.motion.y)){
+	    else if(botonMasZoom->presionado(mouse_x,mouse_y)){
 	        if(plano.getEscala()<ZOOM_MAX){
 		    framemapa->limpiarFrame(false);
 		    plano.escalarMapa(FACTOR_ZOOM);
@@ -334,11 +333,10 @@ void Pantalla::entrada()
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
 		    e_vzoom->insertarTexto(plano.getEscalaStr());
-		    //SDL_UpdateRect(screen,0,0,0,0);
 		    framemapa->refrescarFrame();
 		}
 	    }
-	    else if(botonMenosZoom->presionado(event.motion.x,event.motion.y)){
+	    else if(botonMenosZoom->presionado(mouse_x,mouse_y)){
 		if(plano.getEscala()>ZOOM_MIN){
 		    framemapa->limpiarFrame(false);
 		    plano.escalarMapa(-FACTOR_ZOOM);
@@ -349,11 +347,10 @@ void Pantalla::entrada()
 			objetivo.dibujar();
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
-		    //SDL_UpdateRect(screen,0,0,0,0);
 		    framemapa->refrescarFrame();
 		}
 	    }
-	    else if(botonDerecha->presionado(event.motion.x,event.motion.y)){
+	    else if(botonDerecha->presionado(mouse_x,mouse_y)){
 		framemapa->limpiarFrame(false);
 		plano.despDerecha();
 		silla->dibujar();
@@ -362,10 +359,9 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		//SDL_UpdateRect(screen,0,0,0,0);
 		framemapa->refrescarFrame();
 	    }
-	    else if(botonIzquierda->presionado(event.motion.x,event.motion.y)){
+	    else if(botonIzquierda->presionado(mouse_x,mouse_y)){
 		framemapa->limpiarFrame(false);
 		plano.despIzquierda();
 		silla->dibujar();
@@ -374,10 +370,9 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		//SDL_UpdateRect(screen,0,0,0,0);
 		framemapa->refrescarFrame();
 	    }
-	    else if(botonArriba->presionado(event.motion.x,event.motion.y)){
+	    else if(botonArriba->presionado(mouse_x,mouse_y)){
 		framemapa->limpiarFrame(false);
 		plano.despArriba();
 		silla->dibujar();
@@ -386,10 +381,9 @@ void Pantalla::entrada()
 		    objetivo.dibujar();
 		}
 		if(objetivo.preguntado())objetivo.nopreguntar();
-		//SDL_UpdateRect(screen,0,0,0,0);
 		framemapa->refrescarFrame();
 	    }
-	    else if(botonAbajo->presionado(event.motion.x,event.motion.y)){
+	    else if(botonAbajo->presionado(mouse_x,mouse_y)){
 		framemapa->limpiarFrame(false);
 		plano.despAbajo();
 		silla->dibujar();
@@ -400,7 +394,7 @@ void Pantalla::entrada()
 		if(objetivo.preguntado())objetivo.nopreguntar();
 		framemapa->refrescarFrame();
 	    }
-	    else if(botonCentrar->presionado(event.motion.x,event.motion.y)){
+	    else if(botonCentrar->presionado(mouse_x,mouse_y)){
 		framemapa->limpiarFrame(false);
 		plano.centrarMapa();
 		plano.pintarMapa(screen,plano.getEscala());
@@ -412,13 +406,13 @@ void Pantalla::entrada()
 		if(objetivo.preguntado())objetivo.nopreguntar();
 		framemapa->refrescarFrame();
 	    }
-	    else if(botonSelector->presionado(event.motion.x,event.motion.y)){
+	    else if(botonSelector->presionado(mouse_x,mouse_y)){
 		if(frameselector->getEstado()==CERRADO){
 		    selector=new Selector(screen);
 		    selector->buscarW("/mnt/usb/USB1/","dxf");
 		}
 	    }
-	    else if(framemapa->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
+	    else if(framemapa->getBmaxmin()->presionado(mouse_x,mouse_y)){
 		if(framemapa->getEstado()==MINIMO){
 		    SDL_mutexP(mutexSincRadar);
 		    pauseRadar=true;
@@ -484,10 +478,8 @@ void Pantalla::entrada()
 		    SDL_CondSignal(condSincRadar);
 		    
 		}
-
-		//SDL_UpdateRect(screen,0,0,0,0);
 	    }
-	    else if(frameradar->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
+	    else if(frameradar->getBmaxmin()->presionado(mouse_x,mouse_y)){
 		this->borrar();
 		if(frameradar->getEstado()==MINIMO){
 		    framemapa->desactivarFrame();
@@ -510,7 +502,7 @@ void Pantalla::entrada()
 		}
 		//SDL_UpdateRect(screen,0,0,0,0);
 	    }
-	    else if(framestado->getBmaxmin()->presionado(event.motion.x,event.motion.y)){
+	    else if(framestado->getBmaxmin()->presionado(mouse_x,mouse_y)){
 		if(framestado->getEstado()==MINIMO){
 		    
 		    SDL_mutexP(mutexSincRadar);
@@ -540,17 +532,18 @@ void Pantalla::entrada()
 		    SDL_CondSignal(condSincRadar);
 		    
 		}
-	    }else if(frameselector->getEstado()!=CERRADO
-		    &&frameselector->presionado(event.motion.x,event.motion.y)){
-		    if(selector->handle(event.motion.x,event.motion.y)){
+	    }
+	    else if(frameselector->getEstado()!=CERRADO
+		    &&frameselector->presionado(mouse_x,mouse_y)){
+		    if(selector->handle(mouse_x,mouse_y)){
 			cout << "voy a enviar" << endl;
 			clienteCapaAlta.enviar(plano.getPath());
 		    }
 
-	    }else if(framestado->presionado(event.motion.x,event.motion.y)){
-		tcampos.handle( event.motion.x, event.motion.y);
 	    }
-		
+	    else if(framestado->presionado(mouse_x,mouse_y)){
+		tcampos.handle( mouse_x, mouse_y);
+	    }
 
 
 

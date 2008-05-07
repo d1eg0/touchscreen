@@ -25,14 +25,14 @@ Boton::~Boton()
 {
 
 }
-char* Boton::getTexto(){
+string Boton::getTexto(){
     return texto;
 }
 bool Boton::getEstado(){
     return estado;
 }
 
-void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
+void Boton::cargarBoton(int x, int y, int w, int h, string c, Uint32 color)
 {
 	this->color=color;
 	texto=c;
@@ -52,11 +52,10 @@ void Boton::cargarBoton(int x, int y, int w, int h, char *c, Uint32 color)
 	if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
 	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, color);
 	rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xffffffff);
-	string str(c);
 	stringColor(ventana,
-		(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), 
+		(int)( area.x+(area.w*0.5)-(SIZE_C*c.size()*0.5)), 
 		(int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), 
-		c, 
+		(char*)c.c_str(), 
 		0xffffffFF);
 	if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
 	SDL_UpdateRect(ventana, contenedor.x, contenedor.y, contenedor.w, contenedor.h);
@@ -112,11 +111,12 @@ void Boton::borrar(){
 
 }
 
-void Boton::setIcono(char* iconoruta){
+void Boton::setIcono(string iconoruta){
   //  cout << string(iconoruta).length() <<endl;
 
-    iconopath=(char*)malloc((string(iconoruta).length()+100)*sizeof(char));
-    strcpy(iconopath,iconoruta);
+    //iconopath=(char*)malloc((string(iconoruta).length()+100)*sizeof(char));
+    //strcpy(iconopath,iconoruta);
+    iconopath=iconoruta;
     this->conicono=true;
     extern SDL_mutex *semVideo;
     
@@ -124,7 +124,7 @@ void Boton::setIcono(char* iconoruta){
     offset.x=area.x;
     offset.y=area.y;
 
-    SDL_Surface *iconotemp=SDL_LoadBMP(iconoruta); 
+    SDL_Surface *iconotemp=SDL_LoadBMP((char*)iconoruta.c_str()); 
     icono=SDL_DisplayFormat(iconotemp);
     icono=rotozoomSurface (icono, 0, 0.1, 1);
     SDL_FreeSurface( iconotemp );

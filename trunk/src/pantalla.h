@@ -15,16 +15,6 @@ using namespace std;
  */
 class Pantalla
 {
-private:
-    SDL_Surface* screen;
-    int h_screen;
-    int v_screen;
-    bool sdl_quit,
-	 //alpha,
-	 handle,
-	 pcontestada;
-    const SDL_VideoInfo *info;
-
 public:
     /** Instancia de la pantalla */
     Pantalla(SDL_Surface *screen);
@@ -48,6 +38,17 @@ public:
     void mapaOff();
     /** Modifica el valor de gestionar o no la entrada */ 
     void setHandle(bool handle);
+private:
+    SDL_Surface* screen;
+    int h_screen;
+    int v_screen;
+    bool sdl_quit,
+	 //alpha,
+	 handle,
+	 pcontestada;
+    const SDL_VideoInfo *info;
+
+
 };
 #endif
 

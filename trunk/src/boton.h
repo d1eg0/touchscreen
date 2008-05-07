@@ -1,7 +1,8 @@
 #ifndef BOTON_H
 #define BOTON_H
 #include <SDL/SDL.h>
-#include <string>
+#include <iostream>
+using namespace std;
 /**
  *    \file  boton.h
  *   \brief  
@@ -37,7 +38,7 @@ public:
     Boton(SDL_Surface *Ventana);
     virtual ~Boton();
     /** visualizar el boton en la posicion (x,y) y con una dimension de (w x h) = ancho x alto */
-    void cargarBoton(int x, int y, int w, int h, char *c, Uint32 color);
+    void cargarBoton(int x, int y, int w, int h, string c, Uint32 color);
     /** para visualizar el boton en caso de haber sido borrado */
     void recargarBoton();
     /** devuelve true si el boton esta presionado, false en caso contrario */ 
@@ -45,7 +46,7 @@ public:
     /** devuelve el estado del boton, true=activo false=inactivo */
     bool getEstado();
     /** devuelve el texto del boton */
-    char* getTexto();
+    string getTexto();
     /** desactiva el boton, pero se sigue visualizando */
     void desactivar();     
     /** deshabilita el boton, oscurenciendolo */
@@ -53,11 +54,11 @@ public:
     /** borra el boton */
     void borrar();
     /** poner icono */
-    void setIcono(char* iconoruta);
+    void setIcono(string iconoruta);
 private:
     SDL_Rect area;
     SDL_Surface *ventana;
-    char *texto;
+    string texto;
     Uint32 color;
 
     SDL_Surface *surfacef;
@@ -66,7 +67,7 @@ private:
     SDL_Rect contenedor;
     
     SDL_Surface *icono;
-    char *iconopath;
+    string iconopath;
     bool conicono; 
     EstadoBoton estado;
 };
