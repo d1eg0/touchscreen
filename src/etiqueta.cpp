@@ -11,7 +11,7 @@ Etiqueta::Etiqueta(SDL_Surface *Ventana)
 	area.w=40;
 	area.x=0;
 	area.y=0;
-	texto="?";
+	//texto="?";
 	ventana=Ventana;
 
 
@@ -23,7 +23,7 @@ Etiqueta::~Etiqueta()
 }
 
 
-void Etiqueta::cargarEtiqueta(int x, int y, int w, int h, char *c, Uint32 colorFuente, Uint32 colorBorde, Uint32 colorRelleno)
+void Etiqueta::cargarEtiqueta(int x, int y, int w, int h, string c, Uint32 colorFuente, Uint32 colorBorde, Uint32 colorRelleno)
 {
 	this->colorFuente=colorFuente;
 	this->colorBorde=colorBorde;
@@ -44,14 +44,14 @@ void Etiqueta::cargarEtiqueta(int x, int y, int w, int h, char *c, Uint32 colorF
 	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorRelleno);
 	rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorBorde);
 
-	string str(c);
-	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, colorFuente);
+	
+	stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*c.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), (char*)c.c_str(), colorFuente);
 	if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
 	SDL_UpdateRect(ventana, area.x, area.y, area.w, area.h);
 	SDL_mutexV(semVideo);
 }
 
-void Etiqueta::insertarTexto(char *c){
+void Etiqueta::insertarTexto(string c){
 
     extern SDL_mutex *semVideo;
     SDL_mutexP(semVideo);
@@ -60,8 +60,7 @@ void Etiqueta::insertarTexto(char *c){
     boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorRelleno);
     rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorBorde);
 
-    string str(c);
-    stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*str.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), c, colorFuente);
+    stringColor(ventana,(int)( area.x+(area.w*0.5)-(SIZE_C*c.size()*0.5)), (int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), (char*)c.c_str(), colorFuente);
 
     if(SDL_MUSTLOCK(ventana)) SDL_UnlockSurface(ventana);
     SDL_UpdateRect(ventana, area.x, area.y, area.w, area.h);

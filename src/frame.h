@@ -2,8 +2,10 @@
 #define FRAME_H
 #include <SDL/SDL.h>
 #include "boton.h"
+#include <iostream>
 
 
+using namespace std;
 /**
  *  \class Frame
  *  \brief Gestiona el sistema de subventanas
@@ -18,7 +20,7 @@ public:
     virtual ~Frame();
     /** Carga el frame en la posicion 'x' 'y' con una anchura 'w' y una altura 'h'. El t&iacute;tulo
      * de la ventana es 'c', y el borde de color 'color' */
-    void cargarFrame(int x, int y, int w, int h,char *c, Uint32 color);
+    void cargarFrame(int x, int y, int w, int h, string c, Uint32 color);
 	//void CargarBoton(int x, int y, int w, int h,char *_text, Uint32 _Colorfons, SDL_Color *_Colortext);
    // void cerrarFrame();
    /** Maximiza el frame */
@@ -54,7 +56,7 @@ public:
     Uint8 getEstado();
 
 private:
-    char* titulo;
+    string titulo;
     SDL_Rect area,areamax;
     SDL_Surface *ventana;
     SDL_Surface *frame;

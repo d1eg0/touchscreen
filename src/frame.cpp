@@ -6,17 +6,18 @@
 
 Frame::Frame(SDL_Surface *ventana)
 {
-	area.h=0;
-	area.w=0;
-	area.x=0;
-	area.y=0;
+    area.h=0;
+    area.w=0;
+    area.x=0;
+    area.y=0;
 
-	areamax.h=0;
-	areamax.w=0;
-	areamax.x=0;
-	areamax.y=0;
-	this->ventana=ventana;
-	bmaxmin=new Boton(ventana);
+    areamax.h=0;
+    areamax.w=0;
+    areamax.x=0;
+    areamax.y=0;
+    this->ventana=ventana;
+    this->estado=CERRADO;
+    bmaxmin=new Boton(ventana);
 }
 
 Frame::~Frame()
@@ -24,7 +25,7 @@ Frame::~Frame()
 
 }
 
-void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
+void Frame::cargarFrame(int x, int y, int w, int h, string c, Uint32 color)
 {
     extern SDL_mutex *semVideo;
     //Cordenadas de los campos
@@ -40,9 +41,9 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     this->area.y=y;
 
     /*this->areamax.h=SCREEN_H-MARGEN;
-    this->areamax.w=SCREEN_W-2*MARGEN;
-    this->areamax.x=x;
-    this->areamax.y=y;*/
+      this->areamax.w=SCREEN_W-2*MARGEN;
+      this->areamax.x=x;
+      this->areamax.y=y;*/
     this->titulo=c;
     this->estado=MINIMO;
 
@@ -51,20 +52,20 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
     this->contenedor.w=w+4;
     this->contenedor.h=h;
 
-/*    this->contenedormax.x=areamax.x;
-    this->contenedormax.y=areamax.y-MARGEN;
-    this->contenedormax.w=SCREEN_W-MARGEN;
-    this->contenedormax.h=SCREEN_H-MARGEN;
-  */  
+    /*    this->contenedormax.x=areamax.x;
+	  this->contenedormax.y=areamax.y-MARGEN;
+	  this->contenedormax.w=SCREEN_W-MARGEN;
+	  this->contenedormax.h=SCREEN_H-MARGEN;
+	  */  
     this->limpiarFrame(true);
     //Etiqueta
     Etiqueta etitulo(ventana);
     etitulo.cargarEtiqueta(
 	    area.x,
 	    area.y-15,
-	    string(titulo).size()*SIZE_C,
+	    titulo.size()*SIZE_C,
 	    SIZE_C*2,
-	    titulo,
+	    (char *)titulo.c_str(),
 	    0xFFA500FF,
 	    0,
 	    0x000000FF);
@@ -79,16 +80,16 @@ void Frame::cargarFrame(int x, int y, int w, int h, char *c, Uint32 color)
 }
 
 /*void Frame::cerrarFrame(){
-    //no importa borrarlo porque hay q borrar la pantalla entera
-    if(estado==MAXIMO){
-	SDL_SetClipRect(ventana, &contenedormax);
-	SDL_FillRect(ventana, &contenedormax, 0x000000);
-    }else if (estado==MINIMO){
-	SDL_SetClipRect(ventana, &contenedor);
-	SDL_FillRect(ventana, &contenedor, 0x000000);
-    }
-    SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
-    estado=CERRADO;
+//no importa borrarlo porque hay q borrar la pantalla entera
+if(estado==MAXIMO){
+SDL_SetClipRect(ventana, &contenedormax);
+SDL_FillRect(ventana, &contenedormax, 0x000000);
+}else if (estado==MINIMO){
+SDL_SetClipRect(ventana, &contenedor);
+SDL_FillRect(ventana, &contenedor, 0x000000);
+}
+SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
+estado=CERRADO;
 }*/
 
 void Frame::maxFrame(int x,int y,int w,int h){
@@ -97,7 +98,7 @@ void Frame::maxFrame(int x,int y,int w,int h){
     this->areamax.w=w;
     this->areamax.x=x;
     this->areamax.y=y;
-    
+
     this->contenedormax.x=areamax.x;
     this->contenedormax.y=areamax.y-MARGENV;
     this->contenedormax.w=w;
@@ -111,7 +112,7 @@ void Frame::maxFrame(int x,int y,int w,int h){
 	    areamax.y-15,
 	    string(titulo).size()*SIZE_C,
 	    SIZE_C*2,
-	    titulo,
+	    (char*)titulo.c_str(),
 	    0xFFA500FF,
 	    0,
 	    0x000000FF);
@@ -135,7 +136,7 @@ void Frame::minFrame(){
 	    area.y-15,
 	    string(titulo).size()*SIZE_C,
 	    SIZE_C*2,
-	    titulo,
+	    (char*)titulo.c_str(),
 	    0xFFA500FF,
 	    0,
 	    0x000000FF);	
@@ -199,8 +200,9 @@ SDL_Surface* Frame::getVentana(){
 
 bool Frame::presionado(int x,int y)
 {
-	return (x>this->getX())&&(x<this->getX()+this->getW())&&
-		(y>this->getY())&&(y<this->getY()+this->getH());
+//    cout << "dentro" << endl;
+    return (x>this->getX())&&(x<(this->getX()+this->getW()))&&
+	(y>this->getY())&&(y<(this->getY()+this->getH()));
 }
 
 
@@ -230,8 +232,8 @@ SDL_Rect Frame::getArea(){
 }
 
 /*Boton* Frame::getBcerrar(){
-    return bcerrar;
-}*/
+  return bcerrar;
+  }*/
 
 Boton* Frame::getBmaxmin(){
     return bmaxmin;
