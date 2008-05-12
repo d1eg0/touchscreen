@@ -24,6 +24,8 @@ public:
     void clearCamino();
     void enviar(string path);
 private:
+    string modo;
+    double status;
     stringstream buffer;
     vector<Punto> listaPuntos;
     void onConnect();

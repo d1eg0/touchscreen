@@ -30,12 +30,14 @@ Mapa::Mapa(){
 
 Mapa::~Mapa(){
     listaCapas.clear();
+    camino.clear();
 }
 
 void Mapa::lectura(string ruta){
     //Lectura Fichero DXF, introduce la estructura en plano
     path=ruta;
     listaCapas.clear();
+    camino.clear();
     DxfParser *parser_dxf=new DxfParser();
     DL_Dxf* dxf = new DL_Dxf();
     if (!dxf->in(ruta.c_str(), parser_dxf)) {

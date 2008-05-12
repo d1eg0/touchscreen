@@ -1,7 +1,7 @@
 #include "clientecapa_baja.h"
 #include <SDL/SDL.h>
 #include "tabla.h"
-
+#include "constantes.h"
 extern SDL_cond* sensorNuevoCond;
 extern SDL_mutex* mutexCapaBaja;
 
@@ -13,7 +13,6 @@ void ClienteCapaBaja::onConnect()
     tcampos.update("CONEX","bien");
     cout << "ClienteCapaBaja: conectado!" << endl;
     //Send("hola");
-
 }
 /*
 void ClienteCapaBaja::onDataArrival(string Data)
@@ -57,23 +56,37 @@ void ClienteCapaBaja::onLineArrival(string Cadena)
     cout << "Rx-Bytes:" << getNumBytesReceived() << " Bloques:" << getNumBlocksReceived() <<endl;
     string Data(Cadena);
 
-    if(Data.find("ERROR")==string::npos){
+    if(Data.find(CABECERA_ERROR)==string::npos){
 	double x,y;
 	char *pblanco;
 	x=strtod(Data.c_str(),&pblanco);
 	y=strtod(pblanco,&pblanco);
-	//Punto p(x,y);
-	cout << "x:"<< x << " y:" << y << endl;
-	SDL_mutexP(mutexCapaBaja);
-	//listaValores.push_back(p);
-	SDL_mutexV(mutexCapaBaja);
-	//si hay un dolar es final de datos
-	if(Data.find("$")!=string::npos){
-	    SDL_CondSignal(sensorNuevoCond);
+
+	if(Data.find(CABECERA_POS)!=string::npos){
+	    Data.erase(0,(string(CABECERA_POS)).size());
+	    x=strtod(Data.c_str(),&pblanco);
+	    y=strtod(pblanco,&pblanco);
+	    angulo=strtod(pblanco,&pblanco);
+	    Punto p(x,y);
+	    SDL_mutexP(mutexCapaBaja);
+	    pos=p;
+	    SDL_mutexV(mutexCapaBaja);
+	}else if(Data.find(CABECERA_SENS)!=string::npos){
+	    Data.erase(0,(string(CABECERA_SENS)).size());
+	    int i;
+	    float val;
+	    pblanco=(char *)Data.c_str();
+	    for (i=0;i<4;i++){
+		val=strtod(pblanco,&pblanco);
+		sensor[i]=val;
+	    }
 	}
-    }else SDL_CondSignal(sensorNuevoCond);
+
+	/*if(Data.find(CABECERA_FINRUTA)!=string::npos){
+	    SDL_CondSignal(caminoNuevoCond);
+	}*/
+    }//else SDL_CondSignal(caminoNuevoCond);
     
-    //Activar la condicion del thread gestor_capaalta
 }
 
 void ClienteCapaBaja::onClose(){

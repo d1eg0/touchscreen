@@ -68,13 +68,13 @@ void Frame::cargarFrame(int x, int y, int w, int h, string c, Uint32 color)
 	    (char *)titulo.c_str(),
 	    0xFFA500FF,
 	    0,
-	    0x000000FF);
+	    COLOR_BG);
 
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(x+w-15,y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //bmaxmin=new Boton(ventana);
-    bmaxmin->cargarBoton(x+w-2*T_BOTON,y-T_BOTON,T_BOTON*2,T_BOTON,"+", 0xFFA500FF);
+    bmaxmin->cargarBoton(x+w-2*T_BOTON,y-T_BOTON,T_BOTON*2,T_BOTON,"+", 0xFFA500FF, COLOR_BORDER_BOTON);
     //SDL_SetClipRect(ventana, &area);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
@@ -115,12 +115,12 @@ void Frame::maxFrame(int x,int y,int w,int h){
 	    (char*)titulo.c_str(),
 	    0xFFA500FF,
 	    0,
-	    0x000000FF);
+	    COLOR_BG);	
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(areamax.x+areamax.w-15,areamax.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //bmaxmin=new Boton(ventana);
-    bmaxmin->cargarBoton(areamax.x+areamax.w-2*T_BOTON,areamax.y-T_BOTON,2*T_BOTON,T_BOTON,"-", 0xFFA500FF);
+    bmaxmin->cargarBoton(areamax.x+areamax.w-2*T_BOTON,areamax.y-T_BOTON,2*T_BOTON,T_BOTON,"-", 0xFFA500FF, COLOR_BORDER_BOTON);
     //SDL_SetClipRect(ventana, &areamax);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
     xc=x+5;
@@ -139,7 +139,7 @@ void Frame::minFrame(){
 	    (char*)titulo.c_str(),
 	    0xFFA500FF,
 	    0,
-	    0x000000FF);	
+	    COLOR_BG);	
     //Boton maximizar
     //bcerrar=new Boton(ventana);
     //bcerrar->cargarBoton(area.x+area.w-15,area.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
@@ -151,7 +151,8 @@ void Frame::minFrame(){
 	    2*T_BOTON,
 	    T_BOTON,
 	    "+", 
-	    0xFFA500FF);
+	    0xFFA500FF,
+	    COLOR_BORDER_BOTON);
     //SDL_SetClipRect(ventana, &area);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
     xc=getX()+5;

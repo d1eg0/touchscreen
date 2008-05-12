@@ -409,7 +409,7 @@ void Pantalla::entrada()
 	    else if(botonSelector->presionado(mouse_x,mouse_y)){
 		if(frameselector->getEstado()==CERRADO){
 		    selector=new Selector(screen);
-		    selector->buscarW("/mnt/usb/USB1/","dxf");
+		    selector->buscarW("x/mnt/usb/USB1/","dxf");
 		}
 	    }
 	    else if(framemapa->getBmaxmin()->presionado(mouse_x,mouse_y)){
@@ -442,14 +442,16 @@ void Pantalla::entrada()
 			    20,
 			    20,
 			    "+",
-			    0xFFA500FF);
+			    0xFFA500FF,
+			    COLOR_BORDER_BOTON);
 		    botonMenosZoom->cargarBoton(
 			    framemapa->getX()+framemapa->getW()-50, 
 			    framemapa->getY()+framemapa->getH()+30, 
 			    20,
 			    20,
 			    "-",
-			    0xFFA500FF);
+			    0xFFA500FF,
+			    COLOR_BORDER_BOTON);
 
 		    //Etiqueta Zoom
 		    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
@@ -459,7 +461,7 @@ void Pantalla::entrada()
 			    "Zoom",
 			    0xFFA500FF,
 			    0x000000FF,
-			    0x000000FF);
+			    COLOR_BG);
 
 		    e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
 			    framemapa->getY()+framemapa->getH()+50,
@@ -468,7 +470,7 @@ void Pantalla::entrada()
 			    plano.getEscalaStr(),
 			    0xFFA500FF,
 			    0xFFA500FF,
-			    0x000000FF);
+			    COLOR_BG);
 		}else{ 
 		    this->borrar();
 		    this->minimizar();
@@ -536,7 +538,6 @@ void Pantalla::entrada()
 	    else if(frameselector->getEstado()!=CERRADO
 		    &&frameselector->presionado(mouse_x,mouse_y)){
 		    if(selector->handle(mouse_x,mouse_y)){
-			cout << "voy a enviar" << endl;
 			clienteCapaAlta.enviar(plano.getPath());
 		    }
 
@@ -571,7 +572,7 @@ void Pantalla::borrar(){
     if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
     SDL_FreeSurface(screen);
     SDL_SetClipRect(screen,&r);
-    SDL_FillRect( screen, 0, 0x000000);
+    SDL_FillRect( screen, 0, COLOR_BG);
     if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
     SDL_UpdateRect(screen,0,0,0,0);
     SDL_mutexV(semVideo);
@@ -690,6 +691,8 @@ void Pantalla::minimizar(){
     framestado->minFrame(); 
     framemapa->minFrame(); 
     frameselector->desactivarFrame(); 
+    plano.centrarMapa();
+    plano.calcularZoom();
     plano.pintarMapa(screen,plano.getEscala());
     silla->dibujar();
     if(objetivo.getFijado()){
@@ -711,13 +714,15 @@ void Pantalla::minimizar(){
 	    20,
 	    20,
 	    "+",
-	    0xFFA500FF);
+	    0xFFA500FF,
+	    COLOR_BORDER_BOTON);
     botonMenosZoom->cargarBoton(framemapa->getX()+framemapa->getW()-50, 
 	    framemapa->getY()+framemapa->getH()+30, 
 	    20,
 	    20,
 	    "-",
-	    0xFFA500FF);
+	    0xFFA500FF,
+	    COLOR_BORDER_BOTON);
     //Etiqueta Zoom
     e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
 	    framemapa->getY()+framemapa->getH()+10,
@@ -726,7 +731,7 @@ void Pantalla::minimizar(){
 	    "Zoom",
 	    0xFFA500FF,
 	    0x000000FF,
-	    0x000000FF);
+	    COLOR_BG);
     e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
 	    framemapa->getY()+framemapa->getH()+50,
 	    70,
@@ -734,7 +739,7 @@ void Pantalla::minimizar(){
 	    plano.getEscalaStr(),
 	    0xFFA500FF,
 	    0xFFA500FF,
-	    0x000000FF);
+	    COLOR_BG);
     tcampos.recargar(framestado);
 }
 void Pantalla::mapaOff(){

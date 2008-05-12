@@ -27,7 +27,7 @@ void Etiqueta::cargarEtiqueta(int x, int y, int w, int h, string c, Uint32 color
 {
 	this->colorFuente=colorFuente;
 	this->colorBorde=colorBorde;
-	this->colorRelleno=colorRelleno;
+	this->colorRelleno=colorRelleno|0x000000ff;
 	area.h=h;
 	area.w=w;
 	area.x=x;

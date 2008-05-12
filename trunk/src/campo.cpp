@@ -86,21 +86,24 @@ void Campo::cargarCampo(int x, int y, Uint32 colorNombre, Uint32 colorValor)
 		20,
 		20,
 		"+",
-		0x01F33EFF);
+		0x01F33EFF,
+		COLOR_BORDER_BOTON);
 	bmenos->cargarBoton(	    
 		arean.x+140, 
 		y-5, 
 		20,
 		20,
 		"-",
-		0xFF4848FF);
+		0xFF4848FF,
+		COLOR_BORDER_BOTON);
 	bok->cargarBoton(	    
 		arean.x+160, 
 		y-5, 
 		30,
 		20,
 		"ok",
-		0x20B2AAFF);
+		0x20B2AAFF,
+		COLOR_BORDER_BOTON);
 
 	if(modificado==false){
 	    bok->desactivar();

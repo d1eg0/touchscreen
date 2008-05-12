@@ -32,9 +32,10 @@ bool Boton::getEstado(){
     return estado;
 }
 
-void Boton::cargarBoton(int x, int y, int w, int h, string c, Uint32 color)
+void Boton::cargarBoton(int x, int y, int w, int h, string c, Uint32 colorFondo, Uint32 colorBorde)
 {
-	this->color=color;
+	this->colorFondo=colorFondo;
+	this->colorBorde=colorBorde;
 	texto=c;
 	area.h=h;
 	area.w=w;
@@ -50,8 +51,8 @@ void Boton::cargarBoton(int x, int y, int w, int h, string c, Uint32 color)
 	SDL_mutexP(semVideo);
 	SDL_SetClipRect(ventana, &area);
 	if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
-	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, color);
-	rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, 0xffffffff);
+	boxColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorFondo);
+	rectangleColor(ventana, area.x, area.y, area.x+area.w-1, area.y+area.h-1, colorBorde);
 	stringColor(ventana,
 		(int)( area.x+(area.w*0.5)-(SIZE_C*c.size()*0.5)), 
 		(int)(area.y+(area.h*0.5)-(SIZE_C*0.5)), 
@@ -67,7 +68,7 @@ void Boton::recargarBoton(){
     if(conicono==true){
 	this->setIcono(this->iconopath);
     }else{
-	this->cargarBoton(area.x,area.y,area.w,area.h,texto,color);
+	this->cargarBoton(area.x,area.y,area.w,area.h,texto,colorFondo,colorBorde);
     }
 }
 
@@ -127,8 +128,11 @@ void Boton::setIcono(string iconoruta){
     SDL_Surface *iconotemp=SDL_LoadBMP((char*)iconoruta.c_str()); 
     icono=SDL_DisplayFormat(iconotemp);
     icono=rotozoomSurface (icono, 0, 0.1, 1);
+    Uint32 colorkey = SDL_MapRGB( icono->format, 0x00, 0x00, 0x00 );
+    SDL_SetColorKey( icono, SDL_SRCCOLORKEY, colorkey );
     SDL_FreeSurface( iconotemp );
     
+    SDL_mutexP(semVideo);
     SDL_SetClipRect(ventana, &area);
     if(SDL_MUSTLOCK(ventana))SDL_LockSurface(ventana);
     
