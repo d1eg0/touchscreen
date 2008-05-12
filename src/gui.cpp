@@ -67,30 +67,13 @@ SDL_mutex *semVideo;
 SDL_mutex *mutexObstaculo;
 //  Silla
 SDL_mutex *mutexRot;
+// Datos capa baja
 
 //Campos de estado
 Campo *cconex,
       *cgrid,
       *cdobstaculo,
       *cprueba,
-      *cprueba1,
-      *cprueba2,
-      *cprueba3,
-      *cprueba4,
-      *cprueba5,
-      *cprueba6,
-      *cprueba7,
-      *cprueba8,
-      *cprueba9,
-      *cprueba10,
-      *cprueba11,
-      *cprueba12,
-      *cprueba13,
-      *cprueba14,
-      *cprueba15,
-      *cprueba16,
-      *cprueba17,
-      *cprueba18,
       *cvelocidad;
 //Tabla de campos
 Tabla tcampos;
@@ -129,7 +112,7 @@ int main(int argc, char *argv[])
 	}
 
 	SDL_SetAlpha(surfacePrincipal, SDL_SRCALPHA, 0);
-	SDL_FillRect(surfacePrincipal, 0, 0x000000);
+	SDL_FillRect(surfacePrincipal, 0, COLOR_BG);
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
 	pantalla=new Pantalla(surfacePrincipal);
 	//Ocultar el cursor
@@ -143,7 +126,7 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_W/10.0*6.0), 
 		(int)((float)SCREEN_H/10.0*7.5),
 		"Plano",0xffffff);
-//	plano.lectura("maps/modelo.dxf");
+	//plano.lectura("maps/modelo.dxf");
 	plano.lectura("maps/cientificot_P1.dxf");
 	plano.setFrame(framemapa);
 	plano.centrarMapa();
@@ -194,7 +177,8 @@ int main(int argc, char *argv[])
 		20,
 		20,
 		"+",
-		0xFFA500FF);
+		0xFFA500FF,
+		COLOR_BORDER_BOTON);
 
 	botonMenosZoom=new Boton(surfacePrincipal);
 	botonMenosZoom->cargarBoton(
@@ -203,7 +187,8 @@ int main(int argc, char *argv[])
 		20,
 		20,
 		"-",
-		0xFFA500FF);
+		0xFFA500FF,
+		COLOR_BORDER_BOTON);
 
 	//Etiqueta Zoom
 	e_zoom=new Etiqueta(surfacePrincipal);
@@ -214,7 +199,7 @@ int main(int argc, char *argv[])
 		"Zoom",
 		0xFFA500FF,
 		0x000000FF,
-		0x000000FF);
+		COLOR_BG);
 	e_vzoom=new Etiqueta(surfacePrincipal);
 	e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
 		framemapa->getY()+framemapa->getH()+50,
@@ -223,28 +208,28 @@ int main(int argc, char *argv[])
 		plano.getEscalaStr(),
 		0xFFA500FF,
 		0xFFA500FF,
-		0x000000FF);
+		COLOR_BG);
 
 
 	//Botones movimiento del mapa
 	//	Derecha
 	botonDerecha=new Boton(surfacePrincipal);
-	botonDerecha->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,">",0xFFA500FF);
+	botonDerecha->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,">",0xFFA500FF,COLOR_BORDER_BOTON);
 	//	Izquierda
 	botonIzquierda=new Boton(surfacePrincipal);
-	botonIzquierda->cargarBoton(framemapa->getX()+60, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0xFFA500FF);
+	botonIzquierda->cargarBoton(framemapa->getX()+60, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0xFFA500FF,COLOR_BORDER_BOTON);
 	//	Arriba
 	botonArriba=new Boton(surfacePrincipal);
-	botonArriba->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0xFFA500FF);
+	botonArriba->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0xFFA500FF,COLOR_BORDER_BOTON);
 	//	Abajo
 	botonAbajo=new Boton(surfacePrincipal);
-	botonAbajo->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF);
+	botonAbajo->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF,COLOR_BORDER_BOTON);
 	//	Centrar
 	botonCentrar=new Boton(surfacePrincipal);
-	botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF);
+	botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF,COLOR_BORDER_BOTON);
 	//	Selector
 	botonSelector=new Boton(surfacePrincipal);
-	botonSelector->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+30, 30,30,"o",0x00000000);
+	botonSelector->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+30, 30,30,"o",0x00000000,0X00000000);
 	botonSelector->setIcono("img/mundo.bmp");
 	
 	//Tabla de estado	

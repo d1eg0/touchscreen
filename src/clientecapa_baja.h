@@ -7,7 +7,8 @@
 #include <SDL/SDL_thread.h>
 #include <sstream>
 #include <iostream>
-
+#include "punto.h"
+using namespace std;
 /**
  *  \class ClienteCapaBaja
  *  \brief gestiona la conexion con el embedded IA
@@ -21,6 +22,9 @@ public:
     vector<double> getValores();
 private:
     vector<double> listaValores;
+    Punto pos;
+    double angulo;
+    double sensor[4];
     void onConnect();
     //void onDataArrival(string Data);
     void onLineArrival(string Cadena);

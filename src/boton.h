@@ -38,7 +38,7 @@ public:
     Boton(SDL_Surface *Ventana);
     virtual ~Boton();
     /** visualizar el boton en la posicion (x,y) y con una dimension de (w x h) = ancho x alto */
-    void cargarBoton(int x, int y, int w, int h, string c, Uint32 color);
+    void cargarBoton(int x, int y, int w, int h, string c, Uint32 colorFondo,Uint32 colorBorde);
     /** para visualizar el boton en caso de haber sido borrado */
     void recargarBoton();
     /** devuelve true si el boton esta presionado, false en caso contrario */ 
@@ -59,7 +59,8 @@ private:
     SDL_Rect area;
     SDL_Surface *ventana;
     string texto;
-    Uint32 color;
+    Uint32 colorFondo;
+    Uint32 colorBorde;
 
     SDL_Surface *surfacef;
     SDL_Color colorFuente;

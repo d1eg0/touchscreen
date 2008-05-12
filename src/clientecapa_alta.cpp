@@ -37,19 +37,28 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
 	double x,y;
 	char *pblanco;
 	if(Data.find(CABECERA_INIRUTA)!=string::npos){
+	    modo=CABECERA_INIRUTA;
 	    Data.erase(0,6);
 	    x=strtod(Data.c_str(),&pblanco);
 	    y=strtod(pblanco,&pblanco);
-	}
-	Punto p(x,y);
-	//cout << "x:"<< x << " y:" << y << endl;
-	SDL_mutexP(mutexCapaAlta);
-	listaPuntos.push_back(p);
-	SDL_mutexV(mutexCapaAlta);
-
-	if(Data.find(CABECERA_FINRUTA)!=string::npos){
+	}else if(Data.find(CABECERA_FINRUTA)!=string::npos){
 	    SDL_CondSignal(caminoNuevoCond);
+	}else if(Data.find(CABECERA_STATUS)!=string::npos){
+	    modo=CABECERA_STATUS;
 	}
+
+	if(modo==CABECERA_INIRUTA){
+	    Punto p(x,y);
+	    //cout << "x:"<< x << " y:" << y << endl;
+	    SDL_mutexP(mutexCapaAlta);
+	    listaPuntos.push_back(p);
+	    SDL_mutexV(mutexCapaAlta);
+	}else if(modo==CABECERA_STATUS){
+	    Data.erase(0,(string(CABECERA_STATUS)).size());
+	    double val=strtod(Data.c_str(),&pblanco);
+	    status=val; 
+	}
+
     }else SDL_CondSignal(caminoNuevoCond);
     
     //Activar la condicion del thread gestor_capaalta

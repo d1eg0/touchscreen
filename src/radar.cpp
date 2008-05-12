@@ -181,9 +181,7 @@ void Radar::dibujarFlecha(int rot){
     //boxColor(flecha,0,0,100,100,0x00ffffff);
     //if(SDL_MUSTLOCK(flecha))SDL_UnlockSurface(flecha);
     //añadirla
-    SDL_mutexP(semVideo);
-     flecha=SDL_LoadBMP( "img/flecha.bmp" ); 
-   // flecha=IMG_Load("flecha.bmp");
+    flecha=SDL_LoadBMP( "img/flecha.bmp" ); 
     flechaopt=SDL_DisplayFormat(flecha);
     Uint32 colorkey = SDL_MapRGB( flechaopt->format, 0xff, 0xff, 0xff );
     SDL_SetColorKey( flechaopt, SDL_SRCCOLORKEY, colorkey );
@@ -192,6 +190,7 @@ void Radar::dibujarFlecha(int rot){
     r.y=0;
     r.w=SCREEN_W;
     r.h=SCREEN_H;
+    SDL_mutexP(semVideo);
     SDL_SetClipRect(this->getFrame()->getVentana(),&r);
     if(SDL_MUSTLOCK(this->getFrame()->getVentana()))SDL_LockSurface(this->getFrame()->getVentana());
     SDL_BlitSurface( flechaopt, NULL, this->getFrame()->getVentana(), &offset );

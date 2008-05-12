@@ -130,14 +130,16 @@ void Objetivo::preguntar(){
 	    SIZE_C*4,
 	    SIZE_C*2,
 	    "Si",
-	    colorbotones);
+	    colorbotones,
+	    COLOR_BORDER_BOTON);
     bno->cargarBoton(
 	    (int)x1+SIZE_C*4,
 	    (int)y1,
 	    SIZE_C*4,
 	    SIZE_C*2,
 	    "No",
-	    colorbotones);
+	    colorbotones,
+	    COLOR_BORDER_BOTON);
     pregunta=true;
 }
 

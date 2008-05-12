@@ -1,3 +1,6 @@
+//Color de fondo
+#define	    COLOR_BG	0x000000
+#define	    COLOR_BORDER_BOTON	0xFFFFFFFF
 //Constantes dimensiones
 #define	    SCREEN_W	640
 #define	    SCREEN_H	480
@@ -66,4 +69,7 @@
 #define	    CABECERA_ERROR	"[ERROR]"
 #define	    CABECERA_INIRUTA    "[RUTA]"
 #define	    CABECERA_FINRUTA    "[FIN_RUTA]"
+#define	    CABECERA_STATUS	"[STATUS]"
+#define	    CABECERA_POS    	"[PRA]"
+#define	    CABECERA_SENS    	"[SENS]"
 
