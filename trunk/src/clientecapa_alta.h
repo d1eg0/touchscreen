@@ -22,7 +22,8 @@ public:
     vector<Punto> getCamino();
     /** Borra el camino guardado */
     void clearCamino();
-    void enviar(string path);
+    void enviarPlano(string path);
+    void enviar(string dato);
 private:
     string modo;
     double status;

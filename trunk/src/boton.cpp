@@ -127,7 +127,7 @@ void Boton::setIcono(string iconoruta){
 
     SDL_Surface *iconotemp=SDL_LoadBMP((char*)iconoruta.c_str()); 
     icono=SDL_DisplayFormat(iconotemp);
-    icono=rotozoomSurface (icono, 0, 0.1, 1);
+    icono=rotozoomSurface (icono, 0, 1, 1);
     Uint32 colorkey = SDL_MapRGB( icono->format, 0x00, 0x00, 0x00 );
     SDL_SetColorKey( icono, SDL_SRCCOLORKEY, colorkey );
     SDL_FreeSurface( iconotemp );

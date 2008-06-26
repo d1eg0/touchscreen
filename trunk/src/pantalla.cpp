@@ -12,13 +12,15 @@
 #include "silla.h"
 #include "selector.h"
 extern Boton *botonMasZoom, 
-       *botonMenosZoom;
+       *botonMenosZoom,
+       *botonAjustarZoom;
 extern Boton *botonDerecha,
        *botonIzquierda,
        *botonArriba,
        *botonAbajo,
        *botonCentrar,
-       *botonSelector;
+       *botonSelector,
+       *botonOnoff;
 extern Mapa plano;
 extern Frame *framemapa,
        *frameradar,
@@ -38,9 +40,9 @@ extern Selector *selector;
 Pantalla::Pantalla(SDL_Surface *screen) 
 {
     this->screen=screen;
-//    Uint8 video_bpp;
-//    Uint32 videoflags;
-//    videoflags = SDL_SWSURFACE | SDL_SRCALPHA ;
+    //    Uint8 video_bpp;
+    //    Uint32 videoflags;
+    //    videoflags = SDL_SWSURFACE | SDL_SRCALPHA ;
     h_screen=SCREEN_H;
     v_screen=SCREEN_W;
     sdl_quit=false;
@@ -65,7 +67,7 @@ void Pantalla::hideCursor(){
 
 SDL_Surface* Pantalla::getPantalla()
 {
-	return screen;
+    return screen;
 }
 
 void Pantalla::entrada() 
@@ -73,355 +75,287 @@ void Pantalla::entrada()
     SDL_Event event;
     SDL_Delay(100);//eliminar espera activa, reducir el consumo de CPU
     while ( SDL_PollEvent( &event ) ) 
-    
-    switch ( event.type ) 
-    {
-	case SDL_KEYDOWN:
-            //Escape presionado
-	    switch (event.key.keysym.sym)
-	    {
-		case SDLK_ESCAPE :
-		    cout << "teclado:scape" << endl;
-		    sdl_quit = true;
-		    break;			    
-	    }
-	    break;
- 
-	case SDL_QUIT:
-	    //Boton de salir
-	    sdl_quit = true;
-	    break;
- 
-	case SDL_MOUSEBUTTONDOWN:
 
-	    if(!handle)return;
-	    int mouse_x=event.motion.x;
-	    int mouse_y=event.motion.y;
-	    cout << "x:" << mouse_x << " y:" << mouse_y <<  endl;
-	    Punto p;
-	    p.cplano(mouse_x, mouse_y,framemapa,plano.getDH(),plano.getDV(),plano.getEscala());
-	    if(objetivo.preguntado()){
-		int respuesta=objetivo.respuesta(mouse_x,mouse_y);
-		string dataObjetivo;
-		switch(respuesta){
-		    case SIN_RESPUESTA:
-			break;
-		    case RESPUESTA_SI:
-			objetivo.activar();
-			objetivo.nopreguntar();
-			framemapa->limpiarFrame(false);
-			plano.pintarMapa(screen,plano.getEscala());
-			objetivo.dibujar();
-			objetivo.store();//guardarlo
-			dataObjetivo="[OBJETIVO] "+objetivo.toString()+"\r\n";
-			clienteCapaAlta.Send(dataObjetivo);
-			cout << "objetivo:" <<objetivo.toString() << endl << "paquete: "<< dataObjetivo << endl;
-			break;
-		    case RESPUESTA_NO:
-			objetivo.nopreguntar();
-			framemapa->limpiarFrame(false);
-			plano.pintarMapa(screen,plano.getEscala());
-			if(objetivo.getFijado())objetivo.load();//cargarlo
-			objetivo.dibujar();
-			break;	    
+	switch ( event.type ) 
+	{
+	    case SDL_KEYDOWN:
+		//Escape presionado
+		switch (event.key.keysym.sym)
+		{
+		    case SDLK_ESCAPE :
+			cout << "teclado:scape" << endl;
+			sdl_quit = true;
+			break;			    
 		}
-	    }
-	    else if(!objetivo.preguntado()&&framemapa->presionado(mouse_x,mouse_y)){
-		objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());		
-		Polilinea contorno=
-		    plano.getCapa("CapaContorn")->getPolilinea()->front();
-		if(objetivo.interior(contorno)){
-		    
-		    vector<Polilinea> *obstaculos=
-			plano.getCapa("CapaObstacles")->getPolilinea();
+		break;
 
-		    objetivo.setValido(true);
-		    vector<Polilinea>::iterator i_obstaculo;
-		    for(i_obstaculo=obstaculos->begin();
-			    i_obstaculo!=obstaculos->end();
-			    i_obstaculo++)
-		    {
-			if(objetivo.interior((*i_obstaculo))){
-			    objetivo.setValido(false);
+	    case SDL_QUIT:
+		//Boton de salir
+		sdl_quit = true;
+		break;
+
+	    case SDL_MOUSEBUTTONDOWN:
+
+		if(!handle)return;
+		int mouse_x=event.motion.x;
+		int mouse_y=event.motion.y;
+		cout << "x:" << mouse_x << " y:" << mouse_y <<  endl;
+		Punto p;
+		p.cplano(mouse_x, mouse_y,framemapa,plano.getDH(),plano.getDV(),plano.getEscala());
+		if(objetivo.preguntado()){
+		    int respuesta=objetivo.respuesta(mouse_x,mouse_y);
+		    string dataObjetivo;
+		    switch(respuesta){
+			case SIN_RESPUESTA:
 			    break;
-			}
-		    }
-		    string zona="no id";
-		    vector<Polilinea> *habitaciones=
-			plano.getCapa("CapaHabitacions")->getPolilinea();
-		    vector<Polilinea>::iterator i_habitacion;
-		    for(i_habitacion=habitaciones->begin();
-			    i_habitacion!=habitaciones->end();
-			    i_habitacion++)
-		    {
-			if(objetivo.interior((*i_habitacion))){
-			    zona=(*i_habitacion).getHabitacion();
+			case RESPUESTA_SI:
+			    objetivo.activar();
+			    objetivo.nopreguntar();
+			    framemapa->limpiarFrame(false);
+			    plano.pintarMapa(screen,plano.getEscala());
+			    objetivo.dibujar();
+			    objetivo.store();//guardarlo
+			    dataObjetivo="[OBJETIVO] "+objetivo.toString()+"\r\n";
+			    clienteCapaAlta.Send(dataObjetivo);
+			    cout << "objetivo:" <<objetivo.toString() << endl << "paquete: "<< dataObjetivo << endl;
 			    break;
-				
-			}
+			case RESPUESTA_NO:
+			    objetivo.nopreguntar();
+			    framemapa->limpiarFrame(false);
+			    plano.pintarMapa(screen,plano.getEscala());
+			    if(objetivo.getFijado())objetivo.load();//cargarlo
+			    objetivo.dibujar();
+			    break;	    
 		    }
-		    
-		    string titulo,
-			   pos;
-		    bool pos_correcta;
-		    Uint32 color_etiq,
-			   sincolor=0x00000000,
-			   color_valor=0x00FF00FF;
-			    
-		    if(!objetivo.getValido()){
-			cerr << "[E]: click sobre obstaculo" << endl;
-			titulo = " Obstaculo! ";//msg
-			ostringstream buffer;//msg
-			buffer << (int)p.getX()<< "," << (int)p.getY();//msg
-			pos=buffer.str();//msg
-			//this->setAlpha(framemapa,Z_CENTRO);//efecto alpha
-			color_etiq=0xFF0000FF;//color
+		}
+		else if(!objetivo.preguntado()&&framemapa->presionado(mouse_x,mouse_y)){
+		    objetivo.setObjetivo(framemapa, &plano,p.getX(),p.getY());		
+		    Polilinea contorno=
+			plano.getCapa("CapaContorn")->getPolilinea()->front();
+		    if(objetivo.interior(contorno)){
+
+			vector<Polilinea> *obstaculos=
+			    plano.getCapa("CapaObstacles")->getPolilinea();
+
+			objetivo.setValido(true);
+			vector<Polilinea>::iterator i_obstaculo;
+			for(i_obstaculo=obstaculos->begin();
+				i_obstaculo!=obstaculos->end();
+				i_obstaculo++)
+			{
+			    if(objetivo.interior((*i_obstaculo))){
+				objetivo.setValido(false);
+				break;
+			    }
+			}
+			string zona="no id";
+			vector<Polilinea> *habitaciones=
+			    plano.getCapa("CapaHabitacions")->getPolilinea();
+			vector<Polilinea>::iterator i_habitacion;
+			for(i_habitacion=habitaciones->begin();
+				i_habitacion!=habitaciones->end();
+				i_habitacion++)
+			{
+			    if(objetivo.interior((*i_habitacion))){
+				zona=(*i_habitacion).getHabitacion();
+				break;
+
+			    }
+			}
+
+			string titulo,
+			       pos;
+			bool pos_correcta;
+			Uint32 color_etiq,
+			       sincolor=0x00000000,
+			       color_valor=0x00FF00FF;
+
+			if(!objetivo.getValido()){
+			    cerr << "[E]: click sobre obstaculo" << endl;
+			    titulo = " Obstaculo! ";//msg
+			    ostringstream buffer;//msg
+			    buffer << (int)p.getX()<< "," << (int)p.getY();//msg
+			    pos=buffer.str();//msg
+			    //this->setAlpha(framemapa,Z_CENTRO);//efecto alpha
+			    color_etiq=0xFF0000FF;//color
+			}else{
+			    titulo="  Objetivo  ";
+			    ostringstream buffer;//msg
+			    buffer << (int)p.getX()<< "," << (int)p.getY();//msg
+			    pos=buffer.str();//msg
+			    color_etiq=0x5757FFFF;//color
+			}
+			if(!objetivo.preguntado()){
+			    objetivo.dibujar();
+			    if(objetivo.getValido())objetivo.preguntar();
+			}
+
+			//Posicion de la etiqueta pregunta
+			int x1=mouse_x-50;
+			int x2=x1+titulo.size()*SIZE_C+10;
+			int y1=mouse_y-50;
+			//Corregir la posicion de la etiqueta
+			if(x2>framemapa->getX()+framemapa->getW()){
+			    x1-=x2-(framemapa->getX()+framemapa->getW());
+			}
+			if(x1<framemapa->getX()){
+			    x1=framemapa->getX();
+			}
+			if(y1<framemapa->getY()){
+			    y1=framemapa->getY();
+			}
+
+			//Etiquetas
+			x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(10*SIZE_C)*0.5)-10;		    
+			y1=(int)(framemapa->getY()+framemapa->getH()+5);
+			//Limpiar Zona Etiquetas
+			SDL_Rect r;
+			r.x=x1;
+			r.y=y1;
+			r.w=SIZE_C*15;
+			r.h=SIZE_C*5*2;
+			extern SDL_mutex *semVideo;
+			SDL_mutexP(semVideo);
+			if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+			SDL_SetClipRect(screen,&r);
+			boxColor(screen,r.x,r.y,r.x+r.w,r.y+r.h,0x000000FF);
+			SDL_UpdateRect(screen,r.x,r.y,r.w,r.h);
+			if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+			SDL_mutexV(semVideo);
+
+			Etiqueta *info;
+			info=new Etiqueta(screen);
+			//titulo
+			info->cargarEtiqueta(
+				x1,
+				y1,
+				titulo.size()*SIZE_C,
+				SIZE_C*2,
+				(char*)titulo.c_str(),
+				color_etiq,
+				color_etiq,
+				0x00000043);
+			//Pos
+			titulo="Pos:";
+			y1+=SIZE_C*2;
+			info->cargarEtiqueta(
+				x1,
+				y1,
+				titulo.size()*SIZE_C,
+				SIZE_C*2,
+				(char*)titulo.c_str(),
+				color_etiq,
+				sincolor,
+				0x00000043);
+			y1+=SIZE_C*2;
+			info->cargarEtiqueta(
+				x1,
+				y1,
+				pos.size()*SIZE_C,
+				SIZE_C*2,
+				(char*)pos.c_str(),
+				color_valor,
+				sincolor,
+				0x00000043);
+			//Zona
+			titulo="Zona:";
+			y1+=SIZE_C*2;
+			info->cargarEtiqueta(
+				x1,
+				y1,
+				titulo.size()*SIZE_C,
+				SIZE_C*2,
+				(char*)titulo.c_str(),
+				color_etiq,
+				sincolor,
+				0x00000043);
+			y1+=SIZE_C*2;
+			info->cargarEtiqueta(
+				x1,
+				y1,
+				zona.size()*SIZE_C,
+				SIZE_C*2,
+				(char*)zona.c_str(),
+				color_valor,
+				sincolor,
+				0x00000043);
 		    }else{
-			titulo="  Objetivo  ";
-			ostringstream buffer;//msg
-			buffer << (int)p.getX()<< "," << (int)p.getY();//msg
-			pos=buffer.str();//msg
-			color_etiq=0x5757FFFF;//color
-		    }
-		    if(!objetivo.preguntado()){
-			objetivo.dibujar();
-			if(objetivo.getValido())objetivo.preguntar();
-		    }
+			cout << " Fuera " << endl;
+			int x1,y1;
+			string titulo=" Pto. Fuera ",
+			       pos;
+			bool pos_correcta;
+			Uint32 color_etiq,
+			       sincolor=0x00000000,
+			       color_valor=0x00FF00FF;
 
-		    //Posicion de la etiqueta pregunta
-		    int x1=mouse_x-50;
-		    int x2=x1+titulo.size()*SIZE_C+10;
-		    int y1=mouse_y-50;
-		    //Corregir la posicion de la etiqueta
-		    if(x2>framemapa->getX()+framemapa->getW()){
-			x1-=x2-(framemapa->getX()+framemapa->getW());
+			color_etiq=0xFF0000FF;//color
+			//Etiquetas
+			x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(10*SIZE_C)*0.5)-10;		    
+			y1=(int)(framemapa->getY()+framemapa->getH()+5);
+
+			//Limpiar Zona Etiquetas
+			SDL_Rect r;
+			r.x=x1;
+			r.y=y1;
+			r.w=SIZE_C*15;
+			r.h=SIZE_C*5*2;
+			extern SDL_mutex *semVideo;
+			SDL_mutexP(semVideo);
+			if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
+			SDL_SetClipRect(screen,&r);
+			boxColor(screen,r.x,r.y,r.x+r.w,r.y+r.h,0x000000FF);
+			SDL_UpdateRect(screen,r.x,r.y,r.w,r.h);
+			if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
+			SDL_mutexV(semVideo);
+
+			Etiqueta *info;
+			info=new Etiqueta(screen);
+			//titulo
+			info->cargarEtiqueta(
+				x1,
+				y1,
+				titulo.size()*SIZE_C,
+				SIZE_C*2,
+				(char*)titulo.c_str(),
+				color_etiq,
+				color_etiq,
+				0x00000043);
+
 		    }
-		    if(x1<framemapa->getX()){
-			x1=framemapa->getX();
+		}	    
+		else if(botonMasZoom->presionado(mouse_x,mouse_y)){
+		    if(plano.getEscala()<ZOOM_MAX){
+			framemapa->limpiarFrame(false);
+			plano.escalarMapa(FACTOR_ZOOM);
+			silla->dibujar();
+			if(objetivo.getFijado()){
+			    objetivo.load();
+			    objetivo.dibujar();
+			}
+			if(objetivo.preguntado())objetivo.nopreguntar();
+			e_vzoom->insertarTexto(plano.getEscalaStr());
+			framemapa->refrescarFrame();
 		    }
-		    if(y1<framemapa->getY()){
-			y1=framemapa->getY();
-		    }
-		    
-		    //Etiquetas
-		    x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(10*SIZE_C)*0.5)-10;		    
-		    y1=(int)(framemapa->getY()+framemapa->getH()+5);
-		    //Limpiar Zona Etiquetas
-		    SDL_Rect r;
-		    r.x=x1;
-		    r.y=y1;
-		    r.w=SIZE_C*15;
-		    r.h=SIZE_C*5*2;
-		    extern SDL_mutex *semVideo;
-		    SDL_mutexP(semVideo);
-		    if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
-		    SDL_SetClipRect(screen,&r);
-		    boxColor(screen,r.x,r.y,r.x+r.w,r.y+r.h,0x000000FF);
-		    SDL_UpdateRect(screen,r.x,r.y,r.w,r.h);
-		    if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
-		    SDL_mutexV(semVideo);
-
-		    Etiqueta *info;
-		    info=new Etiqueta(screen);
-		    //titulo
-		    info->cargarEtiqueta(
-			    x1,
-			    y1,
-			    titulo.size()*SIZE_C,
-			    SIZE_C*2,
-			    (char*)titulo.c_str(),
-			    color_etiq,
-			    color_etiq,
-			    0x00000043);
-		    //Pos
-		    titulo="Pos:";
-		    y1+=SIZE_C*2;
-		    info->cargarEtiqueta(
-			    x1,
-			    y1,
-			    titulo.size()*SIZE_C,
-			    SIZE_C*2,
-			    (char*)titulo.c_str(),
-			    color_etiq,
-			    sincolor,
-			    0x00000043);
-		    y1+=SIZE_C*2;
-		    info->cargarEtiqueta(
-			    x1,
-			    y1,
-			    pos.size()*SIZE_C,
-			    SIZE_C*2,
-			    (char*)pos.c_str(),
-			    color_valor,
-			    sincolor,
-			    0x00000043);
-		    //Zona
-		    titulo="Zona:";
-		    y1+=SIZE_C*2;
-		    info->cargarEtiqueta(
-			    x1,
-			    y1,
-			    titulo.size()*SIZE_C,
-			    SIZE_C*2,
-			    (char*)titulo.c_str(),
-			    color_etiq,
-			    sincolor,
-			    0x00000043);
-		    y1+=SIZE_C*2;
-		    info->cargarEtiqueta(
-			    x1,
-			    y1,
-			    zona.size()*SIZE_C,
-			    SIZE_C*2,
-			    (char*)zona.c_str(),
-			    color_valor,
-			    sincolor,
-			    0x00000043);
-		}else{
-		    cout << " Fuera " << endl;
-		    int x1,y1;
-		    string titulo=" Pto. Fuera ",
-			   pos;
-		    bool pos_correcta;
-		    Uint32 color_etiq,
-			   sincolor=0x00000000,
-			   color_valor=0x00FF00FF;
-		    
-		    color_etiq=0xFF0000FF;//color
-		    //Etiquetas
-		    x1=(int)((framemapa->getW()*0.5+framemapa->getX())-(10*SIZE_C)*0.5)-10;		    
-		    y1=(int)(framemapa->getY()+framemapa->getH()+5);
-
-		    //Limpiar Zona Etiquetas
-		    SDL_Rect r;
-		    r.x=x1;
-		    r.y=y1;
-		    r.w=SIZE_C*15;
-		    r.h=SIZE_C*5*2;
-		    extern SDL_mutex *semVideo;
-		    SDL_mutexP(semVideo);
-		    if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
-		    SDL_SetClipRect(screen,&r);
-		    boxColor(screen,r.x,r.y,r.x+r.w,r.y+r.h,0x000000FF);
-		    SDL_UpdateRect(screen,r.x,r.y,r.w,r.h);
-		    if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
-		    SDL_mutexV(semVideo);
-
-		    Etiqueta *info;
-		    info=new Etiqueta(screen);
-		    //titulo
-		    info->cargarEtiqueta(
-			    x1,
-			    y1,
-			    titulo.size()*SIZE_C,
-			    SIZE_C*2,
-			    (char*)titulo.c_str(),
-			    color_etiq,
-			    color_etiq,
-			    0x00000043);
-
 		}
-	    }	    
-	    else if(botonMasZoom->presionado(mouse_x,mouse_y)){
-	        if(plano.getEscala()<ZOOM_MAX){
+		else if(botonMenosZoom->presionado(mouse_x,mouse_y)){
+		    if(plano.getEscala()>ZOOM_MIN){
+			framemapa->limpiarFrame(false);
+			plano.escalarMapa(-FACTOR_ZOOM);
+			silla->dibujar();
+			e_vzoom->insertarTexto(plano.getEscalaStr());
+			if(objetivo.getFijado()){
+			    objetivo.load();
+			    objetivo.dibujar();
+			}
+			if(objetivo.preguntado())objetivo.nopreguntar();
+			framemapa->refrescarFrame();
+		    }
+		}
+		else if(botonAjustarZoom->presionado(mouse_x,mouse_y)){
 		    framemapa->limpiarFrame(false);
-		    plano.escalarMapa(FACTOR_ZOOM);
-		    silla->dibujar();
-		    if(objetivo.getFijado()){
-			objetivo.load();
-			objetivo.dibujar();
-		    }
-		    if(objetivo.preguntado())objetivo.nopreguntar();
-		    e_vzoom->insertarTexto(plano.getEscalaStr());
-		    framemapa->refrescarFrame();
-		}
-	    }
-	    else if(botonMenosZoom->presionado(mouse_x,mouse_y)){
-		if(plano.getEscala()>ZOOM_MIN){
-		    framemapa->limpiarFrame(false);
-		    plano.escalarMapa(-FACTOR_ZOOM);
-		    silla->dibujar();
-		    e_vzoom->insertarTexto(plano.getEscalaStr());
-		    if(objetivo.getFijado()){
-			objetivo.load();
-			objetivo.dibujar();
-		    }
-		    if(objetivo.preguntado())objetivo.nopreguntar();
-		    framemapa->refrescarFrame();
-		}
-	    }
-	    else if(botonDerecha->presionado(mouse_x,mouse_y)){
-		framemapa->limpiarFrame(false);
-		plano.despDerecha();
-		silla->dibujar();
-		if(objetivo.getFijado()){
-		    objetivo.load();
-		    objetivo.dibujar();
-		}
-		if(objetivo.preguntado())objetivo.nopreguntar();
-		framemapa->refrescarFrame();
-	    }
-	    else if(botonIzquierda->presionado(mouse_x,mouse_y)){
-		framemapa->limpiarFrame(false);
-		plano.despIzquierda();
-		silla->dibujar();
-		if(objetivo.getFijado()){
-		    objetivo.load();
-		    objetivo.dibujar();
-		}
-		if(objetivo.preguntado())objetivo.nopreguntar();
-		framemapa->refrescarFrame();
-	    }
-	    else if(botonArriba->presionado(mouse_x,mouse_y)){
-		framemapa->limpiarFrame(false);
-		plano.despArriba();
-		silla->dibujar();
-		if(objetivo.getFijado()){
-		    objetivo.load();
-		    objetivo.dibujar();
-		}
-		if(objetivo.preguntado())objetivo.nopreguntar();
-		framemapa->refrescarFrame();
-	    }
-	    else if(botonAbajo->presionado(mouse_x,mouse_y)){
-		framemapa->limpiarFrame(false);
-		plano.despAbajo();
-		silla->dibujar();
-		if(objetivo.getFijado()){
-		    objetivo.load();
-		    objetivo.dibujar();
-		}
-		if(objetivo.preguntado())objetivo.nopreguntar();
-		framemapa->refrescarFrame();
-	    }
-	    else if(botonCentrar->presionado(mouse_x,mouse_y)){
-		framemapa->limpiarFrame(false);
-		plano.centrarMapa();
-		plano.pintarMapa(screen,plano.getEscala());
-		silla->dibujar();
-		if(objetivo.getFijado()){
-		    objetivo.load();
-		    objetivo.dibujar();
-		}
-		if(objetivo.preguntado())objetivo.nopreguntar();
-		framemapa->refrescarFrame();
-	    }
-	    else if(botonSelector->presionado(mouse_x,mouse_y)){
-		if(frameselector->getEstado()==CERRADO){
-		    selector=new Selector(screen);
-		    selector->buscarW("x/mnt/usb/USB1/","dxf");
-		}
-	    }
-	    else if(framemapa->getBmaxmin()->presionado(mouse_x,mouse_y)){
-		if(framemapa->getEstado()==MINIMO){
-		    SDL_mutexP(mutexSincRadar);
-		    pauseRadar=true;
-		    SDL_mutexV(mutexSincRadar);
-		    this->borrar();
-		    
-		    frameradar->desactivarFrame();
-		    framestado->desactivarFrame();
-		    framemapa->maxFrame(MARGENH,MARGENV,SCREEN_W-2*MARGENH,framemapa->getH());
+		    plano.centrarMapa();
+		    plano.calcularZoom();
 		    plano.pintarMapa(screen,plano.getEscala());
 		    silla->dibujar();
 		    if(objetivo.getFijado()){
@@ -429,136 +363,229 @@ void Pantalla::entrada()
 			objetivo.dibujar();
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
-
-		    botonDerecha->recargarBoton();
-		    botonIzquierda->recargarBoton();
-		    botonAbajo->recargarBoton();
-		    botonArriba->recargarBoton();
-		    botonCentrar->recargarBoton();
-		    //Botones Zoom
-		    botonMasZoom->cargarBoton(
-			    framemapa->getX()+framemapa->getW()-100, 
-			    framemapa->getY()+framemapa->getH()+30, 
-			    20,
-			    20,
-			    "+",
-			    0xFFA500FF,
-			    COLOR_BORDER_BOTON);
-		    botonMenosZoom->cargarBoton(
-			    framemapa->getX()+framemapa->getW()-50, 
-			    framemapa->getY()+framemapa->getH()+30, 
-			    20,
-			    20,
-			    "-",
-			    0xFFA500FF,
-			    COLOR_BORDER_BOTON);
-
-		    //Etiqueta Zoom
-		    e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
-			    framemapa->getY()+framemapa->getH()+10,
-			    70,
-			    20,
-			    "Zoom",
-			    0xFFA500FF,
-			    0x000000FF,
-			    COLOR_BG);
-
-		    e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
-			    framemapa->getY()+framemapa->getH()+50,
-			    70,
-			    20,
-			    plano.getEscalaStr(),
-			    0xFFA500FF,
-			    0xFFA500FF,
-			    COLOR_BG);
-		}else{ 
-		    this->borrar();
-		    this->minimizar();
-		    SDL_mutexP(mutexSincRadar);
-		    pauseRadar=false;
-		    SDL_mutexV(mutexSincRadar);
-		    SDL_CondSignal(condSincRadar);
-		    
+		    e_vzoom->insertarTexto(plano.getEscalaStr());
+		    framemapa->refrescarFrame();
 		}
-	    }
-	    else if(frameradar->getBmaxmin()->presionado(mouse_x,mouse_y)){
-		this->borrar();
-		if(frameradar->getEstado()==MINIMO){
-		    framemapa->desactivarFrame();
-		    framestado->desactivarFrame();
-		    frameradar->maxFrame(MARGENH, MARGENV, SCREEN_W-2*MARGENH, SCREEN_H-2*MARGENV);
-
-		    //desactivar botones de zoom y desplazamiento
-		    botonDerecha->desactivar();
-		    botonIzquierda->desactivar();
-		    botonAbajo->desactivar();
-		    botonArriba->desactivar();
-		    botonCentrar->desactivar();
-		    botonMasZoom->desactivar();
-		    botonMenosZoom->desactivar();
-
-		    radar->recargar(false);
-		}else if(frameradar->getEstado()==MAXIMO){
-		    this->minimizar();
-		    radar->recargar(false);
+		else if(botonDerecha->presionado(mouse_x,mouse_y)){
+		    framemapa->limpiarFrame(false);
+		    plano.despDerecha();
+		    silla->dibujar();
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar();
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
+		    framemapa->refrescarFrame();
 		}
-		//SDL_UpdateRect(screen,0,0,0,0);
-	    }
-	    else if(framestado->getBmaxmin()->presionado(mouse_x,mouse_y)){
-		if(framestado->getEstado()==MINIMO){
-		    
-		    SDL_mutexP(mutexSincRadar);
-		    pauseRadar=true;
-		    SDL_mutexV(mutexSincRadar);
-		    this->borrar();
-		    
-		    frameradar->desactivarFrame();
-		    framestado->maxFrame(MARGENH,MARGENV,SCREEN_W-2*MARGENH,SCREEN_H-2*MARGENV);
-		    framemapa->desactivarFrame();
-		    //desactivar botones de zoom y desplazamiento
-		    botonDerecha->desactivar();
-		    botonIzquierda->desactivar();
-		    botonAbajo->desactivar();
-		    botonArriba->desactivar();
-		    botonCentrar->desactivar();
-		    botonMasZoom->desactivar();
-		    botonMenosZoom->desactivar();
-
-		    tcampos.recargar(framestado);
-		}else if(framestado->getEstado()==MAXIMO){
-		    this->borrar();
-		    this->minimizar();
-		    SDL_mutexP(mutexSincRadar);
-		    pauseRadar=false;
-		    SDL_mutexV(mutexSincRadar);
-		    SDL_CondSignal(condSincRadar);
-		    
+		else if(botonIzquierda->presionado(mouse_x,mouse_y)){
+		    framemapa->limpiarFrame(false);
+		    plano.despIzquierda();
+		    silla->dibujar();
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar();
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
+		    framemapa->refrescarFrame();
 		}
-	    }
-	    else if(frameselector->getEstado()!=CERRADO
-		    &&frameselector->presionado(mouse_x,mouse_y)){
+		else if(botonArriba->presionado(mouse_x,mouse_y)){
+		    framemapa->limpiarFrame(false);
+		    plano.despArriba();
+		    silla->dibujar();
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar();
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
+		    framemapa->refrescarFrame();
+		}
+		else if(botonAbajo->presionado(mouse_x,mouse_y)){
+		    framemapa->limpiarFrame(false);
+		    plano.despAbajo();
+		    silla->dibujar();
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar();
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
+		    framemapa->refrescarFrame();
+		}
+		else if(botonCentrar->presionado(mouse_x,mouse_y)){
+		    framemapa->limpiarFrame(false);
+		    plano.centrarMapa();
+		    plano.pintarMapa(screen,plano.getEscala());
+		    silla->dibujar();
+		    if(objetivo.getFijado()){
+			objetivo.load();
+			objetivo.dibujar();
+		    }
+		    if(objetivo.preguntado())objetivo.nopreguntar();
+		    framemapa->refrescarFrame();
+		}
+		else if(botonSelector->presionado(mouse_x,mouse_y)){
+		    if(frameselector->getEstado()==CERRADO){
+			selector=new Selector(screen);
+			selector->buscarW("x/mnt/usb/USB1/","dxf");
+		    }
+		}
+		else if(framemapa->getBmaxmin()->presionado(mouse_x,mouse_y)){
+		    if(framemapa->getEstado()==MINIMO){
+			SDL_mutexP(mutexSincRadar);
+			pauseRadar=true;
+			SDL_mutexV(mutexSincRadar);
+			this->borrar();
+
+			frameradar->desactivarFrame();
+			framestado->desactivarFrame();
+			framemapa->maxFrame(MARGENH,MARGENV,SCREEN_W-2*MARGENH,framemapa->getH());
+			plano.pintarMapa(screen,plano.getEscala());
+			silla->dibujar();
+			if(objetivo.getFijado()){
+			    objetivo.load();
+			    objetivo.dibujar();
+			}
+			if(objetivo.preguntado())objetivo.nopreguntar();
+
+			botonDerecha->recargarBoton();
+			botonIzquierda->recargarBoton();
+			botonAbajo->recargarBoton();
+			botonArriba->recargarBoton();
+			botonCentrar->recargarBoton();
+			//Botones Zoom
+			botonMasZoom->cargarBoton(
+				framemapa->getX()+framemapa->getW()-100, 
+				framemapa->getY()+framemapa->getH()+30, 
+				20,
+				20,
+				"+",
+				0xFFA500FF,
+				COLOR_BORDER_BOTON);
+			botonMenosZoom->cargarBoton(
+				framemapa->getX()+framemapa->getW()-50, 
+				framemapa->getY()+framemapa->getH()+30, 
+				20,
+				20,
+				"-",
+				0xFFA500FF,
+				COLOR_BORDER_BOTON);
+			botonAjustarZoom->cargarBoton(
+				framemapa->getX()+framemapa->getW()-75, 
+				framemapa->getY()+framemapa->getH()+30, 
+				20,
+				20,
+				"[]",
+				0xFFA500FF,
+				COLOR_BORDER_BOTON);
+
+
+			//Etiqueta Zoom
+			e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
+				framemapa->getY()+framemapa->getH()+10,
+				70,
+				20,
+				"Zoom",
+				0xFFA500FF,
+				0x000000FF,
+				COLOR_BG);
+
+			e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+				framemapa->getY()+framemapa->getH()+50,
+				70,
+				20,
+				plano.getEscalaStr(),
+				0xFFA500FF,
+				0xFFA500FF,
+				COLOR_BG);
+		    }else{ 
+			this->borrar();
+			this->minimizar();
+			SDL_mutexP(mutexSincRadar);
+			pauseRadar=false;
+			SDL_mutexV(mutexSincRadar);
+			SDL_CondSignal(condSincRadar);
+
+		    }
+		}
+		else if(frameradar->getBmaxmin()->presionado(mouse_x,mouse_y)){
+		    this->borrar();
+		    if(frameradar->getEstado()==MINIMO){
+			framemapa->desactivarFrame();
+			framestado->desactivarFrame();
+			frameradar->maxFrame(MARGENH, MARGENV, SCREEN_W-2*MARGENH, SCREEN_H-2*MARGENV);
+
+			//desactivar botones de zoom y desplazamiento
+			botonDerecha->desactivar();
+			botonIzquierda->desactivar();
+			botonAbajo->desactivar();
+			botonArriba->desactivar();
+			botonCentrar->desactivar();
+			botonMasZoom->desactivar();
+			botonMenosZoom->desactivar();
+
+			radar->recargar(false);
+		    }else if(frameradar->getEstado()==MAXIMO){
+			this->minimizar();
+			radar->recargar(false);
+		    }
+		    //SDL_UpdateRect(screen,0,0,0,0);
+		}
+		else if(framestado->getBmaxmin()->presionado(mouse_x,mouse_y)){
+		    if(framestado->getEstado()==MINIMO){
+
+			SDL_mutexP(mutexSincRadar);
+			pauseRadar=true;
+			SDL_mutexV(mutexSincRadar);
+			this->borrar();
+
+			frameradar->desactivarFrame();
+			framestado->maxFrame(MARGENH,MARGENV,SCREEN_W-2*MARGENH,SCREEN_H-2*MARGENV);
+			framemapa->desactivarFrame();
+			//desactivar botones de zoom y desplazamiento
+			botonDerecha->desactivar();
+			botonIzquierda->desactivar();
+			botonAbajo->desactivar();
+			botonArriba->desactivar();
+			botonCentrar->desactivar();
+			botonMasZoom->desactivar();
+			botonMenosZoom->desactivar();
+
+			tcampos.recargar(framestado);
+		    }else if(framestado->getEstado()==MAXIMO){
+			this->borrar();
+			this->minimizar();
+			SDL_mutexP(mutexSincRadar);
+			pauseRadar=false;
+			SDL_mutexV(mutexSincRadar);
+			SDL_CondSignal(condSincRadar);
+
+		    }
+		}
+		else if(frameselector->getEstado()!=CERRADO
+			&&frameselector->presionado(mouse_x,mouse_y)){
 		    if(selector->handle(mouse_x,mouse_y)){
-			clienteCapaAlta.enviar(plano.getPath());
+			clienteCapaAlta.enviarPlano(plano.getPath());
 		    }
 
-	    }
-	    else if(framestado->presionado(mouse_x,mouse_y)){
-		tcampos.handle( mouse_x, mouse_y);
-	    }
+		}
+		else if(framestado->presionado(mouse_x,mouse_y)){
+		    tcampos.handle( mouse_x, mouse_y);
+		}else if(botonOnoff->presionado(mouse_x,mouse_y)){
+		    clienteCapaAlta.enviar(CABECERA_STATUS);
+		}
 
 
 
-	    /*if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)){
-	        cout << "boton: izquierdo" << endl;
-	    }else if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(2)){
-	        cout << "boton: medio" << endl;
-	    }else if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(3)){
-	        cout << "boton: derecho" << endl;
-	    }*/
-	    break;
- 
-    } 
-	
+		/*if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1)){
+		  cout << "boton: izquierdo" << endl;
+		  }else if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(2)){
+		  cout << "boton: medio" << endl;
+		  }else if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(3)){
+		  cout << "boton: derecho" << endl;
+		  }*/
+		break;
+
+	} 
+
 }
 
 void Pantalla::borrar(){
@@ -646,7 +673,7 @@ void Pantalla::setAlpha(Frame *frame, Uint8 zona){
 		if(SDL_MUSTLOCK(screen))SDL_UnlockSurface(screen);
 		SDL_mutexV(semVideo);
 	    }
-	    
+
 	    if(zona&Z_CENTRO) {
 		SDL_mutexP(semVideo);
 		if(SDL_MUSTLOCK(screen))SDL_LockSurface(screen);
@@ -707,6 +734,7 @@ void Pantalla::minimizar(){
     botonArriba->recargarBoton();
     botonCentrar->recargarBoton();
     botonSelector->recargarBoton();
+    botonOnoff->recargarBoton();
 
     //Botones Zoom
     botonMasZoom->cargarBoton(framemapa->getX()+framemapa->getW()-100, 
@@ -723,6 +751,16 @@ void Pantalla::minimizar(){
 	    "-",
 	    0xFFA500FF,
 	    COLOR_BORDER_BOTON);
+    botonAjustarZoom->cargarBoton(
+	    framemapa->getX()+framemapa->getW()-75, 
+	    framemapa->getY()+framemapa->getH()+30, 
+	    20,
+	    20,
+	    "[]",
+	    0xFFA500FF,
+	    COLOR_BORDER_BOTON);
+
+
     //Etiqueta Zoom
     e_zoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,	    
 	    framemapa->getY()+framemapa->getH()+10,

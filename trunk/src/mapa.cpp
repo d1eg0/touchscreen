@@ -79,9 +79,9 @@ Capa* Mapa::getCapa(string c){
     int i=0;
     vector<Capa>::iterator i_capa;
     for(i_capa=listaCapas.begin(); i_capa!=listaCapas.end(); i_capa++){
-	 if ((*i_capa).getNombre()==c){
-	     return &(*i_capa);
-	 }
+	if ((*i_capa).getNombre()==c){
+	    return &(*i_capa);
+	}
     }
     cerr << "No existe la capa: " << c << endl;
     Capa *vacia=new Capa();
@@ -115,28 +115,28 @@ void Mapa::pintarMapa(SDL_Surface *screen, double escala){
 	if((*i_capa).getNombre()!="CapaHabitacions"){
 	    vector<Linea> llineas=(*(*i_capa).getCapa());
 	    for(i_linea=llineas.begin(); i_linea!=llineas.end(); i_linea++){
-		 Punto v1((*i_linea).getX1(),(*i_linea).getY1());
-		 Punto v2((*i_linea).getX2(),(*i_linea).getY2());
-		 v1.cpantalla(frame,dh,dv,escala);
-		 v2.cpantalla(frame,dh,dv,escala);
-		 Linea linea((*i_linea).getCapa(),v1,v2);
-		 pincel->dibujarLinea(frame,&linea,0x000000ff);
-	     }
+		Punto v1((*i_linea).getX1(),(*i_linea).getY1());
+		Punto v2((*i_linea).getX2(),(*i_linea).getY2());
+		v1.cpantalla(frame,dh,dv,escala);
+		v2.cpantalla(frame,dh,dv,escala);
+		Linea linea((*i_linea).getCapa(),v1,v2);
+		pincel->dibujarLinea(frame,&linea,0x000000ff);
+	    }
 	}
-     }
+    }
     this->pintarCamino(screen,frame,escala);
 }
 
 void Mapa::pintarCamino(SDL_Surface *screen, Frame *frame, double escala){
     vector<Linea>::iterator i_linea;
     for(i_linea=camino.begin(); i_linea!=camino.end(); i_linea++){
-	 Punto v1((*i_linea).getX1(),(*i_linea).getY1());
-	 Punto v2((*i_linea).getX2(),(*i_linea).getY2());
-	 v1.cpantalla(frame,dh,dv,escala);
-	 v2.cpantalla(frame,dh,dv,escala);
-	 Linea linea("",v1,v2);
-	 pincel->dibujarLinea(frame,&linea,COLORCAMINO);
-     }
+	Punto v1((*i_linea).getX1(),(*i_linea).getY1());
+	Punto v2((*i_linea).getX2(),(*i_linea).getY2());
+	v1.cpantalla(frame,dh,dv,escala);
+	v2.cpantalla(frame,dh,dv,escala);
+	Linea linea("",v1,v2);
+	pincel->dibujarLinea(frame,&linea,COLORCAMINO);
+    }
     frame->refrescarFrame();
 }
 
@@ -172,6 +172,7 @@ void Mapa::calcularZoom(){
     else f=fy;
     int e=(int)floor(f*100.0);
     escala=e-fmod(e,FACTOR_ZOOM);
+    escalaOptima=escala;
 
 }
 
@@ -207,7 +208,7 @@ void Mapa::despDerecha(){
 }
 
 void Mapa::setFrame(Frame *frame){
-this->frame=frame;
+    this->frame=frame;
 }
 
 
