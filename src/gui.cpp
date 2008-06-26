@@ -21,6 +21,7 @@
 #include "tabla.h"
 #include "silla.h"
 #include "selector.h"
+#include <pthread.h>
 using namespace std;
 SDL_Surface *surfacePrincipal;
 Pantalla *pantalla;
@@ -28,13 +29,15 @@ Pantalla *pantalla;
 //  Zoom
 Boton *botonMasZoom;
 Boton *botonMenosZoom;
+Boton *botonAjustarZoom;
 //  Desplazar
 Boton *botonArriba,
       *botonAbajo,
       *botonDerecha,
       *botonIzquierda,
       *botonCentrar,
-      *botonSelector;
+      *botonSelector,
+      *botonOnoff;
 // Frames
 Frame *framemapa,
       *frameradar,
@@ -169,7 +172,7 @@ int main(int argc, char *argv[])
 
 	//Instanciar el frame selector de mapas
 	frameselector=new Frame(surfacePrincipal);
-	//Botones Zoom
+	//Botones para modificar el zoom del mapa
 	botonMasZoom=new Boton(surfacePrincipal);
 	botonMasZoom->cargarBoton(
 		framemapa->getX()+framemapa->getW()-100, 
@@ -189,6 +192,17 @@ int main(int argc, char *argv[])
 		"-",
 		0xFFA500FF,
 		COLOR_BORDER_BOTON);
+	
+	botonAjustarZoom=new Boton(surfacePrincipal);
+	botonAjustarZoom->cargarBoton(
+		framemapa->getX()+framemapa->getW()-75, 
+		framemapa->getY()+framemapa->getH()+30, 
+		20,
+		20,
+		"[]",
+		0xFFA500FF,
+		COLOR_BORDER_BOTON);
+
 
 	//Etiqueta Zoom
 	e_zoom=new Etiqueta(surfacePrincipal);
@@ -229,13 +243,16 @@ int main(int argc, char *argv[])
 	botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF,COLOR_BORDER_BOTON);
 	//	Selector
 	botonSelector=new Boton(surfacePrincipal);
-	botonSelector->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+30, 30,30,"o",0x00000000,0X00000000);
-	botonSelector->setIcono("img/mundo.bmp");
+	botonSelector->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+15, 30,30,"o",0x00000000,0X00000000);
+	botonSelector->setIcono("img/mundop.bmp");
 	
+	botonOnoff=new Boton(surfacePrincipal);
+	botonOnoff->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+50, 30,30,"o",0x00000000,0X00000000);
+	botonOnoff->setIcono("img/apagar.bmp");
 	//Tabla de estado	
 	cconex=new Campo(
 		surfacePrincipal,
-		"cx camino:",
+		"cx GateWay:",
 		true,
 		0x000000FF,
 		0x00FF00FF);
@@ -284,6 +301,7 @@ int main(int argc, char *argv[])
 	mutexCapaAlta=SDL_CreateMutex();
 	caminoNuevoCond=SDL_CreateCond();
 	clienteCapaAlta.Connect("192.168.1.5", 9999);
+	clienteCapaBaja.Connect("192.168.1.5", 9999);
 	//clienteCapaAlta.Connect("localhost", 9999);
 	GestorCamino gestorCamino(surfacePrincipal);  //Gestiona el estado
 

@@ -91,6 +91,7 @@ private:
     Dibujar *pincel;
     Frame *frame;
     double escala; //0%..100%
+    double escalaOptima; //0%..100%
     
     //Desplazamientos para el centrado: horizontal y vertical
     double dh;

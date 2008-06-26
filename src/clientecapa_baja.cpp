@@ -1,6 +1,7 @@
 #include "clientecapa_baja.h"
 #include <SDL/SDL.h>
 #include "tabla.h"
+#include "silla.h"
 #include "constantes.h"
 extern SDL_cond* sensorNuevoCond;
 extern SDL_mutex* mutexCapaBaja;
@@ -9,8 +10,11 @@ void ClienteCapaBaja::onConnect()
 {
     //cout << this->getStatus() << endl;
     while(this->getStatus()==1001){SDL_Delay(1);}//Esperar la conexion
-    extern Tabla tcampos;
-    tcampos.update("CONEX","bien");
+    extern Frame *framestado;
+    if(framestado->getEstado()!=CERRADO){
+	extern Tabla tcampos;
+	tcampos.update("CONEX","bien");
+    }
     cout << "ClienteCapaBaja: conectado!" << endl;
     //Send("hola");
 }
@@ -70,6 +74,9 @@ void ClienteCapaBaja::onLineArrival(string Cadena)
 	    Punto p(x,y);
 	    SDL_mutexP(mutexCapaBaja);
 	    pos=p;
+	    extern Silla *silla;
+	    silla->setPos(p);
+	    silla->dibujar();
 	    SDL_mutexV(mutexCapaBaja);
 	}else if(Data.find(CABECERA_SENS)!=string::npos){
 	    Data.erase(0,(string(CABECERA_SENS)).size());
@@ -107,6 +114,8 @@ void ClienteCapaBaja::onError(int ssError){
 	    cerr << "[E]:" << ssError << " Baja - Error conexión indefinido" << endl;
 	    break;
     }
+    extern Tabla tcampos;
+    tcampos.update("CONEX","mal ");
 }
 
 vector<double> ClienteCapaBaja::getValores(){

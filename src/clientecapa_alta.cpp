@@ -20,7 +20,7 @@ void ClienteCapaAlta::onConnect()
 	tcampos.update("CONEX","bien");
     }
     cout << "ClienteCapaAlta: conectado!" << endl;
-    enviar("maps/modelo.dxf");
+    enviarPlano("maps/modelo.dxf");
 }
 void ClienteCapaAlta::onClose(){
     cerr << "[E]: conexion cerrada" << endl;
@@ -87,7 +87,7 @@ vector<Punto> ClienteCapaAlta::getCamino(){
 void ClienteCapaAlta::clearCamino(){
     listaPuntos.clear();
 }
-void ClienteCapaAlta::enviar(string path){
+void ClienteCapaAlta::enviarPlano(string path){
     ifstream::pos_type size;
     char * memblock;
     ifstream myFile (path.c_str(), ios::in|ios::binary|ios::ate );
@@ -99,6 +99,13 @@ void ClienteCapaAlta::enviar(string path){
 	myFile.close();
 	Send(string(CABECERA_MAPA)+"\r\n");
 	Send(memblock,size);
-	cout << memblock << endl;
+	//cout << memblock << endl;
     }else cerr << "[E]: No se puede abrir el fichero" << endl;
 }
+
+void ClienteCapaAlta::enviar(string dato){
+    Send(dato+"\r\n");
+}
+
+
+
