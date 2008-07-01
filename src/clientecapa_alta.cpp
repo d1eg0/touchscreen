@@ -8,7 +8,9 @@
 
 extern SDL_mutex *mutexCapaAlta;
 extern SDL_cond *caminoNuevoCond;
-
+void ClienteCapaAlta::setMap(string path){
+    this->path=path;
+}
 void ClienteCapaAlta::onConnect()
 {
     //cout << this->getStatus() << endl;
@@ -20,7 +22,7 @@ void ClienteCapaAlta::onConnect()
 	tcampos.update("CONEX","bien");
     }
     cout << "ClienteCapaAlta: conectado!" << endl;
-    enviarPlano("maps/modelo.dxf");
+    enviarPlano(path);
 }
 void ClienteCapaAlta::onClose(){
     cerr << "[E]: conexion cerrada" << endl;
@@ -32,24 +34,25 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
     cout << "\t****ClienteCapaAlta recibe:\"" << Cadena <<"\"" << endl;   
     cout << "Rx-Bytes:" << getNumBytesReceived() << " Bloques:" << getNumBlocksReceived() <<endl;
     string Data(Cadena);
-
-    if(Data.find(CABECERA_ERROR)==string::npos){
+    if(Data.find(string(CABECERA_ERROR))==string::npos){
 	double x,y;
 	char *pblanco;
-	if(Data.find(CABECERA_INIRUTA)!=string::npos){
+	if((Data.find("[RUTA]")!=string::npos)&&
+		(Data.find("[FIN_RUTA]")==string::npos)){
 	    modo=CABECERA_INIRUTA;
 	    Data.erase(0,6);
 	    x=strtod(Data.c_str(),&pblanco);
 	    y=strtod(pblanco,&pblanco);
-	}else if(Data.find(CABECERA_FINRUTA)!=string::npos){
+	}else if(Data.find("[FIN_RUTA]")!=string::npos){
 	    SDL_CondSignal(caminoNuevoCond);
-	}else if(Data.find(CABECERA_STATUS)!=string::npos){
+	    modo=CABECERA_FINRUTA;
+	}else if(Data.find(string(CABECERA_STATUS))!=string::npos){
 	    modo=CABECERA_STATUS;
 	}
 
 	if(modo==CABECERA_INIRUTA){
 	    Punto p(x,y);
-	    //cout << "x:"<< x << " y:" << y << endl;
+	    cout << "x:"<< x << " y:" << y << endl;
 	    SDL_mutexP(mutexCapaAlta);
 	    listaPuntos.push_back(p);
 	    SDL_mutexV(mutexCapaAlta);
@@ -99,7 +102,6 @@ void ClienteCapaAlta::enviarPlano(string path){
 	myFile.close();
 	Send(string(CABECERA_MAPA)+"\r\n");
 	Send(memblock,size);
-	//cout << memblock << endl;
     }else cerr << "[E]: No se puede abrir el fichero" << endl;
 }
 

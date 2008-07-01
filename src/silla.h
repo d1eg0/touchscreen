@@ -15,6 +15,7 @@ private:
     Punto pos;
     int radio;
     int rot;
+    int status;
     Frame *frame;
     Mapa *plano;
 public:
@@ -33,6 +34,8 @@ public:
 
     /** Actualiza la rotacion actual a 'r' */
     void setRot(int r);
+    void toogleStatus();
+    int getStatus();
 
     /** Dibuja la silla en la posicion correspondiente */
     void dibujar();

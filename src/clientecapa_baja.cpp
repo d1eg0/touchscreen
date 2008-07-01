@@ -60,13 +60,13 @@ void ClienteCapaBaja::onLineArrival(string Cadena)
     cout << "Rx-Bytes:" << getNumBytesReceived() << " Bloques:" << getNumBlocksReceived() <<endl;
     string Data(Cadena);
 
-    if(Data.find(CABECERA_ERROR)==string::npos){
+    if(Data.find(string(CABECERA_ERROR))==string::npos){
 	double x,y;
 	char *pblanco;
 	x=strtod(Data.c_str(),&pblanco);
 	y=strtod(pblanco,&pblanco);
 
-	if(Data.find(CABECERA_POS)!=string::npos){
+	if(Data.find(string(CABECERA_POS))!=string::npos){
 	    Data.erase(0,(string(CABECERA_POS)).size());
 	    x=strtod(Data.c_str(),&pblanco);
 	    y=strtod(pblanco,&pblanco);
@@ -78,7 +78,7 @@ void ClienteCapaBaja::onLineArrival(string Cadena)
 	    silla->setPos(p);
 	    silla->dibujar();
 	    SDL_mutexV(mutexCapaBaja);
-	}else if(Data.find(CABECERA_SENS)!=string::npos){
+	}else if(Data.find(string(CABECERA_SENS))!=string::npos){
 	    Data.erase(0,(string(CABECERA_SENS)).size());
 	    int i;
 	    float val;
@@ -86,6 +86,7 @@ void ClienteCapaBaja::onLineArrival(string Cadena)
 	    for (i=0;i<4;i++){
 		val=strtod(pblanco,&pblanco);
 		sensor[i]=val;
+		cout << "valor" << i << ":" << val;
 	    }
 	}
 

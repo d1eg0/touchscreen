@@ -130,7 +130,10 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_H/10.0*7.5),
 		"Plano",0xffffff);
 	//plano.lectura("maps/modelo.dxf");
-	plano.lectura("maps/cientificot_P1.dxf");
+	//string rutaMapa="maps/cientificot_P1.dxf";
+	string rutaMapa="maps/modelo.dxf";
+	clienteCapaAlta.setMap(rutaMapa);
+	plano.lectura(rutaMapa);
 	plano.setFrame(framemapa);
 	plano.centrarMapa();
 	plano.calcularZoom();
@@ -301,15 +304,14 @@ int main(int argc, char *argv[])
 	mutexCapaAlta=SDL_CreateMutex();
 	caminoNuevoCond=SDL_CreateCond();
 	clienteCapaAlta.Connect("192.168.1.5", 9999);
-	clienteCapaBaja.Connect("192.168.1.5", 9999);
 	//clienteCapaAlta.Connect("localhost", 9999);
 	GestorCamino gestorCamino(surfacePrincipal);  //Gestiona el estado
 
 	    //CapaBaja: sensores y estado
 	mutexCapaBaja=SDL_CreateMutex();
 	sensorNuevoCond=SDL_CreateCond();
-	//clienteCapaBaja.Connect("192.168.1.5", 9998);
-	//GestorEstado gestorEstado;  //Gestiona el estado
+	clienteCapaBaja.Connect("192.168.1.5", 9998);
+	GestorEstado gestorEstado;  //Gestiona el estado
 	//radar->dibujarFlecha(0);
 	//Gestion del input
 	while(!pantalla->salir()){
