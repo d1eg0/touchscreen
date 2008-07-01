@@ -5,6 +5,7 @@ Silla::Silla(Frame *frame, Mapa *plano){
     this->plano=plano;
     radio=3;
     rot=0;
+    status=0;
 }
 
 Silla::~Silla(){
@@ -33,6 +34,13 @@ void Silla::setRot(int r){
     SDL_mutexP(mutexRot);
     rot+=r;
     SDL_mutexV(mutexRot);
+}
+int Silla::getStatus(){
+    return status;
+}
+void Silla::toogleStatus(){
+    if (status==0) status=1;
+    else status=0;
 }
 
 void Silla::dibujar(){

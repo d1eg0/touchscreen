@@ -425,7 +425,7 @@ void Pantalla::entrada()
 		else if(botonSelector->presionado(mouse_x,mouse_y)){
 		    if(frameselector->getEstado()==CERRADO){
 			selector=new Selector(screen);
-			selector->buscarW("x/mnt/usb/USB1/","dxf");
+			selector->buscarW("/mnt/usb/USB1/","dxf");
 		    }
 		}
 		else if(framemapa->getBmaxmin()->presionado(mouse_x,mouse_y)){
@@ -519,6 +519,7 @@ void Pantalla::entrada()
 			botonAbajo->desactivar();
 			botonArriba->desactivar();
 			botonCentrar->desactivar();
+			botonAjustarZoom->desactivar();
 			botonMasZoom->desactivar();
 			botonMenosZoom->desactivar();
 
@@ -570,7 +571,11 @@ void Pantalla::entrada()
 		else if(framestado->presionado(mouse_x,mouse_y)){
 		    tcampos.handle( mouse_x, mouse_y);
 		}else if(botonOnoff->presionado(mouse_x,mouse_y)){
-		    clienteCapaAlta.enviar(CABECERA_STATUS);
+		    silla->toogleStatus();
+		    stringstream buf;
+		    buf << CABECERA_STATUS << " " << silla->getStatus() << "\r\n";
+		    cout << buf.str() << endl;
+		    clienteCapaAlta.enviar(buf.str());
 		}
 
 

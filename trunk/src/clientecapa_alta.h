@@ -18,6 +18,7 @@
 class ClienteCapaAlta : public ssPPClient
 {
 public:
+    void setMap(string path);
     /** Obtiene el camino guardado */
     vector<Punto> getCamino();
     /** Borra el camino guardado */
@@ -29,6 +30,7 @@ private:
     double status;
     stringstream buffer;
     vector<Punto> listaPuntos;
+    string path;
     void onConnect();
     void onClose();
     void onLineArrival(string Cadena);
