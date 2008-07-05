@@ -7,8 +7,6 @@
 #include <iostream>
 #include <vector>
 #include "punto.h"
-
-
 /**
  *  \class ClienteCapaAlta
  *  \brief Socket que escucha el camino cuando se pida un objetivo

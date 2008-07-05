@@ -8,6 +8,7 @@
 #include "radar.h"
 #include <SDL/SDL_thread.h>
 #include <sstream>
+#include <iostream>
 #include "clientecapa_alta.h"
 #include "silla.h"
 #include "selector.h"
@@ -115,7 +116,7 @@ void Pantalla::entrada()
 			    plano.pintarMapa(screen,plano.getEscala());
 			    objetivo.dibujar();
 			    objetivo.store();//guardarlo
-			    dataObjetivo="[OBJETIVO] "+objetivo.toString()+"\r\n";
+			    dataObjetivo=CABECERA_OBJETIVO+objetivo.toString()+"\r\n";
 			    clienteCapaAlta.Send(dataObjetivo);
 			    cout << "objetivo:" <<objetivo.toString() << endl << "paquete: "<< dataObjetivo << endl;
 			    break;

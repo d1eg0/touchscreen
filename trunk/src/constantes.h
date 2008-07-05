@@ -65,11 +65,14 @@
 #define	    COLORCAMINO	    0xff0000ff
 
 //Cabeceras protocolo
-#define	    CABECERA_MAPA	"[MAPA]"
-#define	    CABECERA_ERROR	"[ERROR]"
-#define	    CABECERA_INIRUTA    "[RUTA]"
-#define	    CABECERA_FINRUTA    "[FIN_RUTA]"
-#define	    CABECERA_STATUS	"[STATUS]"
-#define	    CABECERA_POS    	"[PRA]"
-#define	    CABECERA_SENS    	"[SENS]"
-
+#define	    CABECERA_MAPA	"[MAPA] "
+#define	    CABECERA_INIRUTA    "[RUTA] "
+#define	    CABECERA_FINRUTA    "[FIRU] "
+#define	    CABECERA_ERROR	"[ERRO] "
+#define	    CABECERA_STATUS	"[STAT] "
+#define	    CABECERA_OBJETIVO	"[OBJE] "
+#define	    CABECERA_SENS    	"[SENS] "
+#define	    CABECERA_POS    	"[POSI] "
+#define	    CABECERA_GRID    	"[GRID] "
+#define	    CABECERA_DOBST    	"[DOBS] "
+#define	    CABECERA_FLAGS    	"[FLAG] "
