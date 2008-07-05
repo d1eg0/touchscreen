@@ -130,8 +130,8 @@ int main(int argc, char *argv[])
 		(int)((float)SCREEN_H/10.0*7.5),
 		"Plano",0xffffff);
 	//plano.lectura("maps/modelo.dxf");
-	//string rutaMapa="maps/cientificot_P1.dxf";
-	string rutaMapa="maps/modelo.dxf";
+	string rutaMapa="maps/cientificot_P1.dxf";
+	//string rutaMapa="maps/modelo.dxf";
 	clienteCapaAlta.setMap(rutaMapa);
 	plano.lectura(rutaMapa);
 	plano.setFrame(framemapa);
@@ -269,8 +269,8 @@ int main(int argc, char *argv[])
 		false,
 		0x000000FF,
 		0x00FF00FF);
-	cgrid->valorNum(4,10,2,1);
-	tcampos.add("GRID",cgrid);
+	cgrid->valorNum(1,5,0,0.1);
+	tcampos.add(CABECERA_GRID,cgrid);
 	delete cgrid;
 	
 	cdobstaculo=new Campo(
@@ -279,8 +279,8 @@ int main(int argc, char *argv[])
 		false,
 		0x000000FF,
 		0x00FF00FF);
-	cdobstaculo->valorNum(2,8,2,1);
-	tcampos.add("DOBSTACULO",cdobstaculo);
+	cdobstaculo->valorNum(0.5,3,0,0.1);
+	tcampos.add(CABECERA_DOBST,cdobstaculo);
 	delete cdobstaculo;
 
 	cprueba=new Campo(
@@ -311,6 +311,7 @@ int main(int argc, char *argv[])
 	mutexCapaBaja=SDL_CreateMutex();
 	sensorNuevoCond=SDL_CreateCond();
 	clienteCapaBaja.Connect("192.168.1.5", 9998);
+	//clienteCapaBaja.Connect("localhost", 9998);
 	GestorEstado gestorEstado;  //Gestiona el estado
 	//radar->dibujarFlecha(0);
 	//Gestion del input
@@ -321,9 +322,9 @@ int main(int argc, char *argv[])
 	delete pantalla;
  
     }
-    SDL_Quit();
     SDL_DestroyMutex(mutexCapaBaja);
     SDL_DestroyMutex(mutexCapaAlta);
     SDL_DestroyMutex(mutexSincRadar);
     SDL_DestroyMutex(mutexObstaculo);
+    SDL_Quit();
 }

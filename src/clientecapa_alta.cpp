@@ -37,13 +37,13 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
     if(Data.find(string(CABECERA_ERROR))==string::npos){
 	double x,y;
 	char *pblanco;
-	if((Data.find("[RUTA]")!=string::npos)&&
-		(Data.find("[FIN_RUTA]")==string::npos)){
+	if((Data.find(string(CABECERA_INIRUTA))!=string::npos)&&
+		(Data.find(string(CABECERA_FINRUTA))==string::npos)){
 	    modo=CABECERA_INIRUTA;
-	    Data.erase(0,6);
+	    Data.erase(0,7);
 	    x=strtod(Data.c_str(),&pblanco);
 	    y=strtod(pblanco,&pblanco);
-	}else if(Data.find("[FIN_RUTA]")!=string::npos){
+	}else if(Data.find(string(CABECERA_FINRUTA))!=string::npos){
 	    SDL_CondSignal(caminoNuevoCond);
 	    modo=CABECERA_FINRUTA;
 	}else if(Data.find(string(CABECERA_STATUS))!=string::npos){
@@ -57,7 +57,7 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
 	    listaPuntos.push_back(p);
 	    SDL_mutexV(mutexCapaAlta);
 	}else if(modo==CABECERA_STATUS){
-	    Data.erase(0,(string(CABECERA_STATUS)).size());
+	    Data.erase(0,7);
 	    double val=strtod(Data.c_str(),&pblanco);
 	    status=val; 
 	}

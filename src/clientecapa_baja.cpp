@@ -67,7 +67,7 @@ void ClienteCapaBaja::onLineArrival(string Cadena)
 	y=strtod(pblanco,&pblanco);
 
 	if(Data.find(string(CABECERA_POS))!=string::npos){
-	    Data.erase(0,(string(CABECERA_POS)).size());
+	    Data.erase(0,7);
 	    x=strtod(Data.c_str(),&pblanco);
 	    y=strtod(pblanco,&pblanco);
 	    angulo=strtod(pblanco,&pblanco);
@@ -79,7 +79,7 @@ void ClienteCapaBaja::onLineArrival(string Cadena)
 	    silla->dibujar();
 	    SDL_mutexV(mutexCapaBaja);
 	}else if(Data.find(string(CABECERA_SENS))!=string::npos){
-	    Data.erase(0,(string(CABECERA_SENS)).size());
+	    Data.erase(0,7);
 	    int i;
 	    float val;
 	    pblanco=(char *)Data.c_str();

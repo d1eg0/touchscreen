@@ -30,8 +30,8 @@ void Tabla::handle(int x,int y){
     for (it=tabla.begin();it!=tabla.end();it++){
 	if((*it).second.handle(x,y)){
 	    extern ClienteCapaAlta clienteCapaAlta;
-	    clienteCapaAlta.Send("["+(*it).first+"] "+(*it).second.getVstr()+"\r\n");
-	    cout << "envio" << endl;
+	    clienteCapaAlta.Send((*it).first+(*it).second.getVstr()+"\r\n");
+	    cout << "envio:" << (*it).first+(*it).second.getVstr()+"\r\n" <<  endl;
 	    break;
 	}
     }
