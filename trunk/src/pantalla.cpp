@@ -27,7 +27,7 @@ extern Frame *framemapa,
        *frameradar,
        *framestado,
        *frameselector;
-extern Etiqueta *e_zoom,*e_vzoom;
+extern Etiqueta *e_zoom;//,*e_vzoom;
 extern Objetivo objetivo;
 extern ClienteCapaAlta clienteCapaAlta;
 extern Radar *radar;
@@ -118,7 +118,7 @@ void Pantalla::entrada()
 			    objetivo.store();//guardarlo
 			    dataObjetivo=CABECERA_OBJETIVO+objetivo.toString()+"\r\n";
 			    clienteCapaAlta.Send(dataObjetivo);
-			    cout << "objetivo:" <<objetivo.toString() << endl << "paquete: "<< dataObjetivo << endl;
+			    //cout << "objetivo:" <<objetivo.toString() << endl << "paquete: "<< dataObjetivo << endl;
 			    break;
 			case RESPUESTA_NO:
 			    objetivo.nopreguntar();
@@ -182,7 +182,9 @@ void Pantalla::entrada()
 			}else{
 			    titulo="  Objetivo  ";
 			    ostringstream buffer;//msg
-			    buffer << (int)p.getX()<< "," << (int)p.getY();//msg
+			    char possub[16];
+			    sprintf(possub,"%4.3f %4.3f",p.getX(),p.getY());
+			    buffer << possub;//msg
 			    pos=buffer.str();//msg
 			    color_etiq=0x5757FFFF;//color
 			}
@@ -237,7 +239,7 @@ void Pantalla::entrada()
 				color_etiq,
 				0x00000043);
 			//Pos
-			titulo="Pos:";
+			titulo="Posicion:";
 			y1+=SIZE_C*2;
 			info->cargarEtiqueta(
 				x1,
@@ -335,7 +337,7 @@ void Pantalla::entrada()
 			    objetivo.dibujar();
 			}
 			if(objetivo.preguntado())objetivo.nopreguntar();
-			e_vzoom->insertarTexto(plano.getEscalaStr());
+			//e_vzoom->insertarTexto(plano.getEscalaStr());
 			framemapa->refrescarFrame();
 		    }
 		}
@@ -344,7 +346,7 @@ void Pantalla::entrada()
 			framemapa->limpiarFrame(false);
 			plano.escalarMapa(-FACTOR_ZOOM);
 			silla->dibujar();
-			e_vzoom->insertarTexto(plano.getEscalaStr());
+			//e_vzoom->insertarTexto(plano.getEscalaStr());
 			if(objetivo.getFijado()){
 			    objetivo.load();
 			    objetivo.dibujar();
@@ -364,7 +366,7 @@ void Pantalla::entrada()
 			objetivo.dibujar();
 		    }
 		    if(objetivo.preguntado())objetivo.nopreguntar();
-		    e_vzoom->insertarTexto(plano.getEscalaStr());
+		    //e_vzoom->insertarTexto(plano.getEscalaStr());
 		    framemapa->refrescarFrame();
 		}
 		else if(botonDerecha->presionado(mouse_x,mouse_y)){
@@ -485,18 +487,19 @@ void Pantalla::entrada()
 				70,
 				20,
 				"Zoom",
-				0xFFA500FF,
+				COLOR_FUENTE,
 				0x000000FF,
 				COLOR_BG);
 
-			e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
-				framemapa->getY()+framemapa->getH()+50,
-				70,
-				20,
-				plano.getEscalaStr(),
-				0xFFA500FF,
-				0xFFA500FF,
-				COLOR_BG);
+			/*e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+			  framemapa->getY()+framemapa->getH()+50,
+			  70,
+			  20,
+			  plano.getEscalaStr(),
+			  0xFFA500FF,
+			  0xFFA500FF,
+			  COLOR_BG);
+			  */
 		    }else{ 
 			this->borrar();
 			this->minimizar();
@@ -773,17 +776,17 @@ void Pantalla::minimizar(){
 	    70,
 	    20,
 	    "Zoom",
-	    0xFFA500FF,
+	    COLOR_FUENTE,
 	    0x000000FF,
 	    COLOR_BG);
-    e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
-	    framemapa->getY()+framemapa->getH()+50,
-	    70,
-	    20,
-	    plano.getEscalaStr(),
-	    0xFFA500FF,
-	    0xFFA500FF,
-	    COLOR_BG);
+    /*e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+      framemapa->getY()+framemapa->getH()+50,
+      70,
+      20,
+      plano.getEscalaStr(),
+      0xFFA500FF,
+      0xFFA500FF,
+      COLOR_BG);*/
     tcampos.recargar(framestado);
 }
 void Pantalla::mapaOff(){

@@ -66,7 +66,7 @@ void Frame::cargarFrame(int x, int y, int w, int h, string c, Uint32 color)
 	    titulo.size()*SIZE_C,
 	    SIZE_C*2,
 	    (char *)titulo.c_str(),
-	    0xFFA500FF,
+	    COLOR_FUENTE,
 	    0,
 	    COLOR_BG);
 
@@ -75,22 +75,11 @@ void Frame::cargarFrame(int x, int y, int w, int h, string c, Uint32 color)
     //bcerrar->cargarBoton(x+w-15,y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //bmaxmin=new Boton(ventana);
     bmaxmin->cargarBoton(x+w-2*T_BOTON,y-T_BOTON,T_BOTON*2,T_BOTON,"+", 0xFFA500FF, COLOR_BORDER_BOTON);
+    bmaxmin->setIcono("img/bmax.bmp");
     //SDL_SetClipRect(ventana, &area);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
 }
 
-/*void Frame::cerrarFrame(){
-//no importa borrarlo porque hay q borrar la pantalla entera
-if(estado==MAXIMO){
-SDL_SetClipRect(ventana, &contenedormax);
-SDL_FillRect(ventana, &contenedormax, 0x000000);
-}else if (estado==MINIMO){
-SDL_SetClipRect(ventana, &contenedor);
-SDL_FillRect(ventana, &contenedor, 0x000000);
-}
-SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
-estado=CERRADO;
-}*/
 
 void Frame::maxFrame(int x,int y,int w,int h){
     estado=MAXIMO;
@@ -113,7 +102,7 @@ void Frame::maxFrame(int x,int y,int w,int h){
 	    string(titulo).size()*SIZE_C,
 	    SIZE_C*2,
 	    (char*)titulo.c_str(),
-	    0xFFA500FF,
+	    COLOR_FUENTE,
 	    0,
 	    COLOR_BG);	
     //Boton maximizar
@@ -121,6 +110,7 @@ void Frame::maxFrame(int x,int y,int w,int h){
     //bcerrar->cargarBoton(areamax.x+areamax.w-15,areamax.y-T_BOTON,T_BOTON,T_BOTON,"X", 0xFFA500FF);
     //bmaxmin=new Boton(ventana);
     bmaxmin->cargarBoton(areamax.x+areamax.w-2*T_BOTON,areamax.y-T_BOTON,2*T_BOTON,T_BOTON,"-", 0xFFA500FF, COLOR_BORDER_BOTON);
+    bmaxmin->setIcono("img/bmin.bmp");
     //SDL_SetClipRect(ventana, &areamax);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
     xc=x+5;
@@ -137,7 +127,7 @@ void Frame::minFrame(){
 	    string(titulo).size()*SIZE_C,
 	    SIZE_C*2,
 	    (char*)titulo.c_str(),
-	    0xFFA500FF,
+	    COLOR_FUENTE,
 	    0,
 	    COLOR_BG);	
     //Boton maximizar
@@ -153,6 +143,7 @@ void Frame::minFrame(){
 	    "+", 
 	    0xFFA500FF,
 	    COLOR_BORDER_BOTON);
+    bmaxmin->setIcono("img/bmax.bmp");
     //SDL_SetClipRect(ventana, &area);
     //SDL_UpdateRect(ventana, 0, 0, SCREEN_W, SCREEN_H);
     xc=getX()+5;
@@ -171,7 +162,7 @@ void Frame::limpiarFrame(bool refresh){
     SDL_SetClipRect(ventana, &a);
     SDL_FillRect(ventana, &a, color);
     //Borde
-    rectangleColor(ventana, a.x, a.y, a.x+a.w-1, a.y+a.h-1, 0xFFA500FF);
+    rectangleColor(ventana, a.x, a.y, a.x+a.w-1, a.y+a.h-1, COLOR_BORDER_FRAME);
     if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     if (refresh)
 	SDL_UpdateRect(ventana, a.x, a.y, a.w, a.h);
