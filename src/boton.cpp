@@ -62,6 +62,9 @@ void Boton::cargarBoton(int x, int y, int w, int h, string c, Uint32 colorFondo,
 	SDL_UpdateRect(ventana, contenedor.x, contenedor.y, contenedor.w, contenedor.h);
 	SDL_mutexV(semVideo);
 	estado=activo;
+	if(conicono==true){
+	    this->setIcono(this->iconopath);
+	}
 }
 
 void Boton::recargarBoton(){
@@ -141,5 +144,6 @@ void Boton::setIcono(string iconoruta){
     if(SDL_MUSTLOCK(ventana))SDL_UnlockSurface(ventana);
     SDL_UpdateRect(ventana, contenedor.x, contenedor.y, contenedor.w, contenedor.h);
     SDL_mutexV(semVideo);
+    estado=activo;
 }
 

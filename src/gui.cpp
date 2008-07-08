@@ -45,8 +45,8 @@ Frame *framemapa,
       *frameselector;
 
 // Etiquetas
-Etiqueta *e_zoom,
-	 *e_vzoom;
+Etiqueta *e_zoom;
+//	 *e_vzoom;
 
 Mapa  plano;
 Objetivo objetivo;
@@ -76,7 +76,6 @@ SDL_mutex *mutexRot;
 Campo *cconex,
       *cgrid,
       *cdobstaculo,
-      *cprueba,
       *cvelocidad;
 //Tabla de campos
 Tabla tcampos;
@@ -90,21 +89,21 @@ int main(int argc, char *argv[])
 
     //Inicio libreria para controlar video
     if(SDL_Init(SDL_INIT_VIDEO)< 0) {
-    	cerr <<"No se puede iniciar SDL:" << SDL_GetError() << endl;
+	cerr <<"No se puede iniciar SDL:" << SDL_GetError() << endl;
 	SDL_Quit();
     } else {
 	Uint8 video_bpp;
 	Uint32 videoflags;
-	videoflags = SDL_HWSURFACE | SDL_SRCALPHA ;
-	//int h_screen=SCREEN_H;
-	//int v_screen=SCREEN_W;
+	videoflags = SDL_HWSURFACE | SDL_SRCALPHA | SDL_FULLSCREEN ;
+	//No Fullscreen si no es modo debug
+	if(argc==2){ 
+	    if(strcmp(argv[1],"debug")==0){
+		videoflags = SDL_HWSURFACE | SDL_SRCALPHA ;
+	    }
+	}
+
 	const SDL_VideoInfo *info;
 	info=SDL_GetVideoInfo();
-/*	if ( info->vfmt->BitsPerPixel > 8 ) {
-	    video_bpp = info->vfmt->BitsPerPixel;
-	} else {
-	    video_bpp = 16;
-	}*/
 	video_bpp=32;
 	Uint32 modo=SDL_VideoModeOK(SCREEN_W, SCREEN_H, video_bpp, videoflags);
 	if(modo){
@@ -118,8 +117,13 @@ int main(int argc, char *argv[])
 	SDL_FillRect(surfacePrincipal, 0, COLOR_BG);
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
 	pantalla=new Pantalla(surfacePrincipal);
-	//Ocultar el cursor
-	//pantalla->hideCursor();
+
+	//Ocultar el cursor si no es modo debug
+	if(argc==2){ 
+	    if(strcmp(argv[1],"debug")!=0){
+		pantalla->hideCursor();
+	    }
+	}
 
 	//Cargar el frame donde se sitúa el plano
 	framemapa=new Frame(surfacePrincipal);
@@ -138,7 +142,7 @@ int main(int argc, char *argv[])
 	plano.centrarMapa();
 	plano.calcularZoom();
 	plano.pintarMapa(surfacePrincipal,plano.getEscala());
-	
+
 	silla=new Silla(framemapa,&plano);
 	silla->setPos(Punto(100,100));
 	silla->dibujar();
@@ -162,7 +166,7 @@ int main(int argc, char *argv[])
 	radar->addObstaculo(Punto(2,50));
 	radar->addObstaculo(Punto(20,10));
 	radar->addObstaculo(Punto(-10,-10));
-	
+
 	//Cargar el frame donde se sitúa el estado
 	framestado=new Frame(surfacePrincipal);
 	framestado->cargarFrame(
@@ -185,6 +189,7 @@ int main(int argc, char *argv[])
 		"+",
 		0xFFA500FF,
 		COLOR_BORDER_BOTON);
+	botonMasZoom->setIcono("img/plus.bmp");
 
 	botonMenosZoom=new Boton(surfacePrincipal);
 	botonMenosZoom->cargarBoton(
@@ -195,7 +200,8 @@ int main(int argc, char *argv[])
 		"-",
 		0xFFA500FF,
 		COLOR_BORDER_BOTON);
-	
+	botonMenosZoom->setIcono("img/minus.bmp");
+
 	botonAjustarZoom=new Boton(surfacePrincipal);
 	botonAjustarZoom->cargarBoton(
 		framemapa->getX()+framemapa->getW()-75, 
@@ -205,6 +211,7 @@ int main(int argc, char *argv[])
 		"[]",
 		0xFFA500FF,
 		COLOR_BORDER_BOTON);
+	botonAjustarZoom->setIcono("img/ajustar.bmp");
 
 
 	//Etiqueta Zoom
@@ -214,11 +221,11 @@ int main(int argc, char *argv[])
 		70,
 		20,
 		"Zoom",
-		0xFFA500FF,
+		COLOR_FUENTE,
 		0x000000FF,
 		COLOR_BG);
-	e_vzoom=new Etiqueta(surfacePrincipal);
-	e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
+	//e_vzoom=new Etiqueta(surfacePrincipal);
+	/*e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
 		framemapa->getY()+framemapa->getH()+50,
 		70,
 		20,
@@ -226,29 +233,34 @@ int main(int argc, char *argv[])
 		0xFFA500FF,
 		0xFFA500FF,
 		COLOR_BG);
-
+*/
 
 	//Botones movimiento del mapa
 	//	Derecha
 	botonDerecha=new Boton(surfacePrincipal);
-	botonDerecha->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,">",0xFFA500FF,COLOR_BORDER_BOTON);
+	botonDerecha->cargarBoton(framemapa->getX()+100, framemapa->getY()+framemapa->getH()+30, 20,20,">",0x00000000,0x00000000);
+	botonDerecha->setIcono("img/derecha.bmp");
 	//	Izquierda
 	botonIzquierda=new Boton(surfacePrincipal);
-	botonIzquierda->cargarBoton(framemapa->getX()+60, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0xFFA500FF,COLOR_BORDER_BOTON);
+	botonIzquierda->cargarBoton(framemapa->getX()+60, framemapa->getY()+framemapa->getH()+30, 20,20,"<",0x00000000,0x00000000);
+	botonIzquierda->setIcono("img/izquierda.bmp");
 	//	Arriba
 	botonArriba=new Boton(surfacePrincipal);
-	botonArriba->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0xFFA500FF,COLOR_BORDER_BOTON);
+	botonArriba->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+10, 20,20,"^",0x00000000,0x00000000);
+	botonArriba->setIcono("img/arriba.bmp");
 	//	Abajo
 	botonAbajo=new Boton(surfacePrincipal);
-	botonAbajo->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0xFFA500FF,COLOR_BORDER_BOTON);
+	botonAbajo->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+50, 20,20,"V",0x00000000,0x00000000);
+	botonAbajo->setIcono("img/abajo.bmp");
 	//	Centrar
 	botonCentrar=new Boton(surfacePrincipal);
 	botonCentrar->cargarBoton(framemapa->getX()+80, framemapa->getY()+framemapa->getH()+30, 20,20,"C",0xFFA500FF,COLOR_BORDER_BOTON);
+	botonCentrar->setIcono("img/centrar.bmp");
 	//	Selector
 	botonSelector=new Boton(surfacePrincipal);
 	botonSelector->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+15, 30,30,"o",0x00000000,0X00000000);
 	botonSelector->setIcono("img/mundop.bmp");
-	
+
 	botonOnoff=new Boton(surfacePrincipal);
 	botonOnoff->cargarBoton(framemapa->getX()+10, framemapa->getY()+framemapa->getH()+50, 30,30,"o",0x00000000,0X00000000);
 	botonOnoff->setIcono("img/apagar.bmp");
@@ -272,7 +284,7 @@ int main(int argc, char *argv[])
 	cgrid->valorNum(1,5,0,0.1);
 	tcampos.add(CABECERA_GRID,cgrid);
 	delete cgrid;
-	
+
 	cdobstaculo=new Campo(
 		surfacePrincipal,
 		"d_obst:",
@@ -283,16 +295,6 @@ int main(int argc, char *argv[])
 	tcampos.add(CABECERA_DOBST,cdobstaculo);
 	delete cdobstaculo;
 
-	cprueba=new Campo(
-		surfacePrincipal,
-		"prueba",
-		false,
-		0x000000FF,
-		0x00FF00FF);
-	cprueba->valorNum(2,8,2,1);
-	tcampos.add("PRUEBA",cprueba);
-	delete cprueba;
-
 
 	tcampos.recargar(framestado);
 
@@ -300,14 +302,14 @@ int main(int argc, char *argv[])
 	SDL_UpdateRect(surfacePrincipal,0,0,0,0);
 
 	//////////  Comunicacion    ////////////
-	    //CapaAlta: mapa, camino y objetivo
+	//CapaAlta: mapa, camino y objetivo
 	mutexCapaAlta=SDL_CreateMutex();
 	caminoNuevoCond=SDL_CreateCond();
 	clienteCapaAlta.Connect("192.168.1.5", 9999);
 	//clienteCapaAlta.Connect("localhost", 9999);
 	GestorCamino gestorCamino(surfacePrincipal);  //Gestiona el estado
 
-	    //CapaBaja: sensores y estado
+	//CapaBaja: sensores y estado
 	mutexCapaBaja=SDL_CreateMutex();
 	sensorNuevoCond=SDL_CreateCond();
 	clienteCapaBaja.Connect("192.168.1.5", 9998);
@@ -320,7 +322,7 @@ int main(int argc, char *argv[])
 	} 
 	delete radar;
 	delete pantalla;
- 
+
     }
     SDL_DestroyMutex(mutexCapaBaja);
     SDL_DestroyMutex(mutexCapaAlta);
