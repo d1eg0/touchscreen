@@ -3,7 +3,7 @@
 Silla::Silla(Frame *frame, Mapa *plano){
     this->frame=frame;
     this->plano=plano;
-    radio=3;
+    radio=1;
     rot=0;
     status=0;
 }
@@ -47,6 +47,7 @@ void Silla::dibujar(){
     int tradio;
     SDL_Rect r=frame->getArea();
     extern SDL_mutex *semVideo;
+    plano->pintarMapa(frame->getVentana(),plano->getEscala());
     SDL_mutexP(semVideo);
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_LockSurface(frame->getVentana());
     SDL_SetClipRect(frame->getVentana(),&r);
@@ -64,5 +65,6 @@ void Silla::dibujar(){
     if(SDL_MUSTLOCK(frame->getVentana()))SDL_UnlockSurface(frame->getVentana());
 //    SDL_UpdateRect(frame->getVentana(),(int)o.getX()-tradio,(int)o.getY()-tradio,tradio*3,tradio*2);
     SDL_mutexV(semVideo);
+    frame->refrescarFrame();
 
 }
