@@ -20,6 +20,7 @@ class ClienteCapaBaja : public ssPPClient
 public:
     /** devuelve los valores obtenidos */
     vector<double> getValores();
+    void conectar();
 private:
     vector<double> listaValores;
     Punto pos;

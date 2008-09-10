@@ -23,6 +23,7 @@ public:
     void clearCamino();
     void enviarPlano(string path);
     void enviar(string dato);
+    void conectar();
 private:
     string modo;
     double status;
