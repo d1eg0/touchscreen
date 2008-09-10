@@ -86,6 +86,7 @@ void ClienteCapaBaja::onLineArrival(string Cadena)
 	    x=strtod(Data.c_str(),&pblanco);
 	    y=strtod(pblanco,&pblanco);
 	    angulo=strtod(pblanco,&pblanco);
+	    cout << "x: " << x << " y: " << y << " angulo: " << angulo << endl;
 	    Punto p(x,y);
 	    SDL_mutexP(mutexCapaBaja);
 	    pos=p;

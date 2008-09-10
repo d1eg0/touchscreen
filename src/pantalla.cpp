@@ -428,6 +428,7 @@ void Pantalla::entrada()
 		else if(botonSelector->presionado(mouse_x,mouse_y)){
 		    if(frameselector->getEstado()==CERRADO){
 			selector=new Selector(screen);
+			//selector->buscarW("/media/disk/","dxf");
 			selector->buscarW("/mnt/usb/USB1/","dxf");
 		    }
 		}

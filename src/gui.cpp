@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
 		"Plano",0xffffff);
 	//plano.lectura("maps/modelo.dxf");
 	string rutaMapa="maps/cientificot_P1.dxf";
-	//string rutaMapa="maps/modelo.dxf";
+//	string rutaMapa="maps/modelo-bloque.dxf";
 	clienteCapaAlta.setMap(rutaMapa);
 	plano.lectura(rutaMapa);
 	plano.setFrame(framemapa);
