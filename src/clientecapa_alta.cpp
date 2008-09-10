@@ -11,11 +11,26 @@ extern SDL_cond *caminoNuevoCond;
 void ClienteCapaAlta::setMap(string path){
     this->path=path;
 }
+
+int conectarAlta(void *data){
+    ClienteCapaAlta *cli=(ClienteCapaAlta*)data;
+    while(cli->getStatus()!=1002){
+	cli->Connect("192.168.1.5", 9999);
+	SDL_Delay(1000);
+	cout << "estado:" <<cli->getStatus() << endl;
+    }
+    cout << "Conectado:" <<cli->getStatus() << endl;
+    return 0;
+}
+void ClienteCapaAlta::conectar(){
+    SDL_CreateThread(conectarAlta, (void*)this);
+}
+
 void ClienteCapaAlta::onConnect()
 {
     //cout << this->getStatus() << endl;
     cout << "ClienteCapaAlta: conectando..." << endl;
-    while(this->getStatus()==1001){SDL_Delay(1);}//Esperar la conexion
+    while(this->getStatus()==1001){cout << "Espero servidor..." << endl;SDL_Delay(1000);}//Esperar la conexion
     extern Frame *framestado;
     if(framestado->getEstado()!=CERRADO){
 	extern Tabla tcampos;
@@ -28,6 +43,7 @@ void ClienteCapaAlta::onClose(){
     cerr << "[E]: conexion cerrada" << endl;
     extern Tabla tcampos;
     tcampos.update("CONEX","mal ");
+    this->conectar();
 }
 void ClienteCapaAlta::onLineArrival(string Cadena)
 {
@@ -63,7 +79,7 @@ void ClienteCapaAlta::onLineArrival(string Cadena)
 	}
 
     }else SDL_CondSignal(caminoNuevoCond);
-    
+
     //Activar la condicion del thread gestor_capaalta
 }
 

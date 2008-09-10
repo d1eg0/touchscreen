@@ -226,14 +226,14 @@ int main(int argc, char *argv[])
 		COLOR_BG);
 	//e_vzoom=new Etiqueta(surfacePrincipal);
 	/*e_vzoom->cargarEtiqueta(framemapa->getX()+framemapa->getW()-100,
-		framemapa->getY()+framemapa->getH()+50,
-		70,
-		20,
-		plano.getEscalaStr(),
-		0xFFA500FF,
-		0xFFA500FF,
-		COLOR_BG);
-*/
+	  framemapa->getY()+framemapa->getH()+50,
+	  70,
+	  20,
+	  plano.getEscalaStr(),
+	  0xFFA500FF,
+	  0xFFA500FF,
+	  COLOR_BG);
+	  */
 
 	//Botones movimiento del mapa
 	//	Derecha
@@ -305,7 +305,8 @@ int main(int argc, char *argv[])
 	//CapaAlta: mapa, camino y objetivo
 	mutexCapaAlta=SDL_CreateMutex();
 	caminoNuevoCond=SDL_CreateCond();
-	clienteCapaAlta.Connect("192.168.1.5", 9999);
+	clienteCapaAlta.conectar();
+
 	//clienteCapaAlta.Connect("localhost", 9999);
 	GestorCamino gestorCamino(surfacePrincipal);  //Gestiona el estado
 

@@ -6,6 +6,21 @@
 extern SDL_cond* sensorNuevoCond;
 extern SDL_mutex* mutexCapaBaja;
 
+int conectarBaja(void *data){
+    ClienteCapaBaja *cli=(ClienteCapaBaja*)data;
+    while(cli->getStatus()!=1002){
+	cli->Connect("192.168.1.5", 9998);
+	SDL_Delay(1000);
+	cout << "estado:" <<cli->getStatus() << endl;
+    }
+    cout << "Conectado:" <<cli->getStatus() << endl;
+    return 0;
+}
+void ClienteCapaBaja::conectar(){
+    SDL_CreateThread(conectarBaja, (void*)this);
+}
+
+
 void ClienteCapaBaja::onConnect()
 {
     //cout << this->getStatus() << endl;
@@ -101,6 +116,7 @@ void ClienteCapaBaja::onClose(){
     cerr << "[E]: conexion cerrada" << endl;
     extern Tabla tcampos;
     tcampos.update("CONEX","mal ");
+    this->conectar();
 }
 
 void ClienteCapaBaja::onError(int ssError){
